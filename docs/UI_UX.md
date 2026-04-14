@@ -42,6 +42,8 @@ It can somehow look similar to google drive, where people can add files and fold
 
 Anything that is added to the sources page should be indexed and searchable through Chatbot page which not only accesses wiki and codebase itslef, but also these files. They even can be docx or pdf or anything else. We will convert them to markdown files and index them.
 
+Each source should have a mini-badge that shows either indexed or indexing or error or etc. when its indexed, it is fine. When it is indexing, it should show a spinner. When error, it should show a hint that when user hovers over the "?" sign, a tooltip should appear with the error message and explain to user what went wrong and how to fix it.
+
 Basically this is our pool of knowledge that should be accessible by agent, not only for the chatbot, but for any other tools, pages, and modules that is created or maintained by an agent. This is the universal, single source of truth for the workspace that should be accessible by any agent in any part of our project.
 
 ============== Wiki page =================
