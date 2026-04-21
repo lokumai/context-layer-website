@@ -102,6 +102,7 @@ When a workspace is entered for the very first time (no sources, no Wiki), the u
 2. **Choose a sync strategy** — how often the Wiki should refresh (see Wiki Configure below)
 3. **Configure the Wiki** — select which sources feed it, and optionally provide custom instructions
 4. **Generate the first Wiki** — the only generation action that is inherently manual, because the user is choosing the initial scope
+5. **(Optional) Generate Intelligence** — once the Wiki is ready, the user can optionally kick off the IntelliGen job to populate the Intelligence page. This is offered as a final wizard step but can be skipped and triggered later from the Intelligence page itself.
 
 Once the first Wiki generation completes successfully, the workspace "graduates" — subsequent visits skip the wizard and land the user on Wiki Status (or wherever they last were). The wizard never re-appears for a graduated workspace.
 
@@ -333,7 +334,7 @@ This is powerful for enterprise customers and a strong selling point: *"An audit
 
 ### 5.2 Intelligence Page
 
-Intelligence is the sibling of Wiki under the Knowledge group. It provides always-on, dashboard-style views of the codebase's health, risks, security posture, and other metric-driven aspects.
+Intelligence is the sibling of Wiki under the Knowledge group. It provides dashboard-style views of the codebase's health, risks, security posture, and other metric-driven aspects. The backend module that produces these dashboards is called **IntelliGen** (under the product layer); the UI label is **Intelligence** or **Code Intelligence**.
 
 **What lives here**
 
@@ -349,10 +350,27 @@ Wiki is prose. Intelligence is data. Users scanning a test coverage heatmap are 
 
 **Why it's separate from DocsGen**
 
-DocsGen's Health & Risk bundle generates a **frozen, exportable PDF/markdown snapshot** of this same data — suitable for audits, stakeholder reports, compliance attachments. Intelligence, by contrast, is the **live, interactive dashboard** version. Same underlying data, two presentations for two jobs:
+DocsGen's Health & Risk bundle generates a **frozen, exportable PDF/markdown snapshot** of this same data — suitable for audits, stakeholder reports, compliance attachments. Intelligence, by contrast, is the **live dashboard** version. Same underlying data source (IntelliGen's output), two presentations for two jobs:
 
 - "I want to see how we're doing right now" → Intelligence
 - "I need a PDF to attach to the Q3 security review" → DocsGen's Health & Risk bundle → Library
+
+**Two-tier gating: Intelligence requires its own generation**
+
+Unlike Wiki (which is the foundational canonical knowledge), Intelligence is a **downstream, regenerable** view. It is also long-running to produce. For these reasons, Intelligence is **gated behind a second generation step**: after the Wiki exists, the user must explicitly trigger Intelligence generation the first time before dashboards appear. This avoids surprising users with a long job they didn't ask for.
+
+**Configure panel (mirrors Wiki Configure but simpler)**
+
+The Intelligence page has a small **Configure / Refresh** panel — similar in spirit to Wiki Configure but with fewer controls. It offers:
+
+- **Generate Intelligence** (first time) or **Refresh Now** (subsequent) — manual trigger
+- Status: last-refreshed timestamp, current freshness badge (Fresh / Stale / Refreshing…)
+- Option to view the underlying analysis sources
+- **No cadence configuration.** Intelligence regenerates **automatically after every Wiki sync** as a chained downstream job. The only user-facing control is manual refresh for impatient users. This piggyback model avoids a separate scheduler and keeps configuration surface minimal.
+
+**Out-of-sync Intelligence is acceptable**
+
+Old metrics are shown with a staleness indicator. Users can hit Refresh if they want current numbers. Unlike the Wiki, Intelligence has no persistence or versioning promise — old values are not interesting (nobody cares what test coverage was three months ago), so there's no Logs / diff view for Intelligence.
 
 **Sidebar**
 
@@ -575,7 +593,8 @@ Every page has a meaningful empty state. This is not optional — empty states a
 | Wiki (Status) | "No Wiki yet — generate one from Configure" (or prompts the user into the first-time wizard if applicable) |
 | Wiki (View) | "No Wiki yet — generate one from Configure" |
 | Wiki (Logs) | "No generation jobs yet" |
-| Intelligence | "Generate the Wiki to unlock insights" |
+| Intelligence (no Wiki yet) | "Generate the Wiki to unlock insights" |
+| Intelligence (Wiki present, no Intel yet) | "Generate Intelligence to populate dashboards" — prominent button triggers the IntelliGen job |
 | Chatbot (new thread, Wiki present) | Suggested starter prompts tailored to the workspace |
 | Chatbot (locked, no Wiki yet) | "Generate the Wiki first to unlock the Chatbot" with a shortcut to Wiki Configure |
 | DocsGen (bundle tab) | Cards are always visible; "Done" state is empty until first generation. If no Wiki yet, cards prompt the user to generate one first. |
@@ -644,7 +663,8 @@ Locked pages remain visible in the navbar but are disabled (or grayed out) and s
 | Wiki — Configure tab | After at least one source is added | The user needs source material to configure a generation |
 | Wiki — Status / View / Logs | After the first Wiki generation completes | There is nothing to display before a Wiki exists |
 | Chatbot | After the first Wiki generation completes | The Chatbot's value depends on a canonical, indexed knowledge base to ground in; we don't want users getting low-quality answers from raw, un-contextualized sources |
-| Intelligence | After the first Wiki generation completes | Dashboards depend on indexed, analyzed knowledge |
+| Intelligence (page reachable) | After the first Wiki generation completes | Dashboards depend on indexed, analyzed knowledge |
+| Intelligence (dashboards populated) | After the first **Intelligence generation** completes (separate second-tier gate) | Intelligence is a downstream, regenerable view. Its generation is long-running and must be triggered explicitly the first time; subsequent refreshes chain automatically after each Wiki sync. |
 | Generate (DocsGen / OmniBoard / MCPGen) | After the first Wiki generation completes | Every Generate tool is built on top of the Wiki |
 | Library | After the first Wiki generation completes | Becomes relevant only once artifacts can be produced |
 
