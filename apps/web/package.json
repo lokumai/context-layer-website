@@ -21,11 +21,12 @@
     "zustand": "^5.0.12"
   },
   "devDependencies": {
+    "@context-layer/config": "workspace:*",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "postcss": "^8",
     "typescript": "^5",
-    "@context-layer/config": "workspace:*"
+    "vitest": "^4.1.5"
   }
 }

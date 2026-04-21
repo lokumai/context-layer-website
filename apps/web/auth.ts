@@ -1,20 +1,36 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
+import { type Persona } from "@context-layer/mocks";
+import { authorizePersona } from "./auth.utils";
+
+export type { PersonaUser } from "./auth.utils";
+export { authorizePersona } from "./auth.utils";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     Credentials({
       credentials: {
-        username: { label: "Username", type: "text" },
+        username: { label: "Persona", type: "text" },
         password: { label: "Password", type: "password" },
       },
       authorize: async (credentials) => {
-        // Mock user for the playground
-        return { id: "1", name: "Demo User", email: "demo@contextlayer.io" };
+        return authorizePersona({ username: credentials?.username as string | undefined });
       },
     }),
   ],
-  pages: {
-    signIn: "/login",
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user && "persona" in user) {
+        token.persona = (user as { persona: Persona }).persona;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (session.user && token.persona) {
+        (session.user as { persona?: Persona }).persona = token.persona as Persona;
+      }
+      return session;
+    },
   },
+  pages: { signIn: "/login" },
 });
