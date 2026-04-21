@@ -8,7 +8,7 @@
 
 **Tech Stack:** Next.js 15, React, Tailwind CSS v4.
 
-> **Source of Truth:** All technical and design decisions in this plan derive from and strictly adhere to `../../SEED.md`, `../../UI_UX.md`, and `../../DESIGN.md`.
+> **Source of Truth:** All technical and design decisions in this plan derive from and strictly adhere to `../../SEED.md`, `../../UI_UX.md`, and `../../DESIGN.md`. It is highly recommended that the implementer actively views and reads these source of truth documents before and during implementation.
 
 ---
 
