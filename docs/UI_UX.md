@@ -1,167 +1,676 @@
-now its time for dreaming !!! We should together brainstorm the playground !
-Because landing pages are standard but the playground should be thought after.
+# Context Layer — Playground UI/UX Specification
 
-for example in one part you said: Playground pipelines
-this is ok but we have not yet decided on how it would be.
+This is the descriptive UI/UX document for the Context Layer playground. Landing pages are standard marketing pages; this document focuses on the authenticated, workspace-scoped playground experience where the real product is demonstrated.
 
-Lets start with what should UI look in Playground.
+---
 
-========== Overall Playground for Context Layer ===============
+## 1. Guiding Philosophy & Mental Model
 
--------- Workspaces page or Entry Point Page of Playground ----------
-When people enter the playground, I think they should be able to create or select cards which resemble Workspaces. Each workspace actually resembles a project that may be single repo or multi-repo. The cards should have name and be rectangle-shaped. if creating for the first time, there should always be a dot-lined rectangle that is empty and not-filled and has a "+" sign in it only. When the users clicks it, they only need to put name of it as mandatory. No need to enter github URLs yet. 
+Before diving into page-by-page detail, we commit to a single unifying mental model that prevents information architecture overload.
 
-Please note that the workspaces page is the entry point of the playground. Without selecting or creating a workspace, no other pages should be accessible such as DocsGen or Chatbot or OmniBoard or MCPGen. Workspaces page is like a gateway to the playground.
+Users of the playground do fundamentally two kinds of things with their codebase knowledge:
 
--------- Upon entering the workspace ---------
-After entering the workspace that they created or exists,  If we were to divide playground for that workspace to seperate pages, I think having a navbar on the top that spans the whole page horizontally would be good. On th every right side of the navbar there could be Account (human) icon so users can sign in or sign out, see their profile, settings and etc using a dropdown menu. 
+1. **They want to understand or consult** — living, always-synced views of the codebase. This is read-oriented, reference-like, and should always reflect the latest state.
+2. **They want to produce or export** — one-shot jobs that emit a point-in-time artifact. This is write-oriented, frozen, and shareable.
 
-on the very left side of the navbar there should be a logo of Context Layer. It should be clickable and when clicked it should redirect users to the workspaces page. 
-Right after the logo, there should be a box or button that write Workspace Name, implying that this workspace is active right now. It should be clickable and when clicked or hovered over, a dropdown menu should appear with the options to edit the workspace name, change the workspace. When user clicks on the change workspace button, a modal should appear with search bar on top of of the list of all workspaces and they can select one of them to change the active workspace. When user clicks on the edit workspace name button, a modal should appear with a text input field for the workspace name and a save button. When user clicks on the save button, the workspace name should be updated and the dropdown menu should be closed.
+Everything in the navigation follows this split. "Knowledge" is the destination for the first job. "Generate" is the destination for the second. The Library is the storage for whatever the second produces. Sources is the input layer that both depend on. The Chatbot is the cross-cutting conversational surface that queries all of it.
 
-This navbar can have thesee pages:
+This model prevents the frequent confusion of "do I go to Wiki or DocsGen to see the architecture?" — Wiki is the living explanation, DocsGen produces a frozen architecture doc you can email to a stakeholder. Different jobs, different pages.
 
-- Sources: Codes (that user enters github URLs or can upload their zip files of the code so code repositories either single or multi are added) and Files (which user can upload extar documents or files that may not be present in repos but are external organizational files. even within the files, all these files should be indexed and searchable through Chatbot page which not only accesses wiki and codebase itslef, but also these files. They even can be docx or pdf or anything else. We will convert them to markdown files and index them.)
-- Wiki (which is our knowledge base or Context Wiki)
-- Chatbot (a universal chatbot to ask about anything. users can ask about wiki, code, and files)
-- DocsGen (that includes 6 bounded-context bundles with the same names as sub-pages)
-- OmniBoard
-- MCPGen
+---
 
-So these are 6 highest-level pages that should be in the active workspace as pages in the navbar at the very top, making it clear for users on what modules they can use.
-Each of these pages should have a separate URL and should be accessible from the active workspace URL.
-Each page might have multiple sub-pages or sections.
+## 2. Global Layout & Navigation
 
-============== Sources page =================
-This is the SINGLE SOURCE OF TRUTH for the workspace.
+### Top Navbar
 
-This is the place which people can add sources to the workspace. It can be github URLs or zip files of the code or external documents or files. They can also delete the sources if they want to.
-People should be able to see all the sources either as grid cards or list views. They can also search for a specific source by name or URL, and even filter them by type (code, file, or both). People can also edit the source name or URL if they want to.
+The navbar is fixed at the top of every page inside the playground. It spans the full horizontal width and is divided into three regions:
 
-It can somehow look similar to google drive, where people can add files and folders and view them and edit them and delete them. When clicking on them, they should be able to see the content of the source in a modal, similar to what we see in google drive.
+**Left region (workspace context)**
+- **Context Layer Logo** — clickable, redirects to the Workspaces page (exits the current workspace).
+- **Active Workspace Pill** — shows the name of the currently active workspace. Clicking or hovering reveals a dropdown with:
+  - A list of the most recently used workspaces (clickable to switch)
+  - An "All Workspaces" link that navigates back to the Workspaces home page
+  - An "Edit workspace name" action that opens a modal
+  - A "Change workspace" action that opens a modal with a search bar and the full list of workspaces
+- **Sync Heartbeat Indicator** — a subtle visual indicator (a small pulsing dot or pill) adjacent to the workspace pill, showing the current workspace-wide sync status at a glance: *Live* (green/steady), *Syncing…* (animated), *Queued*, or *Outdated*. This reinforces the "always fresh" promise everywhere in the product without being noisy.
 
-Anything that is added to the sources page should be indexed and searchable through Chatbot page which not only accesses wiki and codebase itslef, but also these files. They even can be docx or pdf or anything else. We will convert them to markdown files and index them.
+**Center region (the five main destinations)**
+- **Sources** — input layer for everything
+- **Knowledge** ▼ (dropdown)
+  - **Wiki** — living narrative knowledge base
+  - **Intelligence** — dashboards and metrics
+- **Chatbot** — conversational Q&A over all sources and knowledge
+- **Generate** ▼ (dropdown)
+  - **DocsGen** — on-demand documentation artifacts
+  - **OmniBoard** — multimodal onboarding environment
+  - **MCPGen** — MCP server generation (tentative; may be removed in the future)
+- **Library** — central storage for all generated artifacts
 
-Each source should have a mini-badge that shows either indexed or indexing or error or etc. when its indexed, it is fine. When it is indexing, it should show a spinner. When error, it should show a hint that when user hovers over the "?" sign, a tooltip should appear with the error message and explain to user what went wrong and how to fix it.
+**Right region (global actions)**
+- **Profile circle** — shows the user's avatar. Clicking opens a modal (or dropdown) with account info, settings, and sign-out.
 
-Basically this is our pool of knowledge that should be accessible by agent, not only for the chatbot, but for any other tools, pages, and modules that is created or maintained by an agent. This is the universal, single source of truth for the workspace that should be accessible by any agent in any part of our project.
+### Why "Generate" instead of "Tools"
 
-============== Wiki page =================
-When people enter the wiki page, they should be able to see the wiki viewer and the wiki generation sub-pages (which is the same page but with different tabs) they can be selected at the top (not navbar but top of the page) using a Pill Tab or Segmented Control. The pill will have 3 options: Status, View, Configure, and Logs.
+"Tools" is semantically vague — it tells the user nothing about what happens when they click. "Generate" tells them the category of action they're about to take: something will be produced. This naming discipline makes the navbar a teaching surface, not just a list of links.
 
------- Wiki Status -------------
-When people enter the wiki status page, they should be able to see the overview of the wiki with engaging and attractive UI with stats, cards, charts, graphs, etc. This is the welcome tab of the wiki page.
-It can include the following information:
+### Left vs. Right Separation Discipline
 
-1. Wiki Health & Coverage
-Coverage Score: % of repository code/files currently indexed in the Wiki.
-Staleness Indicator: Time since last sync (e.g., "Last synced 2 hours ago").
-Sync Status: Real-time badge (Ready, Syncing..., Outdated).
-Missing Context: Number of "blind spots" (files/folders not yet documented).
+The left side of the navbar carries **workspace-scoped context** (logo returns to workspaces home, active workspace pill). The right side carries **global user actions** (profile, sign-out). This separation is intentional and should not be mixed. A user glancing at the navbar should instantly know "what am I inside?" (left) and "who am I?" (right).
 
-2. Knowledge Stats
-Total Tokens: Total size of the knowledge base (e.g., "1.2M Tokens").
-Source Breakdown: Ratio of Code vs. External Files (PDF/Docx) indexed.
+### Sidebars
 
-3. Repository Insights (this is a list view that can be expanded as a modal to show the details of the repositories or files or folders)
-Active Repos: Repositories or files or folders currently contributing to this Wiki. (as a list view)
-Inactive Repos: Repositories or files or folders that exist in the sources page but are not currently contributing to this Wiki.
+Sidebars are used only where a page has a collection of items to navigate between. They are collapsible / expandable, and always show the page name at the top.
 
-4. Recent Activity
-Recent Tasks: A mini-log of the last 3 WikiGen/Sync jobs. (with a button at bottom of the section to view all activities in a list)
+| Page | Sidebar? | What it contains |
+|---|---|---|
+| Sources | No | Main-area grid/list view is the navigation |
+| Wiki | Yes | Tabs as sidebar sections: Status, View, Configure, Logs |
+| Intelligence | Yes | Dashboard categories (e.g., Health, Security, Tests, Dependencies) |
+| Chatbot | Yes | Scrollable list of chat threads (standard chatbot pattern) |
+| DocsGen | No | Tabbed bundles + card grid inside each tab |
+| OmniBoard | No | Notebook-like environment |
+| MCPGen | No | Single configuration view |
+| Library | Yes | Filters (type, date, source, status) and folder-like navigation |
 
-5. Knowledge Graph
-Knowledge Graph: A graph of the knowledge base with nodes and edges. It can be expanded as a modal with a search bar on top of it to search for nodes and edges, so users without leaving the page can have a beautifully designede graph viewer or visualization screen that can be opened and viewed on the same window as a new modal.
+The rule: **a sidebar appears when the page has a collection of things to navigate between** (threads, doc types, categories, filters). Single-purpose pages don't need one.
 
-Note that the status page should be updated in real-time and should be aware of the latest changes in the wiki, the sources, and the codebase. This means that the status page should be a live page that is always updating and showing the latest information. It is good to have a button to refresh the page manually by user to see the latest information.
+---
 
------------ Wiki (View) Viewer -------------
-Wiki should be in 3 levels: one is workspace level, describing the whole workspace even if its single repo which should be high-level and a single markdown file not exceeding for example 10K tokens. Another one is repo-level which describes a single repo. The repo-level is similar to Deep Wiki or Code Wiki content viewer in which there is a markdown files with nested levels and header describing the project. Also while I AM NOT SURE YET, but maybe a file-level wiki or something like llms.txt which is more detailed and granular. I think re-naming it to llms.txt would be better. Why ? Because Humans and Agents can already understand the high-levels through workspace and repo level wikis, but for more granular, I think we do not need file-level wiki becasue they can use QnA Chatbot UI and MCP to get those info live using Agentic RAG or Live Agent Analysis and Discovery. So maybe we should replace it and re-brand it as llms.txt which is the most granular type of wiki that has multiple markdown files and an index page, similar to what we see in mintlify or other libraries that in order to vibe-code using them, we give the whole project guide or context using llms.txt.
-When in this page, the user should have a viewer for workspace and repo-level and file-level wikis and be able to export them as markdown or pdf and view them (while they have for example mermaid diagrams in it) This part would be very similar to DeepWiki ui that you can find in @context-layer-info/brainstorm/deepwiki_example.png  and as you can see, the viewer should be similar to deeepwiki, a scrollable file-system like viewer on the left spanning vertically that can be hided or closed or opened. 
+## 3. Workspaces Page (Entry Point)
 
-NOTE: The wiki viewer similar to DeepWiki should have a chatbot UI on the bottom (a floating bar with a text input field and a send button) that allows users to ask questions about the wiki, the code and files and get answers. But when user use it, it should redirect them to the chatbot page which is our main interface for chatbot.
+The Workspaces page is the gateway into the playground. Without selecting or creating a workspace, no other pages are accessible — no DocsGen, Chatbot, Wiki, or any other module.
 
+### Layout
 
---------- Wiki Configure (Wiki Generation/Sync/Delete) ------------
-when people enter the wiki, they should be able to generate a knowledge base with a few clicks. This means creating the wiki should not be automatic but user explicitly can start a job or task for creating the wiki in the background. While we have WikiSync, the user must also be able to invoke WikiSync manually or even re-generate the wiki or delete the wiki and re-generate it. 
-When generating the wiki, user should be able to explicitly select that out of which repos and which files (external files uploaded by user) should this wiki be generated from. This selection should be done from the sources available in the sources page. For example if user wants to generate the wiki from a single repo, they can select the repo from the sources page and then click on the generate button. If user wants to generate the wiki from multiple repos, they can select the repos from the sources page and then click on the generate button. If user wants to generate the wiki from multiple repos and external files, they can select the repos and files from the sources page and then click on the generate button.
-When clicking on generation, user can have a message box of for example 5K tokens to give OPTIONAL instructions to the WikiGen agent to customize the wiki to be generated.
+A grid of rectangular cards, each representing a workspace. Each workspace resembles a project that may be single-repo or multi-repo. Each card shows the workspace name and a small amount of metadata (created date, source count, last activity).
 
-When user clicks on the generate button, we should not lock the user in the UI. It should be a background job that is running in the background and user should be able to see the progress of the job in the UI. The progress should be shown as a progress with steps, that shows for example 3/5 steps completed, with beaitiful UI and animations. These steps are shown below of the progress bar (connected to it) as a list of steps. Each list of step should be accordion and when user clicks on it, it should expand and show the details of the step. The details of the step should be similar to agent logs. 
+The first card in the grid is always a dotted-outline, unfilled rectangle with a "+" sign — the "Create Workspace" card.
 
-For agent logs we have to show a Signature or just a high-level summary of what the agent is doing. The difficult part for it is that each LLM or even agentic framework has different way of showing the logs. for example Claude Code uses "Spinner verbs", a list of pre-defined verbs that are shown randomly and in a loop, while the agent is working. On the other hand, Gemini LLMs emit their thoughts using a "Thought Signature" which is a few words-long summary of the thinking block that is generated by the LLM itself by default when thinknig. So showing agent logs is challenging as each LLM and even agentic framework has different way of showing its planning or thinking or execution process. This is a difficult part and we have to find a way to show it in a beautiful way that is compatible with all the LLMs and agentic frameworks IN THE FUTURE. For now since this UI is just a green-field project, we can show a simple signature or summary of what the agent is doing.
+### Creation
 
-User should be able to stop the generation at any time, and continue it later, or cancel the job completely.
+Clicking the "+" card opens a minimal modal: the only required field is the workspace name. No GitHub URLs are required at this stage. Sources are added later, inside the workspace, on the Sources page.
 
-In addition to the functionality above, the UI of the Wiki Configure page should be like this:
-When people first enter the configure page and there is no wiki generated yet, a card should be shown to the user to inform them that there is no wiki generated yet and they can generate one by clicking on the generate button. The card should have a button to generate the wiki. It should show a modal with a form to enter the name of the wiki and the sources to generate the wiki from. It should also have a part to add instructions to the wiki generation agent to customize the wiki to be generated (optional but to allow humans-in-the-loop to customize the wiki to be generated).
-After clicking on generate button, the modal should be closed and the Configure tab's content should include only the progress bar and the steps list with the accordions to show the details of the steps.
-After the generation is complete, the progress bar should be replaced with a success message and after a few seconds, the page content should be reaplaced with information used to generate the wiki scuh as the sources used, the instructions used, the time taken to generate the wiki, and etc. And at this time the user will be able to re-sync the wiki using the same sources and instructions or even select new sources and instructions to re-sync the wiki or even delete the wiki and re-generate it from scratch using the same form and modal.
-To wrap up, the configure page should be a page with content changing dynamically based on the state of the wiki generation/sync job.
+### Selection
 
+Clicking an existing workspace card enters that workspace and lands the user on the Sources page (the default entry point inside a workspace, since without sources nothing else can happen).
 
-A card is sitting there always to show which generation/sync job is running or has been run, like a list of logs or history. The user should be able to also see which sources contributed to the wiki and which are not. The user then can re-sync the wiki using the already-selected or previously-selected sources, or even select new sources to re-sync the wiki. The user can also delete the wiki and re-generate it from scratch.
+### First-Time Workspace Wizard
 
+When a workspace is entered for the very first time (no sources, no Wiki), the user is guided through a prescriptive wizard rather than dropped into an empty product. The wizard walks the user through:
 
-============== Chatbot page =================
-When people enter the chatbot page, they should be able to see the chatbot UI. This chatbot UI should be a chat interface with a text input field and a send button and stopping button. The chatbot should be able to answer questions about the wiki, code, and files. 
-The chatbot page should show Agent Actions and Tool Calls and etc. (almost every event published by the agentic framework we use such as deep agents by langchain). It should also if exists, show the thinking tokens of the agent and the tool calls and etc.
+1. **Add a source** — connect an integration (recommended) or upload manually
+2. **Choose a sync strategy** — how often the Wiki should refresh (see Wiki Configure below)
+3. **Configure the Wiki** — select which sources feed it, and optionally provide custom instructions
+4. **Generate the first Wiki** — the only generation action that is inherently manual, because the user is choosing the initial scope
 
-It should have the option for user to select what the answer should be grounded in: an specific Source (either file or repo), Wiki, or a combination of them. By deaful an answer should be grounded in everything (sources, wiki, and codebase) but user can select specific sources to ground the answer in like a filtering mechanism.This should be done through a button available in the prompt bar interface that when user select on, expands and allows users to select or deselect specific sources to ground the answer in.
+Once the first Wiki generation completes successfully, the workspace "graduates" — subsequent visits skip the wizard and land the user on Wiki Status (or wherever they last were). The wizard never re-appears for a graduated workspace.
 
-Also it worths noting that the info shown to the user in Wiki Status page should be also accessible by the agents such as the Chatbot agent so that it can use it to answer questions and provide more accurate answers.
+### Empty State
 
-All the chatbot answers should be grounded in the selected sources andn chatbot must provide the citations/references to the sources when answering a question. These citations to the code, file and wiki should be clickable. When use clicks on them, from the right hand side, a new tab should open/appear with the content of the citation (whether it is a pdf file or a code file or a wiki file) that is automatically scrolled to the exact range of lines that the citation is referring to (our deep agent should define the range of lines that the citation is referring to). This feature probably requires a format beautifier so that when agent in the chatbot interface cites something using that format (maybe using @ or using # or any other format that is the best convention), in the UI it should appear as a beautifulclickable link. two examples of it are: @context-layer-info/brainstorm/sources.png and @context-layer-info/brainstorm/citations.png
+If a user has no workspaces at all, the page shows a large welcoming empty state with a prominent "Create your first workspace" call-to-action.
 
-Also somewhere in the page, there should be a button for getting the MCP config for connecting AI Agents to this chatbot MCP server.
+---
 
-[OPTIONAL] Maybe later we can include a basic buble to everywhere in the UI (the bottom right corner of the pages) to open a very basic, simple and small chatbot interface for the user to guide user about how to use the system UI. It is like an integrated copilot or assistant that is always there to guide user about how to use the system UI, pages, and etc. This should be AWARE of the 
+## 4. Sources Page
 
-=============== DocsGen page ================
-When people enter the docsgen page, they should be able to see the docsgen viewer. This docsgen viewer should be a tabbed viewer with 6 tabs:
+Sources is the **single source of truth** for the workspace. Everything else — Wiki, Intelligence, DocsGen, OmniBoard, Chatbot — derives from what is indexed here.
 
-- Structure & Architecture
-- Specification & Knowledge
-- Health & Risk
-- Agent Infrastructure
-- Institutional Memory
-- [Optional] Research Docs
+### Purpose
 
-| **Structure & Architecture** | Semantic repo-map, cross-repo dependency maps, end-to-end data flow diagrams, DB schema docs | *"See the bones of your system — how repos, services, and data flows connect."* | Static structure analysis |
-| **Specification & Knowledge** | README, SRS (reverse-engineered), API docs, unified API catalog (Swagger/GraphQL) | *"Reverse-engineer the specs nobody ever wrote."* | Spec extraction & synthesis |
-| **Health & Risk** | Tech debt audit (SonarQube equivalent), security vulnerability report (CodeQL equivalent), test coverage landscape, test plans | *"Know where your codebase is fragile, exposed, or untested."* | Security scanning & quality analysis |
-| **Agent Infrastructure** | Agent-specific docs (AGENTS.md, CLAUDE.md), style guides, machine-readable architecture boundaries, guardrails, semantic conventions | *"The config layer that makes your codebase agent-native."* | Agent config generation |
-| **Institutional Memory** | Multi-repo release notes, changelogs, analyst/compliance docs, chronological memory snapshots (mined from PR discussions, commits, merges). Integrates with [Entire Checkpoints CLI](https://github.com/entireio/cli) for agent provenance capture. | *"Turn your git history and PR discussions into organizational knowledge."* | Git history mining |
-| **[Optional] Research Docs** | Scientific library documentation with arXiv/Semantic Scholar integration — for repos developed by researchers who left without proper docs | *"Bridge the gap between papers and production."* | Paper-to-code linking |
+This is where users add raw material to the workspace:
 
+- **Code** — GitHub, GitLab, Bitbucket, Gitea, and similar (connected via OAuth), or zip-file uploads and URL paste as fallback. Supports single-repo and multi-repo workspaces.
+- **Files** — External organizational documents (docx, pdf, markdown, plain text, or any other format) from connected sources like Google Drive, Notion, Confluence, SharePoint, or via manual upload. These are documents that aren't present in the repos themselves — internal standards, specs, meeting notes, RFCs, customer contracts, etc.
+- **Discussion & Memory** (optional, feeds the Institutional Memory bundle) — Slack, Discord, Linear, Jira, GitHub Discussions when connected.
 
-=============== OmniBoard page ====================
-When people enter OmniBoard page:
-Multimodal onboarding tool for developers and users — designed to **reduce time-to-productivity from months to weeks**.
+All files — regardless of original format — are converted to markdown and indexed. Everything in Sources becomes searchable and reachable by every agent in the system (Chatbot, WikiGen, Intelligence, every Generate tool).
 
-In enterprise settings, onboarding a new developer onto a legacy codebase can take 2-3 months. OmniBoard generates rich, multimodal documentation so developers can build a mental model of the codebase fast — through the medium that works best for them.
+### Layout
 
-Modalities:
-- **Text:** Markdown, ASCII art, Mermaid diagrams
-- **Audio:** Voice recordings and podcasts (similar to NotebookLM) — using open-source audio generation models or tools like ElevenLabs
-- **Video:** Slides with voiceovers (HTML, PPTX generation, or image generation models)
+A Google-Drive-like interface:
 
-Ideas:
+- Toggle between grid view and list view
+- Search bar at the top for searching by name or URL
+- Filter by type (code, file, all)
+- Each source is displayed as a card (grid) or row (list) with:
+  - Name
+  - Type icon (repo vs. file)
+  - Indexing status badge
+  - Last-indexed timestamp
+- Clicking a source opens a modal showing its content (similar to Google Drive's file preview)
 
-This module can look similar to NotebookLM. Meaning that it can be an environment for users to have a chatbot to help them understand the codebase and get answers to their questions, while the environment provide options for users such as below.
+### Indexing Status Badges
 
-Slides:
-The user should be able to generate a slide deck with the following options:
-- Detailed Slides: A comprehensive deck with full text and details, perfect for emailing or reading on its own.
-- Summary Slides: A summary of the codebase, with key points and highlights.
+Every source carries a status badge that tells the user whether it's usable by agents:
 
-Audio: 
-The user should be able to generate an audio podcast with the following options:
-- Deep Dive: A deep dive into the codebase, with detailed explanations of the code and the architecture.
-- Summary: A summary of the codebase, with key points and highlights.
-- Podcast: A podcast that two people are talking about the codebase and debating. 
+- **Indexed** — ready, green, no friction
+- **Indexing…** — spinner, in-progress
+- **Error** — red with a small "?" icon; hovering the "?" reveals a tooltip explaining what went wrong and how to fix it
 
-Video:
-The user should be able to generate a video presentation that is basically Audio over Slides. With the following options:
-- Detailed Presentation: A detailed presentation with full text and details, perfect for emailing or reading on its own.
-- Summary Presentation: A summary of the codebase, with key points and highlights.
+### Adding a Source
+
+When a user clicks "Add Source", they are presented with a chooser showing the available connection options grouped by category (rather than forcing a manual URL/zip path first). The OAuth integrations are the happy path — they're what enables continuous sync on that source. Manual options remain available as a fallback.
+
+Example groupings surfaced in the "Add Source" flow:
+
+| Category | Options |
+|---|---|
+| **Code** | GitHub, GitLab, Bitbucket, Gitea (OAuth) · Paste URL · Upload zip |
+| **Docs & Wikis** | Notion, Confluence, Google Drive, SharePoint (OAuth) · Upload file |
+| **Discussion / Memory** | Slack, Discord, Linear, Jira, GitHub Discussions (OAuth) |
+
+Each integration option shows its logo, name, and connection status. Clicking opens the appropriate OAuth flow or upload dialog.
+
+### Continuous Sync on Connected Sources
+
+When a source is added via an OAuth integration, a **per-source auto-sync toggle** is available on the source card. Manual uploads (zip, pasted files) cannot auto-sync — there is nothing to poll against — so the toggle is hidden or disabled for them. The toggle's default is "on" for newly connected integrations, inheriting the workspace's sync strategy (defined in Wiki Configure).
+
+This is the technical prerequisite for the "living Wiki" promise: without an integration, the Wiki can only be refreshed by the user re-uploading material manually.
+
+### Deployment-Aware Hierarchy
+
+For on-premise and air-gapped deployments (where OAuth to external services is not possible), the UI flips the hierarchy: manual upload and local git remotes become the primary options, and external integrations are either disabled or routed through the customer's own infrastructure. This is a deployment-time configuration rather than a user-runtime toggle — the product adapts to the environment it's installed in.
+
+### Actions
+
+Users can:
+- Add sources (a prominent button at the top, opening the integration/manual chooser)
+- Rename sources
+- Delete sources
+- Re-index sources (triggers re-conversion and re-indexing)
+- Toggle auto-sync on connected sources
+
+### No Sidebar
+
+Sources has no sidebar. The grid/list IS the navigation.
+
+### Empty State
+
+When a workspace has no sources, a large empty-state card appears: "Add your first source." The primary actions mirror the integration-first philosophy: "Connect GitHub" and "Connect Google Drive" (or whichever categories are most common) are prominent, with "Upload files" and "Paste URL" visible as secondary fallbacks.
+
+---
+
+## 5. Knowledge Section
+
+Knowledge is the top-level group containing Wiki and Intelligence. Both are living, always-synced views of the codebase — they update automatically as sources change. The distinction between them:
+
+| Wiki | Intelligence |
+|---|---|
+| Prose, narrative | Dashboards, metrics, charts |
+| Human-oriented reading | Data-oriented scanning |
+| "Explain the auth system" | "Show test coverage % per service" |
+| Markdown pages | Interactive visualizations |
+| Updated by WikiSync | Updated by scheduled analyses |
+
+They answer different kinds of questions and deserve separate real estate.
+
+### 5.1 Wiki Page
+
+The Wiki is the living narrative knowledge base of the codebase. It is what a DeepWiki or CodeWiki would produce, but extended: multi-repo, multi-layer, on-premise, and deeply integrated with the rest of the product suite.
+
+The Wiki has a sidebar with four entries (these replace the earlier "pill tabs" concept): **Status**, **View**, **Configure**, **Logs**. Each is a subpage.
+
+#### 5.1.1 Wiki Status
+
+This is the welcome / overview tab of the Wiki. It should feel engaging and alive — stats, cards, charts, graphs. It is the first thing a user sees when they enter the Wiki.
+
+It surfaces:
+
+1. **Wiki Health & Coverage**
+   - Coverage Score: percentage of repository code / files currently indexed in the Wiki
+   - Staleness Indicator: time since last sync (e.g., "Last synced 2 hours ago")
+   - Sync Status: real-time badge (Ready, Syncing…, Outdated)
+   - Missing Context: number of "blind spots" — files or folders not yet documented
+
+2. **Knowledge Stats**
+   - Total Tokens: total size of the knowledge base (e.g., "1.2M tokens")
+   - Source Breakdown: ratio of code vs. external files
+
+3. **Repository Insights** (expandable list / modal)
+   - Active Repos/Files/Folders: those currently contributing to this Wiki
+   - Inactive Repos/Files/Folders: those that exist in Sources but are not currently contributing
+
+4. **Recent Activity**
+   - Mini-log of the last 3 WikiGen / WikiSync jobs
+   - "View all activities" button linking to the Logs tab
+
+5. **Knowledge Graph**
+   - A node-edge visualization of the knowledge base
+   - Expandable as a modal with a search bar on top, so users can explore nodes/edges in depth without leaving the page
+
+The Status page updates in real-time and reflects the latest state of the Wiki, sources, and codebase. A manual refresh button is provided for users who want to force a refresh.
+
+#### 5.1.2 Wiki View (the Viewer)
+
+The three-layer Wiki structure:
+
+1. **Workspace-level** — a high-level summary of the entire multi-repo workspace, even for single-repo cases. A single markdown file, typically not exceeding ~10K tokens. This describes the whole system.
+2. **Repo-level** — a DeepWiki/CodeWiki-style set of nested markdown pages per repository. Headers, sections, diagrams, code snippets.
+3. **llms.txt** — the most granular layer, rebranded from "file-level wiki" to match the emerging industry standard (popularized by Mintlify and used by many libraries to feed full project context into AI agents). This is a set of markdown files plus an index page, optimized for LLM consumption rather than human reading. File-level granularity for humans is handled on-demand via the Chatbot with agentic RAG and live code discovery — a persistent file-level wiki isn't necessary.
+
+The viewer itself is modeled on DeepWiki: a scrollable file-system-style tree on the left spanning vertically, collapsible/expandable, with the selected page's rendered markdown content in the main area. Mermaid diagrams, ASCII art, code snippets, and citations all render inline.
+
+Users can **export** the Wiki (or individual pages) as markdown or PDF.
+
+**Chatbot side-panel integration.** A floating chatbot bar sits at the bottom of the Wiki viewer. Clicking it does **not** redirect the user to the full Chatbot page — doing so would yank the user out of the document they're reading. Instead, it opens a right-hand slide-over (~450-550px wide), overlaying the content without replacing it. The underlying Wiki page remains visible and scrollable. When the chatbot cites `[2]`, clicking the citation scrolls the underlying page to the referenced section. Users can always "expand to full page" from the side-panel if they want more room or thread history.
+
+The same side-panel behavior is available on the Intelligence page.
+
+#### 5.1.3 Wiki Configure (Generate / Sync / Delete)
+
+**The living Wiki is the default.** Once the first Wiki is generated, WikiSync maintains it automatically in the background according to the chosen sync strategy. The Configure tab is where the user defines the rules of that automation — not where they have to manually click "Sync" every time a PR merges.
+
+The only moment that is inherently manual is the **first generation**: the user must choose which sources feed the Wiki and provide any initial instructions. After that, sync happens automatically. Manual refreshes remain available as an explicit "Force" action for edge cases.
+
+**What the Configure page does**
+
+- Lets users generate the Wiki from scratch (first time, or after a deletion)
+- Defines the **sync strategy** — how often WikiSync refreshes the Wiki automatically
+- Lets users trigger a manual "Force Sync Now" or "Force Rebuild" when they want to override the schedule
+- Lets users change source selection and instructions at any time (changes apply on the next sync)
+- Lets users delete the Wiki and start over
+
+**Sync Strategy options**
+
+The user selects a strategy from a clear set of choices. This can be workspace-wide (one strategy for the entire Wiki) or per-source (mixed strategies for different repos) depending on granularity needs:
+
+| Strategy | Trigger | Best for |
+|---|---|---|
+| **Per commit** | Every push to any tracked branch | Teams that want maximum freshness, accept noise |
+| **Per PR merge to main** | Every merge into the main/trunk branch | **Balanced default** — avoids noise during dev, captures stable state |
+| **Scheduled — Hourly** | Fixed hourly cadence | Even cadence, time-based planning |
+| **Scheduled — Daily** | Once per day at a chosen time | Low-traffic repos, overnight updates |
+| **Scheduled — Weekly** | Once per week at a chosen day/time | Slow-moving documentation or stable repos |
+| **Manual only** | Never auto-syncs; user triggers explicitly | Air-gapped, paranoid, or compliance-heavy contexts |
+
+The strategy is editable anytime. Changing it applies to the next sync cycle.
+
+**Source selection at generation time**
+
+When generating or re-generating, the user explicitly picks which sources (code repos, external files) should feed into this Wiki. The selection uses the sources already added on the Sources page — Sources is always the single source of truth.
+
+**Optional custom instructions**
+
+At generation time, the user has an optional text area (up to ~5K tokens) to provide custom instructions to the WikiGen agent — tone, focus areas, exclusions, or any other human-in-the-loop guidance.
+
+**Non-blocking background job**
+
+When a user clicks "Generate," the UI does **not** lock. It's a background job. The user can navigate away and come back. The progress is surfaced as a progress indicator plus a vertical list of steps (e.g., "3 / 5 steps completed").
+
+**Step-level accordion logs**
+
+Each step in the list is an accordion. Expanding it shows agent-level logs — a high-level summary of what the agent is currently doing. Different LLMs and agentic frameworks surface their thinking differently: Claude Code uses randomized "spinner verbs", Gemini emits "thought signatures", and other frameworks expose their own streams. Our UI has to normalize this into a coherent, beautiful representation regardless of the underlying engine. In the MVP / greenfield phase we can show a simple signature or summary; the architecture should allow richer representations later as different frameworks are plugged in.
+
+**Stop, resume, cancel**
+
+The user can stop the generation at any time. They can resume it later (if the underlying framework supports it) or cancel the job completely.
+
+**Dynamic UI states**
+
+The Configure page content changes based on the state of the Wiki:
+
+- **No Wiki yet (first-time)** — A card informing the user that no Wiki has been generated, with a prominent "Generate Wiki" button. Clicking opens the first-time generation modal (source selection + optional instructions + sync strategy). This is typically surfaced through the first-time workspace wizard.
+- **Generation in progress** — Progress indicator + step accordions in the main area.
+- **Living state (generation complete)** — The default steady-state view. A summary card showing: current sync strategy, last sync time, last-run outcome, sources currently feeding the Wiki, and the active instructions. Prominent actions: **Force Sync Now**, **Force Rebuild**, **Change Sync Strategy**, **Edit Sources**, **Edit Instructions**, **Delete Wiki**.
+- **Always present** — A history card showing past generation/sync jobs and which sources contributed to each, so users can re-run a previous configuration or compare outcomes. (The full timeline lives in the Logs tab.)
+
+#### 5.1.4 Wiki Logs
+
+The Wiki Logs tab is the audit trail and version history for the Wiki.
+
+**Timeline of jobs**
+
+A chronological list of all generation and sync jobs. Each entry shows: timestamp, type (generate / sync / regenerate / delete), triggering event (commit, manual, scheduled), duration, status.
+
+**Diff view — a major differentiator**
+
+Since the Wiki is stored as markdown in git, every WikiSync run is a commit. Clicking a job opens a split view:
+
+- **Left panel** — the diff of what changed. Files added, removed, modified; lines added and removed. This is a native git diff.
+- **Right panel** — the agent logs for that run. What steps were taken, what decisions the agent made, what sources were consulted.
+
+This is powerful for enterprise customers and a strong selling point: *"An auditor asks what changed in the last quarter's architecture docs? Here's the git log with full agent rationale."* It makes "versioned knowledge base" a tangible, visible property — not just marketing copy.
+
+### 5.2 Intelligence Page
+
+Intelligence is the sibling of Wiki under the Knowledge group. It provides always-on, dashboard-style views of the codebase's health, risks, security posture, and other metric-driven aspects.
+
+**What lives here**
+
+- Health dashboards (tech debt, fragile areas, architecture violations)
+- Security posture (vulnerabilities, exposure)
+- Test coverage landscape (which critical flows lack coverage)
+- Dependency analytics (cross-repo, outdated, risky)
+- Other metric-driven views as the product grows
+
+**Why it's separate from Wiki**
+
+Wiki is prose. Intelligence is data. Users scanning a test coverage heatmap are doing a different cognitive task than users reading a narrative about the auth system. They deserve different UIs.
+
+**Why it's separate from DocsGen**
+
+DocsGen's Health & Risk bundle generates a **frozen, exportable PDF/markdown snapshot** of this same data — suitable for audits, stakeholder reports, compliance attachments. Intelligence, by contrast, is the **live, interactive dashboard** version. Same underlying data, two presentations for two jobs:
+
+- "I want to see how we're doing right now" → Intelligence
+- "I need a PDF to attach to the Q3 security review" → DocsGen's Health & Risk bundle → Library
+
+**Sidebar**
+
+Intelligence has a sidebar listing the dashboard categories. The main area renders the selected dashboard.
+
+**Chatbot side-panel**
+
+Same behavior as Wiki — the chatbot can be opened as a right-hand slide-over, with the underlying dashboard visible behind it and clickable citations.
+
+---
+
+## 6. Chatbot Page
+
+The Chatbot is the universal conversational surface over everything in the workspace — Sources, Wiki, and codebase. It becomes available only after the first Wiki has been generated; until then, the Chatbot entry in the navbar is locked and points the user back to Wiki Configure. This ensures every answer the Chatbot produces is grounded in a canonical, indexed knowledge base rather than raw un-contextualized sources.
+
+### Full Page vs. Side-Panel
+
+Two surfaces, one backend:
+
+- **Full Chatbot page** (navbar entry) — expanded interface with thread history, source filtering controls, MCP config, and the full chat experience
+- **Chatbot side-panel** (from Wiki or Intelligence) — a compact slide-over of the same chatbot, same threads, same backend. Users can expand to the full page from inside the side-panel
+
+Threads are shared between both surfaces. Starting a chat in the Wiki side-panel and then going to the full Chatbot page shows the same thread ready to continue.
+
+### Layout (Full Page)
+
+- **Sidebar** — scrollable list of chat threads, newest at top. Standard chatbot pattern.
+- **Main area** — the active thread.
+- **Input bar** — at the bottom, with Send and Stop buttons, plus the grounding filter chips described below.
+
+### Grounding Filter (above the input)
+
+Users can scope which sources the chatbot grounds answers in. This is **always visible** as a chip row directly above the input — not hidden in a modal or a dropdown:
+
+A chip row shows: `Grounded in: [All] [✓ Wiki] [✓ Codebase] [✓ Files] [+ Add specific source]`
+
+Chips toggle on/off. Users can also open "Add specific source" to pick individual repos or files for fine-grained grounding. By default, everything is on.
+
+### Agent Visibility
+
+The Chatbot surfaces agent internals:
+
+- Agent actions and tool calls (almost every event published by the underlying agentic framework)
+- Thinking tokens when available
+- Tool call inputs and outputs (collapsed by default, expandable)
+
+### Citations & Source Drawer
+
+Every chatbot answer is grounded in the selected sources, and the chatbot **must** provide citations. Citations render as beautiful clickable links in the chat message (similar to reference-style links in DeepWiki, `[1]`, `[2]`, or `@file:line-range` syntax rendered as pill-shaped chips).
+
+**Clicking a citation** opens a tab on the right side of the screen (as a slide-over or panel) showing the referenced content — whether it's a PDF file, a code file, or a Wiki page — automatically scrolled to the exact line range the citation refers to. This requires a formatting convention (`@`, `#`, or another convention) that the agent uses consistently, and a formatter on the UI side that renders it as a clickable chip.
+
+### MCP Config Button
+
+Somewhere on the page (but unobtrusive — likely in a header or settings area), there is a button that surfaces the MCP server configuration for the Chatbot. This lets AI agents (Claude Code, Cursor, etc.) connect to this workspace's knowledge as a tool.
+
+### Status Page Data Access
+
+The information shown on the Wiki Status page (coverage, staleness, source breakdown, knowledge graph) is **also accessible to the Chatbot agent as context**, so it can answer meta-questions about the workspace like "how complete is our Wiki?" or "which repos haven't been indexed yet?"
+
+### Empty State
+
+A fresh thread shows suggested starter prompts ("Explain the authentication flow", "Which services depend on the pricing service?", "Summarize the saga orchestration pattern"), tailored to the active workspace if possible.
+
+### Optional: Global Copilot Bubble
+
+As a future nice-to-have, a small bubble in the bottom-right corner of every page can open a compact, UI-focused assistant that helps users understand how to use the playground itself. This is distinct from the main Chatbot — this is a copilot for **navigating the product**, aware of the current page and what the user can do on it. Low priority, not required for the MVP.
+
+---
+
+## 7. Generate Section
+
+Generate is the top-level group for one-shot production jobs. Every tool under Generate produces an artifact, and every artifact is stored in the Library.
+
+### 7.1 DocsGen Page
+
+DocsGen is the artifact publisher. It does **one thing**: produces static, exportable documentation artifacts. It does not compete with the Wiki (which is living reference) or Intelligence (which is a live dashboard).
+
+**Tabbed view**
+
+DocsGen uses a tabbed interface at the top of the page, one tab per bounded-context bundle:
+
+- **Structure & Architecture** — semantic repo-map, cross-repo dependency maps, end-to-end data flow diagrams, DB schema docs. Selling narrative: *"See the bones of your system — how repos, services, and data flows connect."*
+- **Specification & Knowledge** — README, SRS (reverse-engineered), API docs, unified API catalog (Swagger/GraphQL). Selling narrative: *"Reverse-engineer the specs nobody ever wrote."*
+- **Health & Risk** — tech debt audit (SonarQube equivalent), security vulnerability report (CodeQL equivalent), test coverage landscape, test plans. Selling narrative: *"Know where your codebase is fragile, exposed, or untested."* Note: the live dashboard version of these lives in Intelligence; this bundle produces the exportable frozen-in-time snapshot.
+- **Agentify** — agent-specific configuration files that make the codebase agent-ready: AGENTS.md, CLAUDE.md, skill.md, style guides, machine-readable architecture boundaries, guardrails, semantic conventions. The name "Agentify" captures the intent: we have an existing project and want to *make it agent-ready* by giving agents the necessary project context. (Previously named "Agent Infrastructure.")
+- **Institutional Memory** — multi-repo release notes, changelogs, analyst/compliance docs, chronological memory snapshots mined from PR discussions, commits, and merges. Integrates with Entire Checkpoints CLI for agent provenance capture. Selling narrative: *"Turn your git history and PR discussions into organizational knowledge."*
+- **Research Docs** (optional bundle) — scientific library documentation with arXiv/Semantic Scholar integration. Selling narrative: *"Bridge the gap between papers and production."*
+
+**Card-based generation inside each tab**
+
+Each tab contains a grid of cards. Each card represents a specific artifact the bundle can produce (e.g., inside "Structure & Architecture", the cards might be: Repo-Map, Dependency-Map, Data-Flow-Diagram, DB-Schema).
+
+**Card states**
+
+Each card has three states:
+
+| State | Presentation |
+|---|---|
+| **Idle** | Card with title, short description, "Generate" button |
+| **Running** | Card tinted, spinner, progress bar with steps (same pattern as Wiki Configure) |
+| **Done** | Card with completion indicator, "View in Library" link, "Regenerate" option |
+
+**Generation modal**
+
+Clicking "Generate" on a card opens a modal. The modal is structurally the same as the Wiki Configure modal — this consistency reduces cognitive load:
+
+- Source selection (which repos / files from Sources should this artifact be based on)
+- Optional custom instructions (5K token text area)
+- Bundle-specific options (e.g., output format: markdown or PDF; level of detail; specific subsystems)
+
+On submit, the modal closes. The card transitions to the "Running" state. When complete, the artifact is saved to the Library and the card transitions to "Done."
+
+**No sidebar**
+
+DocsGen doesn't need a sidebar — the tabs are the navigation, and inside each tab the card grid is the navigation.
+
+### 7.2 OmniBoard Page
+
+OmniBoard is the multimodal onboarding environment — designed to reduce time-to-productivity from months to weeks for new developers or users on a legacy codebase.
+
+**Mental model: a specialized chatbot environment**
+
+OmniBoard is not a separate product with its own thread history. It's a **specialized variant of the main Chatbot**, scoped to the onboarding artifact being planned, generated, and explored. The chatbot inside OmniBoard is aware of the onboarding context and can discuss, plan, and iterate on artifacts.
+
+This means: no separate threading system, no new chatbot to maintain. OmniBoard is an *environment* that happens to embed a variant of the main Chatbot, focused on onboarding workflows.
+
+**The flow**
+
+1. User enters OmniBoard. The chatbot greets them with a planning-oriented prompt ("What kind of onboarding artifact do you want? Slides, podcast, video?").
+2. User specifies what they want. The chatbot helps them plan and customize — what sections to include, what depth, what style, what audience.
+3. When the plan is ready, the chatbot surfaces a human-in-the-loop approval step: a summary of what will be generated. The user approves (or edits and re-approves).
+4. On approval, a long-running job starts (generation can take ~30 minutes for rich multimodal outputs). The job runs in the background — the user can leave and come back.
+5. When the job completes, the artifact is saved to the Library. The user can also stay in OmniBoard and use it as an **exploration environment** (similar to NotebookLM) — asking questions about the generated content, playing the podcast, viewing slides, requesting revisions.
+
+**Modalities**
+
+- **Text** — markdown, ASCII art, mermaid diagrams
+- **Audio** — voice recordings and podcasts, open-source audio models or ElevenLabs
+- **Video** — slides with voiceovers (HTML, PPTX, or image generation)
+
+**Slides options**
+- Detailed Slides: comprehensive deck with full text and details, suitable for emailing or reading standalone
+- Summary Slides: key points and highlights
+
+**Audio options**
+- Deep Dive: detailed explanations of the code and architecture
+- Summary: key points and highlights
+- Podcast: two voices discussing and debating the codebase
+
+**Video options**
+- Detailed Presentation: full content, suitable for emailing or reading standalone
+- Summary Presentation: key points and highlights
+
+**No sidebar**
+
+OmniBoard is a single environment — the conversation + artifact views are the navigation.
+
+### 7.3 MCPGen Page (Tentative)
+
+MCPGen is currently an idea rather than a committed feature. It may be removed in the future. If kept, its role is: auto-generate Model Context Protocol server descriptors from internal APIs, SDKs, and CLI tools in the workspace, so AI agents can instantly understand how to use the company's internal tooling.
+
+**What it would produce**
+
+- MCP server descriptor JSON (saved to the Library for download/inspection)
+- Potentially a live MCP endpoint per workspace (hybrid model: the Library stores the descriptor, MCPGen maintains a "live endpoints" view)
+
+**Note:** Further design is deferred. The navbar slot exists to hold the space; the page itself is minimal until we commit.
+
+---
+
+## 8. Library Page
+
+The Library is the central storage for every artifact produced by the Generate tools. It is the **destination** for any "frozen-in-time" output — DocsGen docs, OmniBoard slides/podcasts/videos, MCPGen descriptors.
+
+### Purpose & Mental Model
+
+If Wiki and Intelligence are "always fresh," the Library is "always saved." Users come here to find, re-download, share, or re-generate any artifact they've produced in this workspace.
+
+### Layout
+
+Modeled loosely on Google Drive:
+
+- **Sidebar** — filter and navigation controls:
+  - By type (DocsGen doc, OmniBoard slide deck, OmniBoard podcast, MCP descriptor, etc.)
+  - By source tool (DocsGen / OmniBoard / MCPGen)
+  - By DocsGen bundle (Structure & Architecture, Agentify, etc.)
+  - By date
+  - By status (current, superseded, failed)
+  - Search bar at the top of the sidebar for filtering by name
+
+- **Main area** — toggle between grid and list views. Each artifact is a card (grid) or row (list) showing: title, type icon, bundle, timestamp, size, status.
+
+### Actions on Each Artifact
+
+- **View** — opens the artifact in a modal (inline rendering for markdown/PDF; audio/video players for OmniBoard outputs)
+- **Download / export** — markdown, PDF, or original format
+- **Regenerate** — re-runs the original generation job with optional modifications
+- **Share** — link or export (future)
+- **Delete**
+
+### Empty State
+
+When a workspace has no artifacts yet: a large empty-state card with "Generate your first artifact" and links to DocsGen and OmniBoard.
+
+---
+
+## 9. Cross-Cutting UX Patterns
+
+These patterns apply across the entire playground and should be treated as design rules, not per-page decisions.
+
+### 9.1 Empty States Everywhere
+
+Every page has a meaningful empty state. This is not optional — empty states are an opportunity to teach users the next action.
+
+| Page | Empty state |
+|---|---|
+| Workspaces | "Create your first workspace" |
+| Sources | "Add your first source" — primary CTAs are integration connectors (Connect GitHub / Google Drive / etc.) with manual upload as fallback |
+| Wiki (Status) | "No Wiki yet — generate one from Configure" (or prompts the user into the first-time wizard if applicable) |
+| Wiki (View) | "No Wiki yet — generate one from Configure" |
+| Wiki (Logs) | "No generation jobs yet" |
+| Intelligence | "Generate the Wiki to unlock insights" |
+| Chatbot (new thread, Wiki present) | Suggested starter prompts tailored to the workspace |
+| Chatbot (locked, no Wiki yet) | "Generate the Wiki first to unlock the Chatbot" with a shortcut to Wiki Configure |
+| DocsGen (bundle tab) | Cards are always visible; "Done" state is empty until first generation. If no Wiki yet, cards prompt the user to generate one first. |
+| OmniBoard | Welcome message from the chatbot + "Plan your first artifact" (requires Wiki) |
+| Library | "Generate your first artifact" with links to Generate tools |
+
+### 9.2 Chatbot Side-Panel as a Universal Pattern
+
+The Chatbot side-panel (right-hand slide-over) is available on any page where users consult content and might want to ask questions about it — Wiki, Intelligence, Library (future). It is **not** a page takeover. The underlying content stays visible, scrollable, and interactive. Clicking citations inside the side-panel scrolls the underlying content.
+
+### 9.3 Generation Flow Consistency
+
+Any "generate something" flow in the product — Wiki Configure, DocsGen cards, OmniBoard planning — follows the **same pattern**:
+
+1. Source selection (from Sources)
+2. Optional custom instructions (text area)
+3. Submit → background job
+4. Progress with steps + accordions for agent logs
+5. Stop / resume / cancel available
+6. On completion: success state + actions (view, export, regenerate, re-sync, delete)
+
+This consistency is a feature. Users learn the pattern once; it applies everywhere.
+
+### 9.4 Workspace-Scoped vs. Global Actions
+
+The navbar enforces the distinction:
+
+- **Left side** = workspace context (logo, active workspace pill, workspace switcher)
+- **Center** = workspace-scoped destinations (Sources, Knowledge, Chatbot, Generate, Library)
+- **Right side** = global user actions (profile, settings, sign-out)
+
+Never mix. Workspace-scoped settings (e.g., "default generation options for this workspace") belong inside the workspace, not in the global profile modal.
+
+### 9.5 Agent Log Representation
+
+Different LLMs and agentic frameworks surface their thinking differently. Our UI must normalize this. In the MVP phase, we display a simple high-level summary or signature for each step. The architecture should allow this to be upgraded later as richer streams become available from different frameworks (Claude Code spinner verbs, Gemini thought signatures, LangChain / DeepAgents event streams, etc.).
+
+### 9.6 Indexing Status as a First-Class Concept
+
+Anything ingested (sources, Wiki contents, generated artifacts) carries a **status badge**: Indexed, Indexing…, Error. Errors always carry a "?" icon that reveals a tooltip explaining what went wrong and how to fix it. This is the pattern for any ingestion-related failure anywhere in the product.
+
+### 9.7 Citations as a First-Class Primitive
+
+Citations appear in two places: Wiki content (to code / other Wiki pages) and Chatbot answers (to Wiki, code, or files). The rendering and click behavior should be **identical** in both places — a clickable pill chip that opens the referenced content in a right-side panel, scrolled to the exact location. The formatting convention (e.g., `@file.py:42-58`) must be consistent and well-documented so agents and UI both produce/consume the same format.
+
+### 9.8 Real-Time Freshness Signals
+
+Wiki Status, Intelligence, and the Sources page all need to convey "is what I'm looking at current?" This is done via:
+
+- Sync status badges (Ready / Syncing / Outdated)
+- Staleness indicators ("Last synced 2 hours ago")
+- Manual refresh buttons where appropriate
+- The global **sync heartbeat indicator** near the workspace pill in the navbar (see Section 2)
+
+This builds trust in the "always fresh" promise of Knowledge.
+
+### 9.9 Progressive Gating by Dependency Graph
+
+Pages unlock progressively as the user completes the minimum setup each depends on. Until the two foundational prerequisites are in place — **at least one source added** and **the first Wiki generated** — the rest of the product is locked. This enforces that every downstream capability operates on a real knowledge base rather than an empty shell.
+
+Locked pages remain visible in the navbar but are disabled (or grayed out) and surface an explicit "needs X first" message when the user clicks them, pointing back to the missing prerequisite.
+
+| Page | Unlocked when | Reasoning |
+|---|---|---|
+| Sources | Always | It is the input — there is nothing to unlock before it |
+| Wiki — Configure tab | After at least one source is added | The user needs source material to configure a generation |
+| Wiki — Status / View / Logs | After the first Wiki generation completes | There is nothing to display before a Wiki exists |
+| Chatbot | After the first Wiki generation completes | The Chatbot's value depends on a canonical, indexed knowledge base to ground in; we don't want users getting low-quality answers from raw, un-contextualized sources |
+| Intelligence | After the first Wiki generation completes | Dashboards depend on indexed, analyzed knowledge |
+| Generate (DocsGen / OmniBoard / MCPGen) | After the first Wiki generation completes | Every Generate tool is built on top of the Wiki |
+| Library | After the first Wiki generation completes | Becomes relevant only once artifacts can be produced |
+
+The First-Time Workspace Wizard (Section 3) is the primary UX vehicle for walking the user past these gates on their initial visit — it walks them through adding a source, configuring sync, and generating the first Wiki, at which point the entire product unlocks.
+
+---
+
+## 10. Summary Map
+
+```
+Workspaces (entry gateway)
+    ↓
+Sources (single source of truth — inputs)
+    ↓
+    ├── Knowledge (living, always fresh)
+    │     ├── Wiki      ← prose, narrative, 3 layers (workspace / repo / llms.txt)
+    │     └── Intelligence  ← dashboards, metrics (health, security, tests, deps)
+    │
+    ├── Chatbot (conversational surface; also side-panel over Wiki/Intelligence)
+    │
+    ├── Generate (one-shot jobs → artifacts)
+    │     ├── DocsGen     ← 6 bundles (Structure, Spec, Health, Agentify, Memory, Research)
+    │     ├── OmniBoard   ← multimodal onboarding (text / audio / video)
+    │     └── MCPGen      ← MCP server descriptors (tentative)
+    │
+    └── Library (storage for everything Generate produces)
+```
+
+This is the canonical information architecture. Every future decision — new pipelines, new artifact types, new dashboards — should slot into this map cleanly. If a new feature doesn't fit, the feature is likely misconceived, or the map needs an explicit, deliberated update.
