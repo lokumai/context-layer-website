@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ElevenLabs AI - Chatbot</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Public+Sans:wght@300;400;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        @font-face {
+            font-family: 'Waldenburg';
+            src: url('https://fonts.cdnfonts.com/css/waldenburg'); /* Note: Fallback to Public Sans 300 in config if not available */
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        .font-display { font-family: 'Public Sans', sans-serif; font-weight: 300; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .glass-warm {
+            background: rgba(245, 242, 239, 0.8);
+            backdrop-filter: blur(8px);
+        }
+        .eleven-shadow {
+            box-shadow: rgba(0,0,0,0.075) 0px 0px 0px 0.5px inset, rgba(0,0,0,0.06) 0px 0px 0px 1px, rgba(0,0,0,0.04) 0px 4px 4px;
+        }
+        .warm-shadow {
+            box-shadow: rgba(78, 50, 23, 0.04) 0px 6px 16px;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#000000",
+                        "background": "#f9f9f9",
+                        "surface": "#ffffff",
+                        "warm-stone": "#f5f2ef",
+                        "on-surface-variant": "#4c4546",
+                        "outline-variant": "#cfc4c5",
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    fontFamily: {
+                        "headline": ["Public Sans", "sans-serif"],
+                        "body": ["Inter", "sans-serif"]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-primary overflow-hidden">
+<!-- Top Navigation Bar -->
+<header class="bg-white/80 dark:bg-black/80 backdrop-blur-md border-b border-black/[0.05] sticky top-0 z-50 shadow-[rgba(0,0,0,0.075)_0px_0px_0px_0.5px_inset,rgba(0,0,0,0.06)_0px_0px_0px_1px]">
+<div class="flex justify-between items-center w-full px-8 py-3 max-w-screen-2xl mx-auto">
+<div class="flex items-center gap-8">
+<span class="font-['Public_Sans'] font-light text-2xl tracking-tighter text-black">ElevenLabs AI</span>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-neutral-500 hover:text-black transition-colors font-['Inter'] text-[15px] font-medium tracking-[0.15px]" href="#">Sources</a>
+<a class="text-neutral-500 hover:text-black transition-colors font-['Inter'] text-[15px] font-medium tracking-[0.15px]" href="#">Wiki</a>
+<a class="text-black font-semibold border-b border-black pb-1 font-['Inter'] text-[15px] tracking-[0.15px]" href="#">Chatbot</a>
+<a class="text-neutral-500 hover:text-black transition-colors font-['Inter'] text-[15px] font-medium tracking-[0.15px]" href="#">DocsGen</a>
+<a class="text-neutral-500 hover:text-black transition-colors font-['Inter'] text-[15px] font-medium tracking-[0.15px]" href="#">OmniBoard</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="bg-white border border-neutral-200 px-4 py-1.5 rounded-full text-[14px] font-medium eleven-shadow hover:bg-neutral-50 transition-all">Workspace</button>
+<button class="bg-black text-white px-4 py-1.5 rounded-full text-[14px] font-medium hover:opacity-80 transition-all">Create New</button>
+<div class="w-8 h-8 rounded-full bg-neutral-200 overflow-hidden">
+<img alt="User profile" data-alt="professional male portrait with minimalist lighting and clean white background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7OFYMGzLPMWurcllBzFfVPXQQagtIGyekqOom5bgd5vV1t2gJSdXW_zkZ59DZqPVcWlJqgo6lxnMHveglzQcqRZumrygDdyX4jJ9xA4cN9OyAoyIg-MErSyPtJTyQ9uuUe5baRrF00k98rM3aCsZdhuayezOLzn_Yb9ZUvMoZh2U7wk1UEgHYou5jevohwnd7t5VgaP2nP3e0s3DwmG-WEPvaEAXg6-TcovRcyGySJ9iYWQtwBqJBota4gpXtmCcy7bo8HIkV1D1k"/>
+</div>
+</div>
+</div>
+</header>
+<main class="flex h-[calc(100vh-64px)] w-full max-w-screen-2xl mx-auto">
+<!-- Chat Area -->
+<section class="flex-1 flex flex-col relative bg-white border-r border-black/[0.05]">
+<div class="flex-1 overflow-y-auto p-8 space-y-8">
+<!-- User Message -->
+<div class="flex justify-end">
+<div class="max-w-[80%] bg-neutral-100 rounded-[24px] px-6 py-4 eleven-shadow">
+<p class="text-[16px] leading-relaxed tracking-[0.16px]">How is the authentication handled in the current service layer, and what is the policy for token expiration?</p>
+</div>
+</div>
+<!-- Agent Message -->
+<div class="flex justify-start gap-4">
+<div class="w-8 h-8 rounded-full bg-black flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-white text-[18px]">temp_preferences_custom</span>
+</div>
+<div class="max-w-[85%] space-y-4">
+<h2 class="font-display text-[24px] tracking-tight">Authentication Flow</h2>
+<div class="text-[16px] leading-relaxed tracking-[0.18px] text-neutral-700 space-y-4">
+<p>The authentication logic is encapsulated within the <span class="bg-warm-stone px-2 py-0.5 rounded text-black font-medium border border-black/5 cursor-pointer">@auth_service.py</span>. It utilizes a JWT-based strategy where tokens are validated against the internal identity provider.</p>
+<p>According to the <span class="bg-warm-stone px-2 py-0.5 rounded text-black font-medium border border-black/5 cursor-pointer">#auth-policy</span>, token expiration is strictly set to 60 minutes for standard sessions, with a refresh window of 24 hours.</p>
+</div>
+<div class="flex gap-2">
+<button class="flex items-center gap-2 bg-warm-stone px-3 py-1.5 rounded-full text-[13px] font-medium border border-black/5 warm-shadow">
+<span class="material-symbols-outlined text-[16px]">description</span>
+                                @auth_service.py
+                            </button>
+<button class="flex items-center gap-2 bg-warm-stone px-3 py-1.5 rounded-full text-[13px] font-medium border border-black/5 warm-shadow">
+<span class="material-symbols-outlined text-[16px]">menu_book</span>
+                                #auth-policy
+                            </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Input Bar Area -->
+<div class="p-8 bg-gradient-to-t from-white via-white to-transparent">
+<div class="max-w-3xl mx-auto relative">
+<div class="flex items-center bg-white border border-neutral-200 rounded-[30px] p-2 pl-6 eleven-shadow focus-within:ring-2 ring-blue-500/20 transition-all">
+<button class="flex items-center gap-2 bg-warm-stone/80 px-4 py-2 rounded-full text-[14px] font-medium border border-black/[0.03] warm-shadow mr-2 hover:bg-warm-stone transition-colors">
+<span class="material-symbols-outlined text-[18px]">filter_list</span>
+                            Grounding
+                        </button>
+<input class="flex-1 border-none focus:ring-0 text-[16px] placeholder-neutral-400 bg-transparent py-3" placeholder="Ask anything about your context..." type="text"/>
+<button class="w-10 h-10 bg-black text-white rounded-full flex items-center justify-center hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined">arrow_upward</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Right Citation Panel -->
+<aside class="w-[420px] bg-neutral-50/50 overflow-y-auto border-l border-neutral-100 p-8 flex flex-col gap-8">
+<header class="flex justify-between items-center">
+<h3 class="font-display text-[28px] tracking-tight">Citations</h3>
+<button class="text-neutral-400 hover:text-black">
+<span class="material-symbols-outlined">close</span>
+</button>
+</header>
+<!-- Code Snippet -->
+<div class="space-y-4">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-neutral-400">code</span>
+<span class="text-[14px] font-medium text-neutral-500">@auth_service.py</span>
+</div>
+<button class="text-[12px] text-neutral-400 hover:text-black flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">open_in_new</span>
+                        Open file
+                    </button>
+</div>
+<div class="bg-white rounded-[16px] border border-neutral-200 overflow-hidden eleven-shadow">
+<div class="p-4 font-mono text-[13px] leading-relaxed text-neutral-600 bg-neutral-50/50">
+<div class="flex gap-4">
+<span class="text-neutral-300 text-right w-6 select-none">12</span>
+<span>def validate_session(token: str):</span>
+</div>
+<div class="flex gap-4">
+<span class="text-neutral-300 text-right w-6 select-none">13</span>
+<span class="pl-4">payload = jwt.decode(token, SECRET)</span>
+</div>
+<div class="flex gap-4 bg-warm-stone/50 border-y border-black/5">
+<span class="text-neutral-400 text-right w-6 select-none">14</span>
+<span class="pl-4 font-semibold text-black">if payload['exp'] &lt; time.now():</span>
+</div>
+<div class="flex gap-4">
+<span class="text-neutral-300 text-right w-6 select-none">15</span>
+<span class="pl-8 text-error">raise TokenExpiredError()</span>
+</div>
+<div class="flex gap-4">
+<span class="text-neutral-300 text-right w-6 select-none">16</span>
+<span class="pl-4">return payload['user_id']</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Wiki Snippet -->
+<div class="space-y-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-neutral-400">menu_book</span>
+<span class="text-[14px] font-medium text-neutral-500">#auth-policy</span>
+</div>
+<div class="bg-white rounded-[16px] border border-neutral-200 p-6 eleven-shadow space-y-3">
+<h4 class="font-medium text-[16px]">Token Lifespan Regulations</h4>
+<p class="text-[14px] text-neutral-600 leading-relaxed">
+                        To maintain a high security posture, all session tokens generated by the <span class="italic">ElevenLabs-Identity</span> core must adhere to a strict 3600-second TTL (Time-To-Live). Refresh tokens may be granted for an extended 24-hour period upon specific biometric re-validation.
+                    </p>
+<div class="pt-4 border-t border-neutral-100 flex justify-between items-center">
+<span class="text-[12px] text-neutral-400 italic">Last updated 2 days ago</span>
+<button class="text-[13px] font-medium text-black underline underline-offset-4 decoration-neutral-300">Read Full Policy</button>
+</div>
+</div>
+</div>
+<!-- Visual Decoration -->
+<div class="mt-auto pt-8">
+<div class="h-32 rounded-2xl bg-gradient-to-br from-[#f5f2ef] to-[#f9f9f9] border border-black/5 flex items-center justify-center p-6 text-center">
+<div>
+<p class="text-[12px] font-medium text-neutral-400 uppercase tracking-widest mb-2">Contextual Insights</p>
+<p class="text-[14px] text-neutral-600 leading-snug">AI is analyzing 1,240 files across 4 repositories.</p>
+</div>
+</div>
+</div>
+</aside>
+</main>
+<!-- Footer -->
+<footer class="bg-neutral-50 dark:bg-neutral-950 border-t border-neutral-200 py-12">
+<div class="max-w-7xl mx-auto px-8 flex flex-col md:flex-row justify-between items-center gap-4">
+<span class="text-neutral-400 font-['Inter'] text-[13px] tracking-normal">© 2024 ElevenLabs AI. All rights reserved.</span>
+<div class="flex gap-8">
+<a class="text-neutral-500 hover:text-black underline decoration-neutral-300 font-['Inter'] text-[13px]" href="#">Privacy Policy</a>
+<a class="text-neutral-500 hover:text-black underline decoration-neutral-300 font-['Inter'] text-[13px]" href="#">Terms of Service</a>
+<a class="text-neutral-500 hover:text-black underline decoration-neutral-300 font-['Inter'] text-[13px]" href="#">Security</a>
+<a class="text-neutral-500 hover:text-black underline decoration-neutral-300 font-['Inter'] text-[13px]" href="#">Status</a>
+</div>
+</div>
+</footer>
+</body></html>

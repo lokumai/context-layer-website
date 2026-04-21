@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Public+Sans:wght@300;400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        @font-face {
+            font-family: 'Waldenburg';
+            src: url('https://fonts.cdnfonts.com/css/waldenburg'); /* Representative font choice for thin-serif style */
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f9f9f9;
+            color: #1a1c1c;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .waldenburg-thin {
+            font-family: 'Waldenburg', 'Public Sans', serif;
+            font-weight: 300;
+        }
+
+        .shadow-eleven-inset {
+            box-shadow: rgba(0,0,0,0.075) 0px 0px 0px 0.5px inset, rgba(0,0,0,0.06) 0px 0px 0px 1px;
+        }
+
+        .shadow-eleven-warm {
+            box-shadow: rgba(78, 50, 23, 0.04) 0px 6px 16px;
+        }
+
+        .shadow-eleven-card {
+            box-shadow: rgba(0,0,0,0.4) 0px 0px 1px, rgba(0,0,0,0.04) 0px 4px 4px;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        
+        .inter-airy {
+            letter-spacing: 0.18px;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#000000",
+                        "on-primary": "#ffffff",
+                        "background": "#f9f9f9",
+                        "surface": "#ffffff",
+                        "warm-stone": "rgba(245, 242, 239, 0.8)",
+                        "on-surface-variant": "#4c4546",
+                        "outline-variant": "#cfc4c5",
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    fontFamily: {
+                        "headline": ["Public Sans"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface">
+<!-- TopNavBar - Rendered as per JSON Shell Identity -->
+<nav class="bg-white/80 dark:bg-black/80 backdrop-blur-md border-b border-black/[0.05] dark:border-white/[0.05] shadow-[rgba(0,0,0,0.075)_0px_0px_0px_0.5px_inset,rgba(0,0,0,0.06)_0px_0px_0px_1px] sticky top-0 z-50">
+<div class="flex justify-between items-center w-full px-8 py-3 max-w-screen-2xl mx-auto">
+<div class="flex items-center gap-12">
+<span class="font-['Waldenburg'] font-light text-2xl tracking-tighter text-black dark:text-white">ElevenLabs AI</span>
+<div class="hidden md:flex gap-8 items-center">
+<a class="font-['Inter'] text-[15px] tracking-[0.15px] text-black dark:text-white font-semibold border-b border-black dark:border-white pb-1" href="#">Sources</a>
+<a class="font-['Inter'] text-[15px] tracking-[0.15px] text-neutral-500 dark:text-neutral-400 hover:text-black dark:hover:text-white transition-colors" href="#">Wiki</a>
+<a class="font-['Inter'] text-[15px] tracking-[0.15px] text-neutral-500 dark:text-neutral-400 hover:text-black dark:hover:text-white transition-colors" href="#">Chatbot</a>
+<a class="font-['Inter'] text-[15px] tracking-[0.15px] text-neutral-500 dark:text-neutral-400 hover:text-black dark:hover:text-white transition-colors" href="#">DocsGen</a>
+<a class="font-['Inter'] text-[15px] tracking-[0.15px] text-neutral-500 dark:text-neutral-400 hover:text-black dark:hover:text-white transition-colors" href="#">OmniBoard</a>
+<a class="font-['Inter'] text-[15px] tracking-[0.15px] text-neutral-500 dark:text-neutral-400 hover:text-black dark:hover:text-white transition-colors" href="#">MCPGen</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="px-5 py-2 rounded-full border border-neutral-200 text-[14px] font-medium hover:bg-neutral-50 transition-all">Workspace</button>
+<button class="px-5 py-2 rounded-full bg-black text-white text-[14px] font-medium hover:opacity-80 transition-all">Create New</button>
+<div class="w-8 h-8 rounded-full bg-neutral-200 overflow-hidden">
+<img alt="User profile" data-alt="professional headshot of a person with a friendly expression in soft studio lighting against a neutral background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCj6nKdegmvplYPLZ0VtniZ_nijOJz_vFNJlZPudrw5fM5CnTBUUPy91tHzT7WVHLukIIOgSOJkIUDXS9idIDlyYw2hRDfcTIA-yaPu9xueRTTk1fTBAO4JPxLKC1tdaoa-0R4rVosMrg2l-ZvdH7JN0rWGCzx_twcELKMCCHqa70H9-PGjLn_9a-D5nCc4iF7CjVbLN3NhrS90cc7JIg6OBGYX3WXzty2wnTl0bn5mFY9X14lhLHLH6fyD7EHwabkCKC2wcgwEDYSn"/>
+</div>
+</div>
+</div>
+</nav>
+<main class="max-w-screen-2xl mx-auto px-8 py-16">
+<!-- Hero / Header Section -->
+<header class="mb-16">
+<h1 class="waldenburg-thin text-[48px] leading-[1.08] tracking-[-0.96px] text-black mb-4">Sources</h1>
+<p class="text-on-surface-variant text-[20px] inter-airy leading-[1.35] max-w-2xl">
+                The Context Layer's single source of truth. Manage and monitor the data powering your ElevenLabs AI.
+            </p>
+</header>
+<!-- Actions Bar -->
+<div class="flex flex-col md:flex-row gap-4 items-center justify-between mb-12">
+<div class="flex items-center gap-3 w-full md:w-auto">
+<div class="relative w-full md:w-96">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400 text-[20px]">search</span>
+<input class="w-full pl-11 pr-4 py-3 rounded-full border-0 shadow-eleven-inset focus:ring-2 focus:ring-blue-500/50 bg-white text-[15px]" placeholder="Search your sources..." type="text"/>
+</div>
+<div class="flex p-1 bg-neutral-100 rounded-full">
+<button class="px-6 py-2 rounded-full text-[14px] font-medium bg-white shadow-sm text-black">All</button>
+<button class="px-6 py-2 rounded-full text-[14px] font-medium text-neutral-500 hover:text-black transition-colors">Code</button>
+<button class="px-6 py-2 rounded-full text-[14px] font-medium text-neutral-500 hover:text-black transition-colors">Files</button>
+</div>
+</div>
+<button class="flex items-center gap-2 bg-[rgba(245,242,239,0.8)] px-8 py-3 rounded-[30px] shadow-eleven-warm hover:opacity-90 transition-all group">
+<span class="material-symbols-outlined text-[20px]">add</span>
+<span class="text-[14px] font-bold uppercase tracking-[0.7px] font-['Public_Sans']">Add Source</span>
+</button>
+</div>
+<!-- Bento Style Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+<!-- Repository Card -->
+<div class="bg-white rounded-2xl p-6 shadow-eleven-inset hover:shadow-eleven-card transition-all duration-300 group cursor-pointer border border-transparent hover:border-neutral-100">
+<div class="flex justify-between items-start mb-6">
+<div class="w-12 h-12 bg-neutral-50 rounded-xl flex items-center justify-center border border-neutral-100">
+<span class="material-symbols-outlined text-[28px] text-black">terminal</span>
+</div>
+<span class="px-3 py-1 bg-green-50 text-green-700 text-[11px] font-semibold rounded-full uppercase tracking-wider">Indexed</span>
+</div>
+<h3 class="waldenburg-thin text-[24px] mb-2 leading-tight">elevenlabs-core</h3>
+<p class="text-neutral-500 text-[14px] mb-8 inter-airy">GitHub / Main Branch</p>
+<div class="pt-6 border-t border-neutral-50 flex items-center justify-between">
+<div class="flex flex-col gap-1">
+<span class="text-[10px] uppercase text-neutral-400 font-semibold tracking-widest">Last Synced</span>
+<span class="text-[13px] font-medium">12 minutes ago</span>
+</div>
+<span class="material-symbols-outlined text-neutral-300 group-hover:text-black transition-colors">arrow_forward</span>
+</div>
+</div>
+<!-- PDF Card -->
+<div class="bg-white rounded-2xl p-6 shadow-eleven-inset hover:shadow-eleven-card transition-all duration-300 group cursor-pointer border border-transparent hover:border-neutral-100">
+<div class="flex justify-between items-start mb-6">
+<div class="w-12 h-12 bg-neutral-50 rounded-xl flex items-center justify-center border border-neutral-100">
+<span class="material-symbols-outlined text-[28px] text-red-400">picture_as_pdf</span>
+</div>
+<span class="px-3 py-1 bg-blue-50 text-blue-700 text-[11px] font-semibold rounded-full uppercase tracking-wider">Processing</span>
+</div>
+<h3 class="waldenburg-thin text-[24px] mb-2 leading-tight">Voice Synthesis v2.pdf</h3>
+<p class="text-neutral-500 text-[14px] mb-8 inter-airy">4.2 MB • Research Docs</p>
+<div class="pt-6 border-t border-neutral-50 flex items-center justify-between">
+<div class="flex flex-col gap-1">
+<span class="text-[10px] uppercase text-neutral-400 font-semibold tracking-widest">Upload Date</span>
+<span class="text-[13px] font-medium">Oct 24, 2024</span>
+</div>
+<span class="material-symbols-outlined text-neutral-300 group-hover:text-black transition-colors">arrow_forward</span>
+</div>
+</div>
+<!-- Docx Card -->
+<div class="bg-white rounded-2xl p-6 shadow-eleven-inset hover:shadow-eleven-card transition-all duration-300 group cursor-pointer border border-transparent hover:border-neutral-100">
+<div class="flex justify-between items-start mb-6">
+<div class="w-12 h-12 bg-neutral-50 rounded-xl flex items-center justify-center border border-neutral-100">
+<span class="material-symbols-outlined text-[28px] text-blue-500">description</span>
+</div>
+<span class="px-3 py-1 bg-green-50 text-green-700 text-[11px] font-semibold rounded-full uppercase tracking-wider">Indexed</span>
+</div>
+<h3 class="waldenburg-thin text-[24px] mb-2 leading-tight">Project Manifesto.docx</h3>
+<p class="text-neutral-500 text-[14px] mb-8 inter-airy">128 KB • Shared Assets</p>
+<div class="pt-6 border-t border-neutral-50 flex items-center justify-between">
+<div class="flex flex-col gap-1">
+<span class="text-[10px] uppercase text-neutral-400 font-semibold tracking-widest">Last Synced</span>
+<span class="text-[13px] font-medium">2 hours ago</span>
+</div>
+<span class="material-symbols-outlined text-neutral-300 group-hover:text-black transition-colors">arrow_forward</span>
+</div>
+</div>
+<!-- Large Featured Card (Bento Style) -->
+<div class="bg-white md:col-span-2 rounded-2xl p-8 shadow-eleven-inset hover:shadow-eleven-card transition-all duration-300 group cursor-pointer relative overflow-hidden flex flex-col justify-between">
+<div class="absolute top-0 right-0 w-64 h-64 bg-neutral-50 rounded-full -mr-20 -mt-20 opacity-50 blur-3xl group-hover:bg-blue-50 transition-colors"></div>
+<div>
+<div class="flex justify-between items-start mb-8 relative z-10">
+<div class="w-14 h-14 bg-black rounded-xl flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-[32px]">dataset</span>
+</div>
+<div class="flex gap-2">
+<span class="px-3 py-1 bg-neutral-900 text-white text-[11px] font-semibold rounded-full uppercase tracking-wider">Primary Context</span>
+<span class="px-3 py-1 bg-green-50 text-green-700 text-[11px] font-semibold rounded-full uppercase tracking-wider">Synced</span>
+</div>
+</div>
+<h3 class="waldenburg-thin text-[32px] mb-4 leading-tight relative z-10">Knowledge Graph Alpha</h3>
+<p class="text-neutral-500 text-[16px] mb-12 inter-airy max-w-sm relative z-10">Complex relational data extracted from across all integrated sources. Updated hourly.</p>
+</div>
+<div class="pt-8 border-t border-neutral-50 flex items-center justify-between relative z-10">
+<div class="flex gap-12">
+<div class="flex flex-col gap-1">
+<span class="text-[10px] uppercase text-neutral-400 font-semibold tracking-widest">Entities</span>
+<span class="text-[16px] font-medium">12,402</span>
+</div>
+<div class="flex flex-col gap-1">
+<span class="text-[10px] uppercase text-neutral-400 font-semibold tracking-widest">Precision</span>
+<span class="text-[16px] font-medium">99.8%</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<span class="text-[13px] font-medium text-neutral-400">View Data View</span>
+<span class="material-symbols-outlined text-black">north_east</span>
+</div>
+</div>
+</div>
+<!-- More Small Cards -->
+<div class="bg-white rounded-2xl p-6 shadow-eleven-inset hover:shadow-eleven-card transition-all duration-300 group cursor-pointer border border-transparent hover:border-neutral-100">
+<div class="flex justify-between items-start mb-6">
+<div class="w-12 h-12 bg-neutral-50 rounded-xl flex items-center justify-center border border-neutral-100">
+<span class="material-symbols-outlined text-[28px] text-black">terminal</span>
+</div>
+<span class="px-3 py-1 bg-green-50 text-green-700 text-[11px] font-semibold rounded-full uppercase tracking-wider">Indexed</span>
+</div>
+<h3 class="waldenburg-thin text-[24px] mb-2 leading-tight">api-gateway</h3>
+<p class="text-neutral-500 text-[14px] mb-8 inter-airy">GitHub / Dev Branch</p>
+<div class="pt-6 border-t border-neutral-50 flex items-center justify-between">
+<div class="flex flex-col gap-1">
+<span class="text-[10px] uppercase text-neutral-400 font-semibold tracking-widest">Last Synced</span>
+<span class="text-[13px] font-medium">Yesterday</span>
+</div>
+<span class="material-symbols-outlined text-neutral-300 group-hover:text-black transition-colors">arrow_forward</span>
+</div>
+</div>
+<div class="bg-white rounded-2xl p-6 shadow-eleven-inset hover:shadow-eleven-card transition-all duration-300 group cursor-pointer border border-transparent hover:border-neutral-100">
+<div class="flex justify-between items-start mb-6">
+<div class="w-12 h-12 bg-neutral-50 rounded-xl flex items-center justify-center border border-neutral-100">
+<span class="material-symbols-outlined text-[28px] text-amber-600">deployed_code</span>
+</div>
+<span class="px-3 py-1 bg-neutral-50 text-neutral-400 text-[11px] font-semibold rounded-full uppercase tracking-wider">Paused</span>
+</div>
+<h3 class="waldenburg-thin text-[24px] mb-2 leading-tight">Legacy Models</h3>
+<p class="text-neutral-500 text-[14px] mb-8 inter-airy">Local Archive / Zip</p>
+<div class="pt-6 border-t border-neutral-50 flex items-center justify-between">
+<div class="flex flex-col gap-1">
+<span class="text-[10px] uppercase text-neutral-400 font-semibold tracking-widest">Sync Status</span>
+<span class="text-[13px] font-medium">Inactive</span>
+</div>
+<span class="material-symbols-outlined text-neutral-300 group-hover:text-black transition-colors">arrow_forward</span>
+</div>
+</div>
+</div>
+<!-- Empty State / Add Suggestion Section -->
+<section class="mt-24 p-12 bg-neutral-50 rounded-[24px] border border-neutral-200/50 flex flex-col items-center text-center">
+<span class="material-symbols-outlined text-[48px] text-neutral-300 mb-6">cloud_upload</span>
+<h2 class="waldenburg-thin text-[32px] mb-4">Sync more context</h2>
+<p class="text-neutral-500 inter-airy max-w-lg mb-8">Extend the model's capabilities by adding more data sources. We support direct integrations with GitHub, Notion, Slack, and local file uploads.</p>
+<div class="flex gap-4">
+<button class="px-8 py-3 bg-white shadow-eleven-inset rounded-full font-medium text-[15px] hover:bg-white/50 transition-all">Browse Integrations</button>
+<button class="px-8 py-3 bg-black text-white rounded-full font-medium text-[15px] hover:opacity-80 transition-all">Quick Upload</button>
+</div>
+</section>
+</main>
+<!-- Footer - Rendered as per JSON Shell Identity -->
+<footer class="bg-neutral-50 dark:bg-neutral-950 border-t border-neutral-200 dark:border-neutral-800 py-12">
+<div class="max-w-7xl mx-auto px-8 flex flex-col md:flex-row justify-between items-center gap-4">
+<span class="font-['Inter'] text-[13px] tracking-normal text-neutral-400 dark:text-neutral-600">© 2024 ElevenLabs AI. All rights reserved.</span>
+<div class="flex gap-8">
+<a class="font-['Inter'] text-[13px] tracking-normal text-neutral-500 dark:text-neutral-500 hover:text-black dark:hover:text-white underline decoration-neutral-300 transition-colors duration-200" href="#">Privacy Policy</a>
+<a class="font-['Inter'] text-[13px] tracking-normal text-neutral-500 dark:text-neutral-500 hover:text-black dark:hover:text-white underline decoration-neutral-300 transition-colors duration-200" href="#">Terms of Service</a>
+<a class="font-['Inter'] text-[13px] tracking-normal text-neutral-500 dark:text-neutral-500 hover:text-black dark:hover:text-white underline decoration-neutral-300 transition-colors duration-200" href="#">Security</a>
+<a class="font-['Inter'] text-[13px] tracking-normal text-neutral-500 dark:text-neutral-500 hover:text-black dark:hover:text-white underline decoration-neutral-300 transition-colors duration-200" href="#">Status</a>
+</div>
+</div>
+</footer>
+</body></html>

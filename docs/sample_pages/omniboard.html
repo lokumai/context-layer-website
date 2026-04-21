@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>OmniBoard - Context Layer</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Public+Sans:wght@300;400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface": "#f9f9f9",
+                      "on-primary-fixed-variant": "#474747",
+                      "on-secondary-fixed": "#1b1c1c",
+                      "tertiary-container": "#1f1b15",
+                      "secondary-fixed-dim": "#c8c6c6",
+                      "inverse-surface": "#2f3131",
+                      "tertiary-fixed": "#eae1d7",
+                      "primary-container": "#1b1b1b",
+                      "secondary": "#5e5e5e",
+                      "tertiary": "#000000",
+                      "on-tertiary": "#ffffff",
+                      "on-error": "#ffffff",
+                      "surface-variant": "#e2e2e2",
+                      "surface-container": "#eeeeee",
+                      "secondary-fixed": "#e4e2e2",
+                      "on-secondary-fixed-variant": "#474747",
+                      "inverse-on-surface": "#f1f1f1",
+                      "on-tertiary-fixed-variant": "#4b463f",
+                      "error-container": "#ffdad6",
+                      "error": "#ba1a1a",
+                      "inverse-primary": "#c6c6c6",
+                      "secondary-container": "#e4e2e2",
+                      "surface-container-high": "#e8e8e8",
+                      "on-surface": "#1a1c1c",
+                      "on-primary-fixed": "#1b1b1b",
+                      "on-error-container": "#93000a",
+                      "surface-tint": "#5e5e5e",
+                      "primary-fixed": "#e2e2e2",
+                      "surface-container-highest": "#e2e2e2",
+                      "primary-fixed-dim": "#c6c6c6",
+                      "surface-container-low": "#f3f3f3",
+                      "outline-variant": "#cfc4c5",
+                      "background": "#f9f9f9",
+                      "surface-bright": "#f9f9f9",
+                      "primary": "#000000",
+                      "on-primary": "#ffffff",
+                      "on-secondary-container": "#646464",
+                      "on-primary-container": "#848484",
+                      "on-tertiary-fixed": "#1f1b15",
+                      "on-surface-variant": "#4c4546",
+                      "outline": "#7e7576",
+                      "tertiary-fixed-dim": "#cdc5bc",
+                      "surface-dim": "#dadada",
+                      "surface-container-lowest": "#ffffff",
+                      "on-tertiary-container": "#89837b",
+                      "on-secondary": "#ffffff",
+                      "on-background": "#1a1c1c"
+              },
+              "borderRadius": {
+                      "DEFAULT": "1rem",
+                      "lg": "2rem",
+                      "xl": "3rem",
+                      "full": "9999px"
+              },
+              "spacing": {},
+              "fontFamily": {
+                      "headline": [
+                              "Public Sans"
+                      ],
+                      "body": [
+                              "Inter"
+                      ],
+                      "label": [
+                              "Inter"
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        @font-face {
+            font-family: 'Waldenburg';
+            font-style: normal;
+            font-weight: 300;
+            src: local('Public Sans Light'), local('Helvetica Neue Light'), sans-serif;
+            /* Mocking Waldenburg with Public Sans for the output, as actual Waldenburg might not be readily available via standard CDNs in this constrained environment. Public Sans Light provides a similar clean, thin aesthetic. */
+        }
+        @font-face {
+            font-family: 'WaldenburgFH';
+            font-style: normal;
+            font-weight: 700;
+            src: local('Public Sans Bold'), local('Helvetica Neue Bold'), sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5; /* Light Gray base */
+            color: #000000;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .font-waldenburg {
+            font-family: 'Waldenburg', sans-serif;
+        }
+
+        .font-waldenburg-fh {
+            font-family: 'WaldenburgFH', sans-serif;
+        }
+
+        /* ElevenLabs-inspired Multi-layer Shadows */
+        .shadow-inset-edge {
+            box-shadow: rgba(0,0,0,0.075) 0px 0px 0px 0.5px inset, #fff 0px 0px 0px 0px inset;
+        }
+        .shadow-outline-ring {
+            box-shadow: rgba(0,0,0,0.06) 0px 0px 0px 1px, rgba(0,0,0,0.04) 0px 1px 2px, rgba(0,0,0,0.04) 0px 2px 4px;
+        }
+        .shadow-card-elevated {
+            box-shadow: rgba(0,0,0,0.4) 0px 0px 1px, rgba(0,0,0,0.04) 0px 4px 4px;
+        }
+        .shadow-warm-lift {
+            box-shadow: rgba(78,50,23,0.04) 0px 6px 16px;
+        }
+
+        /* Typography Utilities */
+        .tracking-body { letter-spacing: 0.16px; }
+        .tracking-display { letter-spacing: -0.96px; }
+        .tracking-btn-uppercase { letter-spacing: 0.7px; }
+
+        /* Custom Scrollbar for a cleaner look */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #e5e5e5;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #d4d4d4;
+        }
+    </style>
+</head>
+<body class="font-body tracking-body flex flex-col h-screen overflow-hidden">
+<!-- TopNavBar Component -->
+<nav class="sticky top-0 w-full z-50 flex justify-between items-center px-6 py-3 bg-white/80 dark:bg-stone-950/80 backdrop-blur-md shadow-[rgba(0,0,0,0.075)_0px_0px_0px_0.5px_inset,rgba(0,0,0,0.04)_0px_4px_4px] border-b border-black/[0.05] dark:border-white/[0.05]">
+<div class="flex items-center gap-8">
+<span class="text-xl font-light tracking-tighter text-stone-900 dark:text-stone-50 font-waldenburg">OmniBoard</span>
+<div class="hidden md:flex gap-6">
+<a class="text-[15px] font-medium leading-[1.47] tracking-[0.15px] text-stone-500 hover:text-stone-700 transition-colors" href="#">Workspaces</a>
+<a class="text-[15px] font-medium leading-[1.47] tracking-[0.15px] text-stone-500 hover:text-stone-700 transition-colors" href="#">Deployments</a>
+<a class="text-[15px] font-medium leading-[1.47] tracking-[0.15px] text-stone-500 hover:text-stone-700 transition-colors" href="#">Library</a>
+<a class="text-[15px] font-medium leading-[1.47] tracking-[0.15px] text-stone-500 hover:text-stone-700 transition-colors" href="#">Settings</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-[15px] font-medium leading-[1.47] text-stone-900 px-4 py-2 hover:bg-stone-50 transition-all duration-300 rounded-full">Sign In</button>
+<button class="bg-primary text-on-primary text-[15px] font-medium leading-[1.47] px-[14px] py-0 h-9 rounded-full shadow-card-elevated hover:scale-[0.99] transition-transform">New Project</button>
+</div>
+</nav>
+<div class="flex flex-1 overflow-hidden">
+<!-- SideNavBar Component -->
+<aside class="hidden lg:flex flex-col w-64 h-full border-r border-stone-200 bg-stone-50 shadow-[rgba(0,0,0,0.06)_1px_0px_0px_0px] z-40 relative">
+<div class="p-6">
+<h2 class="font-waldenburg text-[24px] font-light leading-[1.17] text-stone-900 mb-1">Context Layer</h2>
+<p class="text-[14px] text-stone-500 tracking-body">Active Workspace</p>
+</div>
+<nav class="flex-1 px-4 space-y-2 overflow-y-auto">
+<a class="flex items-center gap-3 px-3 py-2 bg-stone-200/50 text-stone-900 rounded-lg group" href="#">
+<span class="material-symbols-outlined text-[20px]">hub</span>
+<span class="font-medium text-[15px] tracking-[0.15px]">Context</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-stone-500 hover:text-stone-900 hover:translate-x-1 transition-transform duration-200 rounded-lg group" href="#">
+<span class="material-symbols-outlined text-[20px]">present_to_all</span>
+<span class="font-medium text-[15px] tracking-[0.15px]">Slides</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-stone-500 hover:text-stone-900 hover:translate-x-1 transition-transform duration-200 rounded-lg group" href="#">
+<span class="material-symbols-outlined text-[20px]">audiotrack</span>
+<span class="font-medium text-[15px] tracking-[0.15px]">Audio</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-stone-500 hover:text-stone-900 hover:translate-x-1 transition-transform duration-200 rounded-lg group" href="#">
+<span class="material-symbols-outlined text-[20px]">videocam</span>
+<span class="font-medium text-[15px] tracking-[0.15px]">Video</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-stone-500 hover:text-stone-900 hover:translate-x-1 transition-transform duration-200 rounded-lg group" href="#">
+<span class="material-symbols-outlined text-[20px]">menu_book</span>
+<span class="font-medium text-[15px] tracking-[0.15px]">Sources</span>
+</a>
+</nav>
+<div class="p-4 mt-auto border-t border-stone-200/50">
+<button class="w-full bg-[#f5f2ef]/80 text-[#000000] rounded-[30px] py-[12px] pl-[14px] pr-[20px] shadow-warm-lift flex items-center justify-center gap-2 hover:scale-[0.99] transition-transform">
+<span class="font-waldenburg-fh text-[14px] uppercase tracking-btn-uppercase">Generate Content</span>
+</button>
+</div>
+<div class="px-4 pb-6 pt-2 flex flex-col gap-2">
+<a class="flex items-center gap-3 px-3 py-2 text-stone-500 hover:text-stone-900 transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined text-[18px]">help</span>
+<span class="text-[14px]">Documentation</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-stone-500 hover:text-stone-900 transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined text-[18px]">contact_support</span>
+<span class="text-[14px]">Support</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Area (Central Chat) -->
+<main class="flex-1 flex flex-col bg-white overflow-hidden relative">
+<div class="flex-1 overflow-y-auto p-8 lg:px-24">
+<div class="max-w-3xl mx-auto space-y-12 pb-24">
+<!-- Welcome / Hero -->
+<div class="text-center space-y-4 pt-12 pb-8">
+<h1 class="font-waldenburg text-[48px] font-light leading-[1.08] tracking-display text-primary">OmniBoard</h1>
+<p class="text-[20px] text-on-secondary-container leading-[1.35] tracking-body">Multimodal context exploration and generation hub.</p>
+</div>
+<!-- Chat Messages -->
+<div class="space-y-8">
+<!-- User Message -->
+<div class="flex justify-end">
+<div class="bg-surface-container-low text-on-surface px-6 py-4 rounded-[20px] rounded-tr-[4px] shadow-outline-ring max-w-[85%]">
+<p class="text-[16px] leading-[1.5]">Can you summarize the main architecture components of the current codebase?</p>
+</div>
+</div>
+<!-- Agent Message -->
+<div class="flex justify-start">
+<div class="bg-white px-6 py-5 rounded-[24px] shadow-outline-ring max-w-[95%] border border-surface-variant">
+<!-- Thinking / Meta -->
+<div class="flex items-center gap-2 mb-4 text-[13px] text-on-primary-container font-medium">
+<span class="material-symbols-outlined text-[16px]">psychology</span>
+<span>Analyzing repository structure and dependencies...</span>
+</div>
+<div class="prose prose-stone max-w-none space-y-4">
+<p class="text-[16px] leading-[1.6] text-on-surface">Based on the provided context, the architecture is built around three primary components:</p>
+<ul class="space-y-3 mt-4 text-[16px] leading-[1.6] text-on-surface">
+<li class="flex gap-3">
+<span class="material-symbols-outlined text-[#777169] text-[20px] mt-0.5">account_tree</span>
+<div>
+<strong class="font-medium text-primary">Data Ingestion Pipeline:</strong> Handles fetching and normalizing raw data from external APIs. <span class="text-[12px] bg-surface-variant text-on-surface-variant px-1.5 py-0.5 rounded ml-1 cursor-pointer hover:bg-secondary-fixed-dim transition-colors">[1] src/pipeline/</span>
+</div>
+</li>
+<li class="flex gap-3">
+<span class="material-symbols-outlined text-[#777169] text-[20px] mt-0.5">memory</span>
+<div>
+<strong class="font-medium text-primary">Processing Engine:</strong> A set of worker nodes that apply transformations and machine learning models. <span class="text-[12px] bg-surface-variant text-on-surface-variant px-1.5 py-0.5 rounded ml-1 cursor-pointer hover:bg-secondary-fixed-dim transition-colors">[2] docs/engine.md</span>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Chat Input Sticky Bottom -->
+<div class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-white via-white to-transparent">
+<div class="max-w-3xl mx-auto relative">
+<div class="bg-white rounded-[24px] shadow-outline-ring border border-[#e5e5e5] p-2 flex items-end shadow-card-elevated">
+<textarea class="w-full bg-transparent border-none focus:ring-0 resize-none max-h-32 min-h-[44px] py-3 px-4 text-[16px] text-primary placeholder-[#777169]" placeholder="Ask about your context..." rows="1"></textarea>
+<button class="bg-primary text-on-primary p-2.5 rounded-full shadow-card-elevated hover:scale-95 transition-transform flex-shrink-0 mb-1 mr-1">
+<span class="material-symbols-outlined text-[20px]" data-weight="fill" style="font-variation-settings: 'FILL' 1;">arrow_upward</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+<!-- Right Side Panel (Multimodal Controls) -->
+<aside class="hidden xl:block w-[380px] bg-[#fcfcfc] border-l border-[#e5e5e5] overflow-y-auto h-full z-30">
+<div class="p-8 space-y-10">
+<div>
+<h3 class="font-waldenburg text-[24px] font-light text-primary mb-6">Multimodal Generations</h3>
+<p class="text-[15px] text-on-secondary-container leading-[1.5] mb-8">Transform your active context into diverse formats.</p>
+</div>
+<!-- Slides Section -->
+<section class="space-y-4 relative">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-[#777169]">present_to_all</span>
+<h4 class="font-medium text-[16px] text-primary">Slides</h4>
+</div>
+<div class="bg-white rounded-[16px] p-5 shadow-outline-ring border border-[#e5e5e5] hover:shadow-card-elevated transition-shadow duration-300">
+<h5 class="font-medium text-[15px] mb-2 text-primary">Detailed Slides</h5>
+<p class="text-[14px] text-[#777169] leading-[1.5] mb-4">Comprehensive presentation including all technical specifications and code snippets.</p>
+<button class="bg-[#f5f2ef]/80 text-[#000000] rounded-[30px] py-[8px] pl-[12px] pr-[16px] shadow-warm-lift flex items-center gap-2 text-[13px] font-medium hover:bg-[#eae6e1] transition-colors">
+<span class="material-symbols-outlined text-[16px]">magic_button</span> Generate
+                        </button>
+</div>
+<div class="bg-white rounded-[16px] p-5 shadow-outline-ring border border-[#e5e5e5] hover:shadow-card-elevated transition-shadow duration-300">
+<h5 class="font-medium text-[15px] mb-2 text-primary">Summary Slides</h5>
+<p class="text-[14px] text-[#777169] leading-[1.5] mb-4">High-level executive overview focusing on architecture and outcomes.</p>
+<button class="bg-[#f5f2ef]/80 text-[#000000] rounded-[30px] py-[8px] pl-[12px] pr-[16px] shadow-warm-lift flex items-center gap-2 text-[13px] font-medium hover:bg-[#eae6e1] transition-colors">
+<span class="material-symbols-outlined text-[16px]">magic_button</span> Generate
+                        </button>
+</div>
+</section>
+<!-- Audio Section -->
+<section class="space-y-4 relative">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-[#777169]">audiotrack</span>
+<h4 class="font-medium text-[16px] text-primary">Audio</h4>
+</div>
+<div class="bg-white rounded-[16px] p-5 shadow-outline-ring border border-[#e5e5e5] hover:shadow-card-elevated transition-shadow duration-300">
+<h5 class="font-medium text-[15px] mb-2 text-primary">Podcast (Debate)</h5>
+<p class="text-[14px] text-[#777169] leading-[1.5] mb-4">A two-person conversational deep dive discussing the trade-offs in your architecture.</p>
+<button class="bg-[#f5f2ef]/80 text-[#000000] rounded-[30px] py-[8px] pl-[12px] pr-[16px] shadow-warm-lift flex items-center gap-2 text-[13px] font-medium hover:bg-[#eae6e1] transition-colors">
+<span class="material-symbols-outlined text-[16px]">magic_button</span> Generate
+                        </button>
+</div>
+</section>
+</div>
+</aside>
+</div>
+</body></html>
