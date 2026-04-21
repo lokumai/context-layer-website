@@ -136,4 +136,32 @@ When people enter the docsgen page, they should be able to see the docsgen viewe
 
 
 =============== OmniBoard page ====================
-When people enter OmniBoard page, they should be provided with 
+When people enter OmniBoard page:
+Multimodal onboarding tool for developers and users — designed to **reduce time-to-productivity from months to weeks**.
+
+In enterprise settings, onboarding a new developer onto a legacy codebase can take 2-3 months. OmniBoard generates rich, multimodal documentation so developers can build a mental model of the codebase fast — through the medium that works best for them.
+
+Modalities:
+- **Text:** Markdown, ASCII art, Mermaid diagrams
+- **Audio:** Voice recordings and podcasts (similar to NotebookLM) — using open-source audio generation models or tools like ElevenLabs
+- **Video:** Slides with voiceovers (HTML, PPTX generation, or image generation models)
+
+Ideas:
+
+This module can look similar to NotebookLM. Meaning that it can be an environment for users to have a chatbot to help them understand the codebase and get answers to their questions, while the environment provide options for users such as below.
+
+Slides:
+The user should be able to generate a slide deck with the following options:
+- Detailed Slides: A comprehensive deck with full text and details, perfect for emailing or reading on its own.
+- Summary Slides: A summary of the codebase, with key points and highlights.
+
+Audio: 
+The user should be able to generate an audio podcast with the following options:
+- Deep Dive: A deep dive into the codebase, with detailed explanations of the code and the architecture.
+- Summary: A summary of the codebase, with key points and highlights.
+- Podcast: A podcast that two people are talking about the codebase and debating. 
+
+Video:
+The user should be able to generate a video presentation that is basically Audio over Slides. With the following options:
+- Detailed Presentation: A detailed presentation with full text and details, perfect for emailing or reading on its own.
+- Summary Presentation: A summary of the codebase, with key points and highlights.
