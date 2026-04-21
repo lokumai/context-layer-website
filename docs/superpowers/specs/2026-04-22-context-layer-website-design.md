@@ -3,6 +3,8 @@
 **Date:** 2026-04-22
 **Topic:** Context Layer Landing Pages and Mock Playground
 
+> **Source of Truth:** This specification strictly adheres to the definitions established in `../../SEED.md`, `../../UI_UX.md`, and `../../DESIGN.md`. All design and functional implementations MUST reference these core documents.
+
 ## Overview
 This document specifies the technical architecture and design structure for the Context Layer website, an authenticated playground mimicking the final agentic product. It serves as an exportable demo grounded in pre-generated data from the `microservices-product-catalog` workspace.
 

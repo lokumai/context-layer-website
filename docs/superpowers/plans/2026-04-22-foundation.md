@@ -8,6 +8,8 @@
 
 **Tech Stack:** Bun, Turborepo, Next.js 15, Tailwind CSS v4, Biome.
 
+> **Source of Truth:** All technical and design decisions in this plan derive from and strictly adhere to `../../SEED.md`, `../../UI_UX.md`, and `../../DESIGN.md`.
+
 ---
 
 ### Task 1: Initialize Turborepo Workspace with Bun
