@@ -4,7 +4,7 @@
 
 **Goal:** Initialize the Turborepo workspace, setup Next.js 15, and implement the ElevenLabs-inspired design system as the foundation for the mock website.
 
-**Architecture:** A Turborepo monorepo managed by Bun. `apps/web` for Next.js 15 App Router. `packages/ui` for shared components. `packages/config` for shared tooling.
+**Architecture:** A Turborepo monorepo managed by Bun. `apps/web` for Next.js 15 App Router. `packages/ui` for shared components. `packages/config` for shared tooling. `packages/mocks` for persona fixtures is scaffolded in plan `2026-04-22-08-personas-and-fixtures.md` (Task 1) — do not create it here.
 
 **Tech Stack:** Bun, Turborepo, Next.js 15, Tailwind CSS v4, Biome.
 
