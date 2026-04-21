@@ -1,1 +1,40 @@
+# Dependencies
+node_modules/
+
+# Turborepo
+.turbo/
+
+# Next.js (apps/web)
+.next/
+out/
+
+# Bun (local cache if present at repo root)
+.bun/
+
+# Environment (keep .env.example committed if you add one)
+.env
+.env.*
+!.env.example
+
+# Vercel
+.vercel/
+
+# Logs & debug
+*.log
+npm-debug.log*
+
+# Test / coverage
+coverage/
+
+# TypeScript
+*.tsbuildinfo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# JetBrains
+.idea/
+
+# Agent / tooling — extra Git clones in-repo
 .worktrees/
