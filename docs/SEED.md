@@ -80,3 +80,20 @@ No real agents or workflows are implemented. The playground is a **demo that mim
 **Why A:** Sweet spot for current scope. Fast, minimal tooling overhead. If monorepo grows significantly, can migrate to Nx later.
 
 **Future agent integration:** [DeepAgentsJS](https://github.com/langchain-ai/deepagentsjs). Company strategy is monorepo with TS frontends + TS backends.
+
+---
+
+## 2026-04-21 — Playground UI/UX Finalized
+
+After a dedicated refinement pass, the playground UI/UX spec is finalized. Canonical reference: [UI_UX.md](./UI_UX.md).
+
+Key pillars settled (details in UI_UX.md):
+
+- **Information architecture** organized around the "Understand vs. Produce" mental model: Sources → Knowledge (Wiki + Intelligence) → Chatbot → Generate (DocsGen + OmniBoard + MCPGen) → Library.
+- **Living Wiki as default**: auto-sync is the baseline; manual "Force Sync" and "Force Rebuild" are fallbacks. Sync cadence is user-selectable (per commit, per PR merge, hourly, daily, weekly, or manual).
+- **Integration-first Sources**: OAuth connectors (GitHub/GitLab, Drive/Notion, Slack, etc.) are the primary path; manual upload / URL paste are fallbacks. On-premise deployments flip this hierarchy.
+- **Progressive gating**: no downstream capability (Chatbot, Intelligence, Generate, Library) is accessible until at least one source is added and the first Wiki is generated. The first-time workspace wizard walks the user past these gates.
+- **Chatbot side-panel** on Wiki and Intelligence; expandable to full page. Grounding filter chips above the input.
+- **Version history via git diff** in Wiki Logs — enterprise audit-friendly.
+- **DocsGen** uses tabbed bundles with card-based generation; outputs land in Library. "Agent Infrastructure" bundle renamed to **Agentify**.
+- **OmniBoard** is a specialized chatbot environment (plan → HITL approve → long job → Library + NotebookLM-like exploration). MCPGen is tentative.
