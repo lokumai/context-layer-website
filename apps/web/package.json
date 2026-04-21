@@ -10,6 +10,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@context-layer/mocks": "workspace:*",
     "@tailwindcss/postcss": "4.0.0-alpha.16",
     "lucide-react": "latest",
     "next": "15.0.0-rc.0",

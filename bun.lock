@@ -13,6 +13,7 @@
       "name": "web",
       "version": "0.1.0",
       "dependencies": {
+        "@context-layer/mocks": "workspace:*",
         "@tailwindcss/postcss": "4.0.0-alpha.16",
         "lucide-react": "latest",
         "next": "15.0.0-rc.0",
@@ -34,6 +35,14 @@
     "packages/config": {
       "name": "@context-layer/config",
       "version": "0.0.0",
+    },
+    "packages/mocks": {
+      "name": "@context-layer/mocks",
+      "version": "0.0.0",
+      "devDependencies": {
+        "@context-layer/config": "workspace:*",
+        "typescript": "^5",
+      },
     },
   },
   "packages": {
@@ -58,6 +67,8 @@
     "@biomejs/cli-win32-x64": ["@biomejs/cli-win32-x64@2.4.12", "", { "os": "win32", "cpu": "x64" }, "sha512-yMckRzTyZ83hkk8iDFWswqSdU8tvZxspJKnYNh7JZr/zhZNOlzH13k4ecboU6MurKExCe2HUkH75pGI/O2JwGA=="],
 
     "@context-layer/config": ["@context-layer/config@workspace:packages/config"],
+
+    "@context-layer/mocks": ["@context-layer/mocks@workspace:packages/mocks"],
 
     "@emnapi/runtime": ["@emnapi/runtime@1.10.0", "", { "dependencies": { "tslib": "^2.4.0" } }, "sha512-ewvYlk86xUoGI0zQRNq/mC+16R1QeDlKQy21Ki3oSYXNgLb45GV1P6A0M+/s6nyCuNDqe5VpaY84BzXGwVbwFA=="],
 
