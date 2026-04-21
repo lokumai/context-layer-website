@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { signOut } from "next-auth/react";
 import { usePlaygroundStore } from "@/store/playground-store";
 
 export function TopNavbar() {
@@ -123,6 +124,17 @@ export function TopNavbar() {
               Reset
             </button>
           )}
+          <button
+            onClick={async () => {
+              localStorage.removeItem("playground");
+              usePlaygroundStore.getState().__resetAll();
+              await signOut({ callbackUrl: "/login" });
+            }}
+            className="text-[13px] font-medium text-neutral-500 hover:text-black px-3 py-1 rounded-full hover:bg-neutral-100"
+            title="Sign out"
+          >
+            Sign out
+          </button>
           <div className="w-8 h-8 rounded-full bg-neutral-200" title="Profile" />
         </div>
       </div>
