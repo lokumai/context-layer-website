@@ -7,6 +7,7 @@ export type { PersonaUser } from "./auth.utils";
 export { authorizePersona } from "./auth.utils";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  secret: process.env.AUTH_SECRET,
   providers: [
     Credentials({
       credentials: {
