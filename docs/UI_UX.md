@@ -26,7 +26,7 @@ This model prevents the frequent confusion of "do I go to Wiki or DocsGen to see
 The navbar is fixed at the top of every page inside the playground. It spans the full horizontal width and is divided into three regions:
 
 **Left region (workspace context)**
-- **Context Layer Logo** — clickable, redirects to the Workspaces page (exits the current workspace).
+- **Context Layer Logo** — clickable, redirects to the Workspaces page (exits the current workspace). You MUST use the official brand assets located in `assets/logos/` (e.g., `assets/logos/logo-landscape.png` for desktop headers, and `assets/logos/icon.png` for mobile or compact views). Do not use placeholder text or emojis for the logo.
 - **Active Workspace Pill** — shows the name of the currently active workspace. Clicking or hovering reveals a dropdown with:
   - A list of the most recently used workspaces (clickable to switch)
   - An "All Workspaces" link that navigates back to the Workspaces home page
@@ -677,6 +677,12 @@ Because this playground operates purely on the frontend without a live AI backen
 - **Artificial Delays:** State transitions must never be instant. When a user clicks "Generate Wiki", "Generate Intelligence", or adds a source, the Zustand store must use timers to simulate a realistic processing job (e.g., 4 to 5 seconds) before actually hydrating the mock data. But keep it snappy since our client cannot wait for the long-horizon nature of our systems and tasks. In demo we have to keep it clean and smooth for clients. 
 - **Fake Log Streams:** During these simulated delays, the UI must display realistic, cascading progress steps. Do not just show a static spinner. Hardcode arrays of fake agent logs (e.g., `"Cloning repository..."`, `"Analyzing AST..."`, `"Generating markdown structure..."`) that trickle in sequentially to convince the user the AI is actively working.
 - **LLM Streaming Simulation:** When the user interacts with the Chatbot or OmniBoard, the mock response should not appear instantly. Implement a 1-2 second "Thinking..." state, followed by an artificial streaming effect that renders the mock text chunk-by-chunk, perfectly mimicking real LLM token generation.
+
+### 9.11 Brand Assets
+The AI must strictly use the provided image assets for branding. Do not use plain text, placeholder SVGs, or emojis for the Context Layer brand.
+- **`assets/logos/logo-landscape.png`** — Use for wide headers, the main marketing page, and desktop navigation.
+- **`assets/logos/logo-square.png`** — Use for social preview images, OpenGraph tags, or large square avatars.
+- **`assets/logos/icon.png`** — Use for the favicon (`app/favicon.ico` or `app/icon.png`) and compact mobile navigation bars.
 
 ---
 
