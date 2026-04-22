@@ -670,6 +670,14 @@ Locked pages remain visible in the navbar but are disabled (or grayed out) and s
 
 The First-Time Workspace Wizard (Section 3) is the primary UX vehicle for walking the user past these gates on their initial visit — it walks them through adding a source, configuring sync, and generating the first Wiki, at which point the entire product unlocks.
 
+### 9.10 Simulated Latency & The Illusion of Functionality
+
+Because this playground operates purely on the frontend without a live AI backend, you MUST engineer the **illusion of complex processing**. 
+
+- **Artificial Delays:** State transitions must never be instant. When a user clicks "Generate Wiki", "Generate Intelligence", or adds a source, the Zustand store must use timers to simulate a realistic processing job (e.g., 4 to 5 seconds) before actually hydrating the mock data. But keep it snappy since our client cannot wait for the long-horizon nature of our systems and tasks. In demo we have to keep it clean and smooth for clients. 
+- **Fake Log Streams:** During these simulated delays, the UI must display realistic, cascading progress steps. Do not just show a static spinner. Hardcode arrays of fake agent logs (e.g., `"Cloning repository..."`, `"Analyzing AST..."`, `"Generating markdown structure..."`) that trickle in sequentially to convince the user the AI is actively working.
+- **LLM Streaming Simulation:** When the user interacts with the Chatbot or OmniBoard, the mock response should not appear instantly. Implement a 1-2 second "Thinking..." state, followed by an artificial streaming effect that renders the mock text chunk-by-chunk, perfectly mimicking real LLM token generation.
+
 ---
 
 ## 10. Summary Map
