@@ -1,0 +1,20 @@
+{
+  "name": "context-layer",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "biome lint .",
+    "format": "biome format . --write",
+    "test": "turbo run test"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.4.12",
+    "turbo": "^2.0.0"
+  },
+  "packageManager": "bun@1.0.0"
+}

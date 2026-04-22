@@ -1,0 +1,15 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.4.12/schema.json",
+  "extends": ["./packages/config/biome.json"],
+  "files": {
+    "includes": ["**", "!**/node_modules", "!**/.next", "!**/dist", "!**/public", "!**/.turbo", "!**/docs"]
+  },
+  "css": {
+    "parser": {
+      "cssModules": true
+    },
+    "linter": {
+      "enabled": false
+    }
+  }
+}
