@@ -1,0 +1,189 @@
+{
+  "jobs": [
+    {
+      "id": "job-010",
+      "type": "sync",
+      "trigger": "pr-merge",
+      "status": "success",
+      "startedAt": "2026-04-22T13:41:00.000Z",
+      "completedAt": "2026-04-22T13:42:12.000Z",
+      "durationMs": 72000,
+      "repoIds": ["offering-service"],
+      "summary": "Synced offering-service wiki after PR #261 (Next.js 16 upgrade merged upstream).",
+      "steps": [
+        { "name": "fetch-sources", "status": "success", "summary": "Pulled latest offering-service tree." },
+        { "name": "diff-analyze", "status": "success", "summary": "18 files changed; 2 wiki sections impacted." },
+        { "name": "regenerate-sections", "status": "success", "summary": "Rewrote lifecycle and saga orchestration sections." },
+        { "name": "commit-wiki", "status": "success", "summary": "Wiki git commit 9a4f2e1." }
+      ],
+      "diffStats": { "added": 42, "modified": 31, "removed": 18 }
+    },
+    {
+      "id": "job-009",
+      "type": "sync",
+      "trigger": "pr-merge",
+      "status": "success",
+      "startedAt": "2026-04-21T10:14:32.000Z",
+      "completedAt": "2026-04-21T10:15:50.000Z",
+      "durationMs": 78000,
+      "repoIds": ["frontend"],
+      "summary": "Synced frontend wiki after PR #261 (Next.js 16 upgrade).",
+      "steps": [
+        { "name": "fetch-sources", "status": "success", "summary": "Pulled latest frontend tree." },
+        { "name": "diff-analyze", "status": "success", "summary": "31 files changed; 4 wiki sections impacted." },
+        { "name": "regenerate-sections", "status": "success", "summary": "Rewrote architecture and testing sections." },
+        { "name": "commit-wiki", "status": "success", "summary": "Wiki git commit c108ab3." }
+      ],
+      "diffStats": { "added": 71, "modified": 52, "removed": 24 }
+    },
+    {
+      "id": "job-008",
+      "type": "sync",
+      "trigger": "scheduled",
+      "status": "success",
+      "startedAt": "2026-04-20T02:00:00.000Z",
+      "completedAt": "2026-04-20T02:04:41.000Z",
+      "durationMs": 281000,
+      "repoIds": ["api-gateway", "identity-service", "characteristic-service", "specification-service", "pricing-service", "offering-service", "store-query-service", "frontend", "shared-chassis"],
+      "summary": "Weekly workspace-wide reconciliation sync. 3 sections touched across 2 repos.",
+      "steps": [
+        { "name": "fetch-sources", "status": "success", "summary": "All 9 repos pulled." },
+        { "name": "diff-analyze", "status": "success", "summary": "Low-churn week." },
+        { "name": "regenerate-sections", "status": "success", "summary": "3 sections updated (shared-chassis + pricing)." },
+        { "name": "rebuild-knowledge-graph", "status": "success", "summary": "Graph rebuild." },
+        { "name": "commit-wiki", "status": "success", "summary": "Wiki git commit 31e9f04." }
+      ],
+      "diffStats": { "added": 14, "modified": 22, "removed": 5 }
+    },
+    {
+      "id": "job-007",
+      "type": "regenerate",
+      "trigger": "manual",
+      "status": "success",
+      "startedAt": "2026-04-18T09:02:11.000Z",
+      "completedAt": "2026-04-18T09:18:42.000Z",
+      "durationMs": 991000,
+      "repoIds": ["offering-service", "pricing-service", "specification-service", "store-query-service"],
+      "summary": "Force-rebuild triggered after saga schema change; saga-flows doc rewritten end-to-end.",
+      "steps": [
+        { "name": "fetch-sources", "status": "success", "summary": "4 repos pulled." },
+        { "name": "diff-analyze", "status": "success", "summary": "Saga-touching files detected." },
+        { "name": "regenerate-wiki-layer", "status": "success", "summary": "Repo-level wikis rewritten." },
+        { "name": "regenerate-workspace-narrative", "status": "success", "summary": "Workspace narrative refreshed." },
+        { "name": "regenerate-saga-flows", "status": "success", "summary": "Saga-flows doc rewritten with new compensation paths." },
+        { "name": "rebuild-llms-txt", "status": "success", "summary": "Master + per-repo llms.txt regenerated." },
+        { "name": "commit-wiki", "status": "success", "summary": "Wiki git commit 7b3f1a8 + squash merge." }
+      ],
+      "diffStats": { "added": 284, "modified": 161, "removed": 92 }
+    },
+    {
+      "id": "job-006",
+      "type": "sync",
+      "trigger": "pr-merge",
+      "status": "success",
+      "startedAt": "2026-04-14T14:22:18.000Z",
+      "completedAt": "2026-04-14T14:23:04.000Z",
+      "durationMs": 46000,
+      "repoIds": ["pricing-service"],
+      "summary": "Synced pricing-service wiki after PR #249 (explicit pre-flight validation).",
+      "steps": [
+        { "name": "fetch-sources", "status": "success", "summary": "" },
+        { "name": "diff-analyze", "status": "success", "summary": "Locking section unchanged; pre-flight section added." },
+        { "name": "regenerate-sections", "status": "success", "summary": "Updated endpoints table." },
+        { "name": "commit-wiki", "status": "success", "summary": "Wiki git commit 42ab8c7." }
+      ],
+      "diffStats": { "added": 22, "modified": 14, "removed": 3 }
+    },
+    {
+      "id": "job-005",
+      "type": "sync",
+      "trigger": "commit",
+      "status": "failed",
+      "startedAt": "2026-04-10T19:08:44.000Z",
+      "completedAt": "2026-04-10T19:09:15.000Z",
+      "durationMs": 31000,
+      "repoIds": ["store-query-service"],
+      "summary": "Sync aborted: source fetch exceeded timeout.",
+      "steps": [
+        { "name": "fetch-sources", "status": "failed", "summary": "Git clone timed out after 30s — upstream GitHub latency." }
+      ]
+    },
+    {
+      "id": "job-004",
+      "type": "sync",
+      "trigger": "scheduled",
+      "status": "success",
+      "startedAt": "2026-04-06T02:00:00.000Z",
+      "completedAt": "2026-04-06T02:02:58.000Z",
+      "durationMs": 178000,
+      "repoIds": ["api-gateway", "identity-service", "characteristic-service", "specification-service", "pricing-service", "offering-service", "store-query-service", "frontend", "shared-chassis"],
+      "summary": "Weekly workspace-wide reconciliation. No-op week.",
+      "steps": [
+        { "name": "fetch-sources", "status": "success", "summary": "" },
+        { "name": "diff-analyze", "status": "success", "summary": "No meaningful changes." },
+        { "name": "rebuild-knowledge-graph", "status": "success", "summary": "Rebuild." },
+        { "name": "commit-wiki", "status": "success", "summary": "No-op commit skipped." }
+      ],
+      "diffStats": { "added": 0, "modified": 0, "removed": 0 }
+    },
+    {
+      "id": "job-003",
+      "type": "sync",
+      "trigger": "pr-merge",
+      "status": "success",
+      "startedAt": "2026-03-22T11:48:02.000Z",
+      "completedAt": "2026-03-22T11:49:14.000Z",
+      "durationMs": 72000,
+      "repoIds": ["store-query-service"],
+      "summary": "Synced store-query-service after PR #201 (entity_version propagation).",
+      "steps": [
+        { "name": "fetch-sources", "status": "success", "summary": "" },
+        { "name": "diff-analyze", "status": "success", "summary": "Event consumer logic changed." },
+        { "name": "regenerate-sections", "status": "success", "summary": "Data composition section rewritten." },
+        { "name": "commit-wiki", "status": "success", "summary": "Wiki git commit d91a4c2." }
+      ],
+      "diffStats": { "added": 18, "modified": 26, "removed": 4 }
+    },
+    {
+      "id": "job-002",
+      "type": "regenerate",
+      "trigger": "manual",
+      "status": "success",
+      "startedAt": "2026-02-28T15:10:00.000Z",
+      "completedAt": "2026-02-28T15:28:03.000Z",
+      "durationMs": 1083000,
+      "repoIds": ["api-gateway", "identity-service", "characteristic-service", "specification-service", "pricing-service", "offering-service", "store-query-service", "frontend", "shared-chassis"],
+      "summary": "Full workspace rebuild after taxonomy refactor (renamed Agent Infrastructure → Agentify bundle).",
+      "steps": [
+        { "name": "fetch-sources", "status": "success", "summary": "All 9 repos pulled." },
+        { "name": "diff-analyze", "status": "success", "summary": "" },
+        { "name": "regenerate-wiki-layer", "status": "success", "summary": "Per-repo wikis rebuilt." },
+        { "name": "regenerate-workspace-narrative", "status": "success", "summary": "Narrative rebuilt." },
+        { "name": "rebuild-llms-txt", "status": "success", "summary": "Regenerated." },
+        { "name": "commit-wiki", "status": "success", "summary": "Wiki git commit 5e11cc9." }
+      ],
+      "diffStats": { "added": 612, "modified": 341, "removed": 188 }
+    },
+    {
+      "id": "job-001",
+      "type": "generate",
+      "trigger": "manual",
+      "status": "success",
+      "startedAt": "2026-02-14T09:12:00.000Z",
+      "completedAt": "2026-02-14T09:47:48.000Z",
+      "durationMs": 2148000,
+      "repoIds": ["api-gateway", "identity-service", "characteristic-service", "specification-service", "pricing-service", "offering-service", "store-query-service", "frontend", "shared-chassis"],
+      "summary": "Initial workspace generation. Sources, per-repo wikis, llms.txt, intelligence, artifacts — everything.",
+      "steps": [
+        { "name": "register-sources", "status": "success", "summary": "9 sources registered." },
+        { "name": "fetch-sources", "status": "success", "summary": "All repos pulled." },
+        { "name": "generate-repo-wikis", "status": "success", "summary": "9 repo wikis generated." },
+        { "name": "generate-workspace-narrative", "status": "success", "summary": "Cross-repo story + saga flows drafted." },
+        { "name": "generate-llms-txt", "status": "success", "summary": "Master + per-repo indices." },
+        { "name": "generate-intelligence", "status": "success", "summary": "Metrics + knowledge graph." },
+        { "name": "commit-wiki", "status": "success", "summary": "Wiki git commit 1a0f0f0 (initial)." }
+      ],
+      "diffStats": { "added": 1640, "modified": 0, "removed": 0 }
+    }
+  ]
+}

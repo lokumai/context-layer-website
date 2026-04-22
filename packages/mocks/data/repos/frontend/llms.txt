@@ -1,0 +1,15 @@
+# frontend
+
+> Next.js 16 app: Builder (admin create), Viewer (admin manage), Store (public browse).
+
+## Docs
+
+- [Overview](wiki/overview.md): Routing, auth context, forms, API client, page-by-page flows, testing.
+
+## Source
+
+- App router: `web-ui/src/app/`
+- Auth context: `web-ui/src/contexts/AuthContext.tsx`
+- API client: `web-ui/src/lib/api-client.ts`
+- Saga polling: `web-ui/src/lib/hooks.ts`
+- Forms: `web-ui/src/components/forms/`

@@ -1,0 +1,15 @@
+# offering-service
+
+> Aggregate root; DRAFT → PUBLISHING → PUBLISHED state machine; Camunda saga orchestrator.
+
+## Docs
+
+- [Overview](wiki/overview.md): State machine, Camunda integration, pre-flight validation, endpoints, saga tests.
+
+## Source
+
+- Entrypoint: `services/offering-service/src/main.py`
+- Domain: `services/offering-service/src/domain/models.py`
+- BPMN: `services/offering-service/bpmn/offering-publication-saga.bpmn`
+- Saga worker: `services/offering-service/src/saga_worker.py`
+- Tests: `services/offering-service/tests/`

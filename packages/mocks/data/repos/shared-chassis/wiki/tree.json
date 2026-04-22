@@ -1,0 +1,6 @@
+{
+  "repoId": "shared-chassis",
+  "nodes": [
+    { "slug": "overview", "title": "Overview", "file": "overview.md" }
+  ]
+}

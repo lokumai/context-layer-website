@@ -1,0 +1,14 @@
+# pricing-service
+
+> Monetary definitions + saga-aware price locking.
+
+## Docs
+
+- [Overview](wiki/overview.md): Domain model, currency handling, lock/unlock semantics, outbox, endpoints, tests.
+
+## Source
+
+- Entrypoint: `services/pricing-service/src/main.py`
+- Domain: `services/pricing-service/src/domain/models.py`
+- Saga worker: `services/pricing-service/src/saga_worker.py`
+- Tests: `services/pricing-service/tests/`

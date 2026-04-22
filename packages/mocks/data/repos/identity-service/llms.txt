@@ -1,0 +1,14 @@
+# identity-service
+
+> Bcrypt login, RS256 JWT issuance, public-key distribution — the root of zero-trust.
+
+## Docs
+
+- [Overview](wiki/overview.md): Auth model, JWT issuance flow, RBAC, data store, test scenarios.
+
+## Source
+
+- Entrypoint: `services/identity-service/src/main.py`
+- Auth: `services/identity-service/src/auth.py`
+- Models: `services/identity-service/src/models.py`
+- Tests: `services/identity-service/tests/`

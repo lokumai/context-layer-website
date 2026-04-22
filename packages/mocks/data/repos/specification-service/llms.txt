@@ -1,0 +1,14 @@
+# specification-service
+
+> Composes characteristics into specs; cache synced via subscribed events.
+
+## Docs
+
+- [Overview](wiki/overview.md): Event consumer, local cache, outbox emissions, endpoints, tests.
+
+## Source
+
+- Entrypoint: `services/specification-service/src/main.py`
+- Consumer: `services/specification-service/src/infrastructure/characteristic_consumer.py`
+- Domain: `services/specification-service/src/domain/models.py`
+- Tests: `services/specification-service/tests/`

@@ -1,0 +1,15 @@
+# store-query-service
+
+> CQRS read-model — Motor + aiohttp consumers project events into MongoDB + Elasticsearch.
+
+## Docs
+
+- [Overview](wiki/overview.md): Event consumers, trigger-then-fetch composition, indexes, search endpoint, tests.
+
+## Source
+
+- Entrypoint: `services/store-query-service/src/main.py`
+- Consumers: `services/store-query-service/src/infrastructure/consumers/`
+- Projections: `services/store-query-service/src/application/projections/`
+- Search: `services/store-query-service/src/application/search.py`
+- Tests: `services/store-query-service/tests/`

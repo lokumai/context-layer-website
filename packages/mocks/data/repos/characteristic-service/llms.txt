@@ -1,0 +1,15 @@
+# characteristic-service
+
+> CRUD + outbox events for atomic product attributes (TMForum Characteristics).
+
+## Docs
+
+- [Overview](wiki/overview.md): Domain, clean-architecture layering, outbox emissions, CRUD endpoints, tests.
+
+## Source
+
+- Entrypoint: `services/characteristic-service/src/main.py`
+- Domain: `services/characteristic-service/src/domain/models.py`
+- Application: `services/characteristic-service/src/application/`
+- Infrastructure: `services/characteristic-service/src/infrastructure/`
+- Tests: `services/characteristic-service/tests/`

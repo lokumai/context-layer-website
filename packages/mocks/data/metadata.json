@@ -1,0 +1,19 @@
+{
+  "version": "1.0.0",
+  "generatedAt": "2026-04-22T14:08:41.000Z",
+  "repoRef": {
+    "owner": "amirkiarafiei",
+    "name": "microservices-product-catalog",
+    "branch": "main",
+    "commit": "9a4f2e1"
+  },
+  "counts": {
+    "workspaces": 1,
+    "sources": 9,
+    "repoWikis": 9,
+    "wikiPages": 12,
+    "artifacts": 21,
+    "cannedQA": 17,
+    "jobs": 10
+  }
+}

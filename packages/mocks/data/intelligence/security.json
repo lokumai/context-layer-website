@@ -1,0 +1,195 @@
+{
+  "summary": { "critical": 0, "high": 2, "medium": 6, "low": 11, "info": 8 },
+  "findings": [
+    {
+      "id": "sec-001",
+      "repoId": "identity-service",
+      "severity": "high",
+      "category": "Secrets Management",
+      "title": "RSA private key loaded from plain env var",
+      "file": "services/identity-service/src/config.py",
+      "line": 42,
+      "description": "The private signing key is read directly from an environment variable. In non-dev deploys this should be mounted from Kubernetes secrets or a KMS. The current loader tolerates a raw PEM string with newline escaping, which has bitten the team before."
+    },
+    {
+      "id": "sec-002",
+      "repoId": "offering-service",
+      "severity": "high",
+      "category": "SSRF",
+      "title": "Camunda URL is not allow-listed",
+      "file": "services/offering-service/src/infrastructure/camunda_client.py",
+      "line": 28,
+      "description": "`CAMUNDA_URL` is used as a literal base for outbound requests. If the env var is ever supplied from user-controlled configuration, it becomes an SSRF vector. Add scheme + host validation."
+    },
+    {
+      "id": "sec-003",
+      "repoId": "api-gateway",
+      "severity": "medium",
+      "category": "Header Injection",
+      "title": "`X-Correlation-ID` forwarded without sanitation",
+      "file": "services/api-gateway/gateway/middleware.py",
+      "line": 64,
+      "description": "Incoming correlation IDs are forwarded as-is. If a client sends a header with CR/LF characters, downstream log lines can be split. Strip non-hex characters before forwarding."
+    },
+    {
+      "id": "sec-004",
+      "repoId": "characteristic-service",
+      "severity": "medium",
+      "category": "Input Validation",
+      "title": "Outbox payload contains no schema version",
+      "file": "services/characteristic-service/src/infrastructure/outbox.py",
+      "line": 88,
+      "description": "Events published to RabbitMQ do not carry a schema version. Consumers rely on duck typing; a breaking change to the payload can silently corrupt projections."
+    },
+    {
+      "id": "sec-005",
+      "repoId": "specification-service",
+      "severity": "medium",
+      "category": "Authentication",
+      "title": "`GET /specifications` publicly readable",
+      "file": "services/specification-service/src/main.py",
+      "line": 71,
+      "description": "List endpoint is unauthenticated to allow internal service-to-service calls. Consider service-to-service mTLS or a cluster-local network policy — unauthenticated reads of catalog taxonomy are not obviously safe in all deployments."
+    },
+    {
+      "id": "sec-006",
+      "repoId": "pricing-service",
+      "severity": "medium",
+      "category": "Authorization",
+      "title": "Lock/unlock endpoints reuse admin role",
+      "file": "services/pricing-service/src/main.py",
+      "line": 119,
+      "description": "Saga worker endpoints reuse the ADMIN role. A dedicated SAGA role (or service account) would narrow the blast radius if a UI-side admin token leaked."
+    },
+    {
+      "id": "sec-007",
+      "repoId": "offering-service",
+      "severity": "medium",
+      "category": "Race Condition",
+      "title": "Pre-flight validation is not transactional with saga start",
+      "file": "services/offering-service/src/application/service.py",
+      "line": 204,
+      "description": "A specification or price could be deleted between pre-flight check and Camunda process start. Not fatal — the saga compensates — but surfaces confusing 'OfferingPublicationFailed' reasons to operators."
+    },
+    {
+      "id": "sec-008",
+      "repoId": "store-query-service",
+      "severity": "medium",
+      "category": "SSRF",
+      "title": "Elasticsearch URL allow-list is absent",
+      "file": "services/store-query-service/src/infrastructure/elasticsearch_client.py",
+      "line": 31,
+      "description": "Same class of issue as Camunda URL — trust the env var, nothing else. Add scheme/host validation."
+    },
+    {
+      "id": "sec-009",
+      "repoId": "frontend",
+      "severity": "low",
+      "category": "XSS",
+      "title": "Offering description rendered with `dangerouslySetInnerHTML`",
+      "file": "web-ui/src/components/OfferingCard.tsx",
+      "line": 41,
+      "description": "If the backend ever accepts untrusted markdown or HTML in the description field, this becomes a reflected XSS sink. Today descriptions are plain text, but add explicit sanitization (DOMPurify) before the next schema change."
+    },
+    {
+      "id": "sec-010",
+      "repoId": "frontend",
+      "severity": "low",
+      "category": "Token Handling",
+      "title": "JWT stored in `localStorage`",
+      "file": "web-ui/src/contexts/AuthContext.tsx",
+      "line": 27,
+      "description": "Tokens in localStorage are accessible to any script running on the origin. For a demo this is fine; for production, prefer httpOnly cookies + CSRF tokens."
+    },
+    {
+      "id": "sec-011",
+      "repoId": "api-gateway",
+      "severity": "low",
+      "category": "Rate Limiting",
+      "title": "No per-client rate limit",
+      "file": "services/api-gateway/gateway/main.py",
+      "line": 52,
+      "description": "The gateway does not rate-limit clients. Identity-service is the obvious target of password spray attacks; consider a sliding window limit on `/auth/login`."
+    },
+    {
+      "id": "sec-012",
+      "repoId": "shared-chassis",
+      "severity": "low",
+      "category": "Error Handling",
+      "title": "Exception handler leaks correlation ID to 500 responses",
+      "file": "libs/common-python/src/common/exceptions.py",
+      "line": 94,
+      "description": "For 500 responses from uncaught exceptions, the handler still surfaces the correlation ID in the response body. That's a feature for operators, a minor information-disclosure concern for external APIs. Decide by threat model."
+    },
+    {
+      "id": "sec-013",
+      "repoId": "shared-chassis",
+      "severity": "low",
+      "category": "Cryptography",
+      "title": "Public key cache has no TTL",
+      "file": "libs/common-python/src/common/security.py",
+      "line": 58,
+      "description": "The identity-service public key is fetched once and cached forever. Key rotation requires a service restart. Add a TTL + background refresh."
+    },
+    {
+      "id": "sec-014",
+      "repoId": "characteristic-service",
+      "severity": "low",
+      "category": "Logging",
+      "title": "Entity payloads logged at DEBUG",
+      "file": "services/characteristic-service/src/main.py",
+      "line": 89,
+      "description": "Characteristic payloads are logged at DEBUG level. Low risk (characteristics aren't PII), but worth a guideline so future services don't copy the pattern with sensitive data."
+    },
+    {
+      "id": "sec-015",
+      "repoId": "specification-service",
+      "severity": "low",
+      "category": "Dependency",
+      "title": "`aio-pika` pinned to a minor version behind latest",
+      "file": "services/specification-service/pyproject.toml",
+      "line": 19,
+      "description": "No known CVE; routine hygiene. Bump to the latest minor during the next maintenance window."
+    },
+    {
+      "id": "sec-016",
+      "repoId": "pricing-service",
+      "severity": "low",
+      "category": "Business Logic",
+      "title": "No currency-whitelist check at lock time",
+      "file": "services/pricing-service/src/domain/price.py",
+      "line": 71,
+      "description": "Currency validation happens at create/update. The lock path does not re-check. If an admin rewrites the enum between create and publish, a locked price could carry a stale currency. Defense-in-depth only."
+    },
+    {
+      "id": "sec-017",
+      "repoId": "offering-service",
+      "severity": "low",
+      "category": "Authorization",
+      "title": "Retire endpoint does not check ownership",
+      "file": "services/offering-service/src/main.py",
+      "line": 148,
+      "description": "Any ADMIN can retire any offering. If the product ever introduces per-team ownership, this route needs an additional check."
+    },
+    {
+      "id": "sec-018",
+      "repoId": "store-query-service",
+      "severity": "low",
+      "category": "Injection",
+      "title": "Search query parsing has no length cap",
+      "file": "services/store-query-service/src/application/search.py",
+      "line": 62,
+      "description": "A 10MB `q` param can stress Elasticsearch. Cap input length at the FastAPI layer."
+    },
+    {
+      "id": "sec-019",
+      "repoId": "frontend",
+      "severity": "low",
+      "category": "Auth",
+      "title": "`ProtectedRoute` renders children before redirect completes",
+      "file": "web-ui/src/components/ProtectedRoute.tsx",
+      "line": 18,
+      "description": "On the first render after an expired token, children briefly mount before the effect fires. Replace with a loading skeleton while the effect runs."
+    }
+  ]
+}

@@ -1,0 +1,69 @@
+{
+  "overallScore": 84,
+  "summary": "Healthy overall. The write services are clean, chassis-backed, and well-tested. Hot-spots: offering-service carries the saga-orchestration complexity and has the highest cyclomatic density; frontend has thin unit coverage and lives by e2e. Shared-chassis is reused everywhere, so regressions propagate — invest in its contract tests.",
+  "perRepo": [
+    {
+      "repoId": "api-gateway",
+      "score": 90,
+      "fragileAreas": ["circuit breaker state transitions under concurrent failure bursts"],
+      "architectureViolations": 0,
+      "codeSmells": 3
+    },
+    {
+      "repoId": "identity-service",
+      "score": 92,
+      "fragileAreas": ["env-var newline escaping in public key distribution"],
+      "architectureViolations": 0,
+      "codeSmells": 2
+    },
+    {
+      "repoId": "characteristic-service",
+      "score": 88,
+      "fragileAreas": ["outbox listener startup race on cold boot with empty queue"],
+      "architectureViolations": 0,
+      "codeSmells": 4
+    },
+    {
+      "repoId": "specification-service",
+      "score": 82,
+      "fragileAreas": ["cached_characteristics divergence during long partition windows", "consumer back-pressure is not instrumented"],
+      "architectureViolations": 1,
+      "codeSmells": 6
+    },
+    {
+      "repoId": "pricing-service",
+      "score": 86,
+      "fragileAreas": ["locked_by_saga_id cleanup on process crash — no watchdog"],
+      "architectureViolations": 0,
+      "codeSmells": 4
+    },
+    {
+      "repoId": "offering-service",
+      "score": 78,
+      "fragileAreas": ["Camunda reachability — no graceful-degrade path", "saga compensation ordering assumes external workers run in a specific order", "pre-flight validation double-calls services"],
+      "architectureViolations": 2,
+      "codeSmells": 9
+    },
+    {
+      "repoId": "store-query-service",
+      "score": 85,
+      "fragileAreas": ["out-of-order event arrival under heavy replay", "ES index template drift vs. Motor doc shape"],
+      "architectureViolations": 0,
+      "codeSmells": 5
+    },
+    {
+      "repoId": "frontend",
+      "score": 79,
+      "fragileAreas": ["saga polling has no max-duration cutoff", "auth-context localStorage access is client-only, but some hooks run during SSR warmup"],
+      "architectureViolations": 1,
+      "codeSmells": 7
+    },
+    {
+      "repoId": "shared-chassis",
+      "score": 88,
+      "fragileAreas": ["public key rotation requires full service restart — no hot-reload path"],
+      "architectureViolations": 0,
+      "codeSmells": 3
+    }
+  ]
+}

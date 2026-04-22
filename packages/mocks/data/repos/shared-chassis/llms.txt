@@ -1,0 +1,17 @@
+# shared-chassis
+
+> Cross-cutting library: logging, tracing, security, messaging, outbox, exceptions.
+
+## Docs
+
+- [Overview](wiki/overview.md): Module-by-module architecture, exports, contract tests.
+
+## Source
+
+- Package: `libs/common-python/src/common/`
+- Logging: `libs/common-python/src/common/logging.py`
+- Tracing: `libs/common-python/src/common/tracing.py`
+- Security: `libs/common-python/src/common/security.py`
+- Messaging: `libs/common-python/src/common/messaging.py`
+- Outbox: `libs/common-python/src/common/database/outbox.py`
+- Exceptions: `libs/common-python/src/common/exceptions.py`

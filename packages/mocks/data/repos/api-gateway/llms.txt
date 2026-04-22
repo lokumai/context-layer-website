@@ -1,0 +1,14 @@
+# api-gateway
+
+> FastAPI reverse proxy with circuit breakers, timeouts, correlation IDs, and CORS. Single entry point (port 8000) routing to 6 downstream services.
+
+## Docs
+
+- [Overview](wiki/overview.md): Architecture, endpoints, and testing posture for the API Gateway.
+
+## Source
+
+- Entrypoint: `services/api-gateway/gateway/main.py`
+- Config: `services/api-gateway/gateway/config.py`
+- Circuit breaker: `services/api-gateway/gateway/circuit_breaker.py`
+- Tests: `services/api-gateway/tests/`

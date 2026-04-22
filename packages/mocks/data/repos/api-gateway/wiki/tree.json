@@ -1,0 +1,9 @@
+{
+  "repoId": "api-gateway",
+  "nodes": [
+    { "slug": "overview", "title": "Overview", "file": "overview.md" },
+    { "slug": "architecture", "title": "Architecture", "file": "architecture.md" },
+    { "slug": "endpoints", "title": "Endpoints", "file": "endpoints.md" },
+    { "slug": "testing", "title": "Testing", "file": "testing.md" }
+  ]
+}

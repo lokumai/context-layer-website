@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@context-layer/config": "workspace:*",
+    "@context-layer/mocks": "workspace:*",
     "@context-layer/ui": "workspace:*",
     "@radix-ui/react-slot": "^1.2.4",
     "class-variance-authority": "^0.7.1",

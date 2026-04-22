@@ -1,0 +1,112 @@
+{
+  "overall": 81.4,
+  "perRepo": [
+    {
+      "repoId": "api-gateway",
+      "lineCoverage": 72.1,
+      "branchCoverage": 64.8,
+      "criticalGaps": ["circuit-breaker half-open re-entry path", "CORS pre-flight on unknown origin"],
+      "files": [
+        { "file": "services/api-gateway/gateway/main.py", "lineCoverage": 78.4, "branchCoverage": 66.0 },
+        { "file": "services/api-gateway/gateway/circuit_breaker.py", "lineCoverage": 81.5, "branchCoverage": 72.3 },
+        { "file": "services/api-gateway/gateway/middleware.py", "lineCoverage": 68.0, "branchCoverage": 58.4 }
+      ]
+    },
+    {
+      "repoId": "identity-service",
+      "lineCoverage": 91.8,
+      "branchCoverage": 88.4,
+      "criticalGaps": ["public-key read with malformed PEM"],
+      "files": [
+        { "file": "services/identity-service/src/main.py", "lineCoverage": 88.9, "branchCoverage": 84.2 },
+        { "file": "services/identity-service/src/auth.py", "lineCoverage": 95.1, "branchCoverage": 92.0 },
+        { "file": "services/identity-service/src/models.py", "lineCoverage": 93.7, "branchCoverage": 88.1 }
+      ]
+    },
+    {
+      "repoId": "characteristic-service",
+      "lineCoverage": 90.2,
+      "branchCoverage": 85.6,
+      "criticalGaps": ["outbox listener restart mid-batch"],
+      "files": [
+        { "file": "services/characteristic-service/src/main.py", "lineCoverage": 87.3, "branchCoverage": 80.2 },
+        { "file": "services/characteristic-service/src/domain/models.py", "lineCoverage": 96.1, "branchCoverage": 92.4 },
+        { "file": "services/characteristic-service/src/application/service.py", "lineCoverage": 92.8, "branchCoverage": 88.1 },
+        { "file": "services/characteristic-service/src/infrastructure/outbox.py", "lineCoverage": 82.4, "branchCoverage": 72.5 }
+      ]
+    },
+    {
+      "repoId": "specification-service",
+      "lineCoverage": 86.7,
+      "branchCoverage": 81.2,
+      "criticalGaps": ["event consumer handles Delete for unknown id", "outbox + consumer concurrent access"],
+      "files": [
+        { "file": "services/specification-service/src/main.py", "lineCoverage": 84.1, "branchCoverage": 76.9 },
+        { "file": "services/specification-service/src/domain/models.py", "lineCoverage": 94.2, "branchCoverage": 90.1 },
+        { "file": "services/specification-service/src/infrastructure/characteristic_consumer.py", "lineCoverage": 81.5, "branchCoverage": 72.8 }
+      ]
+    },
+    {
+      "repoId": "pricing-service",
+      "lineCoverage": 88.3,
+      "branchCoverage": 83.9,
+      "criticalGaps": ["lock contention under concurrent sagas", "cascade of update-while-locked"],
+      "files": [
+        { "file": "services/pricing-service/src/main.py", "lineCoverage": 85.7, "branchCoverage": 79.4 },
+        { "file": "services/pricing-service/src/domain/models.py", "lineCoverage": 93.1, "branchCoverage": 88.9 },
+        { "file": "services/pricing-service/src/application/service.py", "lineCoverage": 90.4, "branchCoverage": 85.7 },
+        { "file": "services/pricing-service/src/saga_worker.py", "lineCoverage": 82.1, "branchCoverage": 71.2 }
+      ]
+    },
+    {
+      "repoId": "offering-service",
+      "lineCoverage": 83.1,
+      "branchCoverage": 76.8,
+      "criticalGaps": ["saga compensation when Camunda is unreachable mid-flight", "retire on offering with outstanding outbox rows"],
+      "files": [
+        { "file": "services/offering-service/src/main.py", "lineCoverage": 80.5, "branchCoverage": 72.4 },
+        { "file": "services/offering-service/src/domain/models.py", "lineCoverage": 95.8, "branchCoverage": 91.2 },
+        { "file": "services/offering-service/src/application/service.py", "lineCoverage": 81.2, "branchCoverage": 70.4 },
+        { "file": "services/offering-service/src/saga_worker.py", "lineCoverage": 78.5, "branchCoverage": 68.1 },
+        { "file": "services/offering-service/src/infrastructure/camunda_client.py", "lineCoverage": 74.1, "branchCoverage": 62.8 }
+      ]
+    },
+    {
+      "repoId": "store-query-service",
+      "lineCoverage": 84.9,
+      "branchCoverage": 78.2,
+      "criticalGaps": ["out-of-order delivery of update events", "ES mapping migration path"],
+      "files": [
+        { "file": "services/store-query-service/src/main.py", "lineCoverage": 82.3, "branchCoverage": 74.1 },
+        { "file": "services/store-query-service/src/application/projections/offering_projection.py", "lineCoverage": 88.7, "branchCoverage": 82.4 },
+        { "file": "services/store-query-service/src/infrastructure/consumers/offering_consumer.py", "lineCoverage": 81.0, "branchCoverage": 71.8 },
+        { "file": "services/store-query-service/src/application/search.py", "lineCoverage": 86.4, "branchCoverage": 80.2 }
+      ]
+    },
+    {
+      "repoId": "frontend",
+      "lineCoverage": 58.4,
+      "branchCoverage": 48.2,
+      "criticalGaps": ["saga polling max-duration", "token refresh flow", "Store filter URL round-trip"],
+      "files": [
+        { "file": "web-ui/src/contexts/AuthContext.tsx", "lineCoverage": 76.2, "branchCoverage": 68.4 },
+        { "file": "web-ui/src/lib/api-client.ts", "lineCoverage": 62.1, "branchCoverage": 52.8 },
+        { "file": "web-ui/src/lib/hooks.ts", "lineCoverage": 54.8, "branchCoverage": 41.6 },
+        { "file": "web-ui/src/components/forms/OfferingForm.tsx", "lineCoverage": 51.2, "branchCoverage": 38.4 }
+      ]
+    },
+    {
+      "repoId": "shared-chassis",
+      "lineCoverage": 92.4,
+      "branchCoverage": 88.1,
+      "criticalGaps": ["outbox listener reconnect on broker flap"],
+      "files": [
+        { "file": "libs/common-python/src/common/logging.py", "lineCoverage": 96.1, "branchCoverage": 92.4 },
+        { "file": "libs/common-python/src/common/tracing.py", "lineCoverage": 91.8, "branchCoverage": 85.7 },
+        { "file": "libs/common-python/src/common/security.py", "lineCoverage": 94.2, "branchCoverage": 90.1 },
+        { "file": "libs/common-python/src/common/database/outbox.py", "lineCoverage": 88.7, "branchCoverage": 82.4 },
+        { "file": "libs/common-python/src/common/exceptions.py", "lineCoverage": 95.3, "branchCoverage": 91.2 }
+      ]
+    }
+  ]
+}

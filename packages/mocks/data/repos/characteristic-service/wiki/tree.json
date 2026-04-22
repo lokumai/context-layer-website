@@ -1,0 +1,6 @@
+{
+  "repoId": "characteristic-service",
+  "nodes": [
+    { "slug": "overview", "title": "Overview", "file": "overview.md" }
+  ]
+}
