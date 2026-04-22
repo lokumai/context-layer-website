@@ -54,6 +54,210 @@ sources.push({
   autoSync: true,
 });
 
+const WORKSPACE_OVERVIEW_MD = `# microservices-product-catalog — Overview
+
+A **TMForum-compatible** product catalog system for a telecom operator. Nine repositories. Seven deployable microservices. One shared domain library and one storefront UI.
+
+> Engineered for **enterprise telco resilience** — CQRS, transactional outbox, event-driven sagas, and a frontend that doesn't know which backend is running.
+
+## System topology
+
+\`\`\`mermaid
+flowchart LR
+    subgraph Clients
+      UI[catalog-ui<br/>Next.js]
+      API[External partners]
+    end
+
+    subgraph Edge
+      GW[API Gateway]
+    end
+
+    subgraph Services
+      CAT[catalog-service]
+      PRC[pricing-service]
+      INV[inventory-service]
+      ORD[order-service]
+      CUS[customer-service]
+      NOT[notification-service]
+      SRC[search-service]
+    end
+
+    subgraph Shared
+      LIB[[shared-lib]]
+    end
+
+    subgraph Infra
+      KAF[(Kafka)]
+      PG[(Postgres)]
+      REDIS[(Redis)]
+    end
+
+    UI --> GW
+    API --> GW
+    GW --> CAT & PRC & INV & ORD & CUS & SRC
+    ORD --> KAF
+    CAT --> KAF
+    NOT --> KAF
+    KAF --> NOT & INV & SRC
+    CAT & PRC & INV & ORD & CUS & NOT & SRC -.-> LIB
+    CAT & PRC & INV & ORD & CUS --> PG
+    SRC --> REDIS
+\`\`\`
+
+## Order placement saga
+
+The canonical cross-repo story. Four services cooperate via the **transactional outbox** pattern. Each write is a local DB transaction that appends to an outbox table; a debezium connector tails the table into Kafka.
+
+\`\`\`mermaid
+sequenceDiagram
+    autonumber
+    participant C as Client
+    participant O as order-service
+    participant I as inventory-service
+    participant P as pricing-service
+    participant N as notification-service
+    participant K as Kafka
+
+    C->>O: POST /orders
+    O->>I: Reserve stock (sync)
+    I-->>O: OK · reservation-id
+    O->>P: Calculate total (sync)
+    P-->>O: OK · total, tax
+    O->>O: Commit order + outbox row
+    O->>K: emit OrderPlaced
+    K->>N: OrderPlaced
+    N->>C: Confirmation email
+    K->>I: OrderPlaced<br/>(async, finalize reservation)
+\`\`\`
+
+### Compensation path
+
+If any sync call fails, the order-service emits a \`SagaAborted\` event and inventory releases the reservation. Compensation is **event-sourced** — the saga state lives in \`order-service/saga_state\`.
+
+## Deployment units
+
+| Repository | Tech | SLO (p95) | Owner |
+|---|---|---|---|
+| catalog-service | FastAPI · Py 3.12 | 120 ms | platform |
+| pricing-service | FastAPI · Py 3.12 | 80 ms | pricing |
+| inventory-service | FastAPI · Py 3.12 | 100 ms | fulfillment |
+| order-service | FastAPI · Py 3.12 | 350 ms | orders |
+| customer-service | FastAPI · Py 3.12 | 80 ms | platform |
+| notification-service | FastAPI · Py 3.12 | 1 s | platform |
+| search-service | FastAPI · Py 3.12 | 50 ms | discovery |
+| shared-lib | Py lib, no runtime | — | platform |
+| catalog-ui | Next.js 15 | 200 ms TTI | frontend |
+
+## Data model boundaries
+
+\`\`\`mermaid
+classDiagram
+    class Product {
+      +UUID id
+      +String name
+      +ProductSpec[] specs
+      +Lifecycle lifecycle
+    }
+    class ProductSpec {
+      +UUID id
+      +Money price
+      +String[] bundles
+    }
+    class Order {
+      +UUID id
+      +UUID customerId
+      +LineItem[] items
+      +SagaStatus status
+    }
+    class Reservation {
+      +UUID id
+      +UUID orderId
+      +String sku
+      +int qty
+      +ReservationStatus status
+    }
+    Product "1" *-- "many" ProductSpec
+    Order "1" o-- "many" Reservation : fulfills
+\`\`\`
+
+## Why this exists
+
+The operator's legacy catalog stack was a single monolith. When the product team wanted to ship personalized pricing, the whole thing had to come down for deploys. This architecture decouples the pricing engine from the catalog, lets the inventory team scale independently, and gives the storefront a single gateway to consume.
+
+## Key invariants
+
+1. **Every cross-service write goes through the outbox.** No service writes directly to Kafka.
+2. **TMF620 schema is the contract.** Internal types use \`shared-lib.models.tmf620\` — never hand-rolled.
+3. **Reservations are idempotent.** Retrying \`POST /reservations\` with the same \`Idempotency-Key\` is safe.
+4. **Saga state is owned by order-service alone.** Other services see events, never the saga table.
+`;
+
+const REPO_PAGE_MD = (r: { id: string; desc: string }) => `# ${r.id}
+
+${r.desc}
+
+## Overview
+
+\`${r.id}\` exposes a single HTTP surface area and reads/writes its own Postgres schema. It emits domain events to Kafka via the transactional outbox. It depends on \`shared-lib\` for event schemas and TMForum models.
+
+## High-level flow
+
+\`\`\`mermaid
+flowchart TD
+    REQ[HTTP Request] --> ROUTER{Router}
+    ROUTER -->|read| REPO[Repository]
+    ROUTER -->|write| SVC[Service]
+    SVC --> REPO
+    SVC --> OUTBOX[(Outbox Table)]
+    REPO --> DB[(Postgres)]
+    OUTBOX -.-> KAFKA[(Kafka)]
+\`\`\`
+
+## Entry points
+
+\`\`\`python
+# src/app/main.py
+from fastapi import FastAPI
+from shared_lib.middleware import TelemetryMiddleware
+
+app = FastAPI(title="${r.id}", version="1.0.0")
+app.add_middleware(TelemetryMiddleware)
+
+from app.routers import api
+app.include_router(api.router)
+\`\`\`
+
+## Request lifecycle (write path)
+
+\`\`\`mermaid
+sequenceDiagram
+    Client->>Router: POST /resource
+    Router->>Validator: TMF620 payload
+    Validator-->>Router: ok
+    Router->>Service: handle(cmd)
+    Service->>Repository: save(entity)
+    Repository->>Postgres: INSERT + outbox row
+    Postgres-->>Repository: ok
+    Service-->>Router: entity
+    Router-->>Client: 201 Created
+\`\`\`
+
+## Tables
+
+| Table | Purpose |
+|---|---|
+| \`entities\` | Canonical state |
+| \`outbox\` | Transactional event log |
+| \`audit\` | Change-data capture backup |
+
+## Known callers
+
+Everything in the workspace reaches this service via the gateway — there is no direct service-to-service HTTP (aside from the order saga's sync calls into pricing and inventory).
+
+> **Operational note:** this service is horizontally scalable. The outbox relay is a separate pod, deployed as a sidecar.
+`;
+
 const wikiPages: WikiPage[] = [
   {
     id: "workspace/overview",
@@ -61,7 +265,7 @@ const wikiPages: WikiPage[] = [
     layer: "workspace",
     title: "Workspace Overview",
     pathSegments: ["Overview"],
-    markdown: `# microservices-product-catalog — Overview\n\nA TMForum-compatible product catalog system comprising 9 repositories and 7 microservices.\n\n## Saga Flows\n\nThe order placement saga spans 4 services: \`order-service\` → \`inventory-service\` → \`pricing-service\` → \`notification-service\`. Each step uses the transactional outbox pattern published via Kafka.\n\n\`\`\`mermaid\nsequenceDiagram\n  Client->>order-service: POST /orders\n  order-service->>inventory-service: Reserve stock\n  inventory-service-->>order-service: OK\n  order-service->>pricing-service: Calculate total\n  pricing-service-->>order-service: OK\n  order-service->>notification-service: Send confirmation\n\`\`\``,
+    markdown: WORKSPACE_OVERVIEW_MD,
   },
   ...REPOS.map((r) => ({
     id: `repo/${r.id}/architecture`,
@@ -70,7 +274,7 @@ const wikiPages: WikiPage[] = [
     repoId: r.id,
     title: `${r.id} — Architecture`,
     pathSegments: [r.id, "Architecture"],
-    markdown: `# ${r.id}\n\n${r.desc}\n\n## Entry Points\n\n\`\`\`python\n# Representative example (see src/app/main.py)\napp = FastAPI(title="${r.id}")\n\`\`\``,
+    markdown: REPO_PAGE_MD(r),
   })),
 ];
 

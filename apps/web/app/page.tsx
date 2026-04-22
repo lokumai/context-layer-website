@@ -28,6 +28,7 @@ import { SpotlightCard } from "@/components/motion/spotlight-card";
 import { ShinyText } from "@/components/motion/shiny-text";
 import { ScrollProgress } from "@/components/motion/scroll-progress";
 import { StatsStrip } from "@/components/marketing/stats-strip";
+import { LiveDemo } from "@/components/marketing/live-demo";
 import { IconTile } from "@/components/ui/icon-tile";
 import { SectionLabel } from "@/components/ui/meta-field";
 import { Dot } from "@/components/ui/badge";
@@ -96,6 +97,21 @@ export default function HomePage() {
               <span className="flex items-center gap-2"><span className="h-1 w-1 rounded-full bg-[var(--color-warm-amber)]" /> Multi-repo native</span>
               <span className="h-[1px] w-6 bg-[var(--color-border-strong)]" />
               <span className="flex items-center gap-2"><span className="h-1 w-1 rounded-full bg-[var(--color-ink)]" /> Agent-ready</span>
+            </FadeIn>
+          </div>
+        </section>
+
+        {/* ─────────────── Live product demo ─────────────── */}
+        <section className="relative -mt-16 pb-24 md:pb-32">
+          <div className="mx-auto max-w-screen-xl px-6 md:px-10">
+            <FadeIn delay={0.1}>
+              <LiveDemo />
+            </FadeIn>
+
+            <FadeIn delay={0.3} className="mt-8 flex flex-wrap items-center justify-center gap-6 font-mono text-[11px] uppercase tracking-[0.16em] text-[var(--color-ink-muted)]">
+              <span>Sources → Wiki → Chat → Library</span>
+              <span className="h-[1px] w-6 bg-[var(--color-border-strong)]" />
+              <span>auto-cycling · hover to pause</span>
             </FadeIn>
           </div>
         </section>

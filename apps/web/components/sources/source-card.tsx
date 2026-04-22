@@ -34,7 +34,7 @@ const PROVIDER_ICON: Record<string, typeof GitBranch> = {
   url: FileText,
 };
 
-export function SourceCard({ source }: { source: Source }) {
+export function SourceCard({ source, onClick }: { source: Source; onClick?: (source: Source) => void }) {
   const Icon = PROVIDER_ICON[source.provider] ?? FileText;
   const tone = source.status === "indexed" ? "success" : source.status === "indexing" ? "warn" : "danger";
 
@@ -47,6 +47,7 @@ export function SourceCard({ source }: { source: Source }) {
           padding="spacious"
           radius="large"
           interactive
+          onClick={() => onClick?.(source)}
           className="flex h-full flex-col gap-6"
         >
           <div className="flex items-start justify-between">

@@ -3,9 +3,11 @@
 import { useMemo, useState } from "react";
 import { useParams } from "next/navigation";
 import { Plus, Search, Upload } from "lucide-react";
+import type { Source } from "@context-layer/mocks";
 import { usePlaygroundStore } from "@/store/playground-store";
 import { SourceCard } from "@/components/sources/source-card";
 import { AddSourceChooser } from "@/components/sources/add-source-chooser";
+import { SourcePreviewModal } from "@/components/sources/source-preview-modal";
 import { FadeIn } from "@/components/motion/fade-in";
 import { Stagger, StaggerChild } from "@/components/motion/stagger";
 import { Button } from "@/components/ui/button";
@@ -28,6 +30,7 @@ export default function SourcesPage() {
   const workspace = usePlaygroundStore((s) => s.workspaces.find((w) => w.workspace.id === workspaceId));
   const persona = usePlaygroundStore((s) => s.persona);
   const [chooserOpen, setChooserOpen] = useState(false);
+  const [previewSource, setPreviewSource] = useState<Source | null>(null);
   const [query, setQuery] = useState("");
   const [kind, setKind] = useState<KindFilter>("all");
 
@@ -116,7 +119,7 @@ export default function SourcesPage() {
           <Stagger className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {filtered.map((s) => (
               <StaggerChild key={s.id}>
-                <SourceCard source={s} />
+                <SourceCard source={s} onClick={setPreviewSource} />
               </StaggerChild>
             ))}
           </Stagger>
@@ -155,6 +158,7 @@ export default function SourcesPage() {
       )}
 
       {chooserOpen && <AddSourceChooser workspaceId={workspaceId} onClose={() => setChooserOpen(false)} />}
+      <SourcePreviewModal source={previewSource} onClose={() => setPreviewSource(null)} />
     </div>
   );
 }

@@ -2,13 +2,13 @@
 
 import { useMemo, useState } from "react";
 import { useParams } from "next/navigation";
-import { motion } from "motion/react";
-import { ChevronRight, FileText } from "lucide-react";
+import { motion, AnimatePresence } from "motion/react";
+import { ChevronRight, FileText, Sparkles } from "lucide-react";
 import { usePlaygroundStore } from "@/store/playground-store";
 import { cn } from "@/lib/cn";
-import { FadeIn } from "@/components/motion/fade-in";
 import { SectionLabel } from "@/components/ui/meta-field";
 import { Badge } from "@/components/ui/badge";
+import { MarkdownRenderer } from "@/components/markdown/renderer";
 
 export default function WikiViewPage() {
   const { workspaceId } = useParams<{ workspaceId: string }>();
@@ -55,21 +55,28 @@ export default function WikiViewPage() {
                     <button
                       onClick={() => setActiveId(p.id)}
                       className={cn(
-                        "group flex w-full items-center gap-2 rounded-[8px] px-3 py-2 text-left text-[13px] transition-colors",
+                        "group relative flex w-full items-center gap-2 rounded-[8px] px-3 py-2 text-left text-[13px] transition-colors",
                         p.id === active?.id
-                          ? "bg-white font-medium text-[var(--color-ink)] shadow-whisper"
-                          : "text-[var(--color-ink-muted)] hover:bg-black/[0.03] hover:text-[var(--color-ink)]",
+                          ? "text-[var(--color-ink)]"
+                          : "text-[var(--color-ink-muted)] hover:text-[var(--color-ink)]",
                       )}
                     >
+                      {p.id === active?.id && (
+                        <motion.span
+                          layoutId="wiki-tree-active"
+                          className="absolute inset-0 rounded-[8px] bg-white shadow-whisper"
+                          transition={{ type: "spring", stiffness: 320, damping: 32 }}
+                        />
+                      )}
                       <ChevronRight
                         size={10}
                         strokeWidth={2}
                         className={cn(
-                          "text-[var(--color-ink-whisper)] transition-transform",
-                          p.id === active?.id && "text-[var(--color-ink)]",
+                          "relative z-[1] text-[var(--color-ink-whisper)] transition-transform",
+                          p.id === active?.id && "rotate-90 text-[var(--color-ink)]",
                         )}
                       />
-                      <span className="truncate">{p.pathSegments.join(" / ")}</span>
+                      <span className="relative z-[1] truncate">{p.pathSegments.join(" / ")}</span>
                     </button>
                   </li>
                 ))}
@@ -81,40 +88,33 @@ export default function WikiViewPage() {
 
       {/* Article */}
       <div className="flex-1 overflow-y-auto">
-        <FadeIn key={active?.id} className="mx-auto max-w-[780px] px-8 py-16 md:px-12">
-          <div className="flex items-center gap-2 font-mono text-[10.5px] uppercase tracking-[0.18em] text-[var(--color-ink-whisper)]">
-            <FileText size={12} strokeWidth={1.6} />
-            {active?.pathSegments.join(" / ")}
-            <span className="mx-1 h-[1px] w-8 bg-[var(--color-border-subtle)]" />
-            <Badge tone="warm">{active?.layer}</Badge>
-          </div>
-
-          <motion.h1
+        <AnimatePresence mode="wait">
+          <motion.div
             key={active?.id}
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-            className="font-display mt-5 text-[44px] leading-[1.08] tracking-display text-[var(--color-ink)]"
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            className="mx-auto max-w-[860px] px-8 py-16 md:px-14"
           >
-            {active?.title}
-          </motion.h1>
+            <div className="flex items-center gap-2 font-mono text-[10.5px] uppercase tracking-[0.18em] text-[var(--color-ink-whisper)]">
+              <FileText size={12} strokeWidth={1.6} />
+              {active?.pathSegments.join(" / ")}
+              <span className="mx-1 h-[1px] w-8 bg-[var(--color-border-subtle)]" />
+              <Badge tone="warm">{active?.layer}</Badge>
+              <span className="ml-auto flex items-center gap-1">
+                <Sparkles size={11} strokeWidth={1.6} />
+                Auto-generated · {new Date().toISOString().slice(0, 10)}
+              </span>
+            </div>
 
-          <motion.article
-            key={`${active?.id}-body`}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.15 }}
-            className="mt-10"
-          >
-            <pre className="whitespace-pre-wrap text-airy font-sans text-[15.5px] leading-[1.75] text-[var(--color-ink-soft)]">
-              {active?.markdown ?? ""}
-            </pre>
-          </motion.article>
+            <MarkdownRenderer source={active?.markdown ?? ""} className="mt-6" />
 
-          <div className="mt-16 border-t border-[var(--color-border-subtle)] pt-6 font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-whisper)]">
-            Context Layer · {active?.layer} layer · {active?.pathSegments.length} nodes deep
-          </div>
-        </FadeIn>
+            <div className="mt-16 border-t border-[var(--color-border-subtle)] pt-6 font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-whisper)]">
+              Context Layer · {active?.layer} layer · Stored as markdown in git · Every change is a commit
+            </div>
+          </motion.div>
+        </AnimatePresence>
       </div>
     </div>
   );

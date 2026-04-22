@@ -23,6 +23,7 @@ import { Badge, Dot } from "@/components/ui/badge";
 import { SectionLabel } from "@/components/ui/meta-field";
 import { AnimatedNumber } from "@/components/motion/animated-number";
 import { Waveform } from "@/components/ui/atmosphere";
+import { KnowledgeGraph } from "@/components/wiki/knowledge-graph";
 
 export default function WikiStatusPage() {
   const { workspaceId } = useParams<{ workspaceId: string }>();
@@ -145,20 +146,21 @@ export default function WikiStatusPage() {
         </div>
       </div>
 
-      {/* Repo chips + waveform */}
+      {/* Knowledge graph + repo chips */}
       <FadeIn>
-        <div className="grid gap-10 md:grid-cols-[1.2fr_1fr]">
-          <Card variant="inset" padding="spacious" radius="large">
+        <div className="grid gap-6 md:grid-cols-12">
+          <div className="md:col-span-8">
+            <KnowledgeGraph />
+          </div>
+
+          <Card variant="inset" padding="spacious" radius="large" className="md:col-span-4">
             <div className="flex items-center justify-between">
-              <div>
-                <SectionLabel>Feeding the Wiki</SectionLabel>
-                <h3 className="font-display mt-3 text-[28px] leading-[1.08]">Active repositories</h3>
-              </div>
+              <SectionLabel>Active repos</SectionLabel>
               <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-[var(--color-ink-muted)]">
                 <AnimatedNumber value={s.activeRepoIds.length} /> of {ws.sources.length}
               </span>
             </div>
-            <ul className="mt-6 flex flex-wrap gap-2">
+            <ul className="mt-5 flex flex-wrap gap-2">
               {s.activeRepoIds.map((r) => (
                 <li
                   key={r}
@@ -169,16 +171,10 @@ export default function WikiStatusPage() {
                 </li>
               ))}
             </ul>
-          </Card>
-
-          <Card variant="quiet" padding="spacious" radius="large" className="relative overflow-hidden">
-            <div className="flex h-full flex-col">
+            <div className="mt-6 border-t border-[var(--color-border-subtle)] pt-5">
               <SectionLabel>Knowledge density</SectionLabel>
-              <p className="mt-3 text-[14px] text-[var(--color-ink-muted)]">
-                Editorial glance at how the Wiki's token budget is distributed across the workspace.
-              </p>
-              <div className="mt-auto flex items-end justify-center pt-6">
-                <Waveform className="h-[100px]" bars={32} />
+              <div className="mt-3 flex justify-center">
+                <Waveform className="h-[60px]" bars={24} />
               </div>
             </div>
           </Card>

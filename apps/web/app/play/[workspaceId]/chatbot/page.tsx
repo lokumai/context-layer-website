@@ -18,6 +18,7 @@ import { usePlaygroundStore } from "@/store/playground-store";
 import { cn } from "@/lib/cn";
 import { FadeIn } from "@/components/motion/fade-in";
 import { CitationChip } from "@/components/chat/citation-chip";
+import { CitationDrawer } from "@/components/chat/citation-drawer";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { IconTile } from "@/components/ui/icon-tile";
@@ -27,6 +28,7 @@ export default function ChatbotPage() {
   const { workspaceId } = useParams<{ workspaceId: string }>();
   const ws = usePlaygroundStore((s) => s.workspaces.find((w) => w.workspace.id === workspaceId));
   const [activeThreadId, setActiveThreadId] = useState<string | null>(ws?.chatThreads[0]?.id ?? null);
+  const [openCitation, setOpenCitation] = useState<string | null>(null);
 
   if (!ws) return null;
 
@@ -141,7 +143,7 @@ export default function ChatbotPage() {
                       <p className="mt-2 text-airy text-[15.5px] leading-[1.75] text-[var(--color-ink-soft)]">
                         {m.content}
                         {m.citations?.map((c) => (
-                          <CitationChip key={c.label} citation={c} />
+                          <CitationChip key={c.label} citation={c} onClick={setOpenCitation} />
                         ))}
                       </p>
 
@@ -150,8 +152,9 @@ export default function ChatbotPage() {
                           {m.citations.map((c) => (
                             <button
                               key={c.label}
+                              onClick={() => setOpenCitation(c.target)}
                               title={c.target}
-                              className="flex items-center gap-2 rounded-full border border-black/5 bg-[var(--color-warm-stone)] px-3 py-1.5 font-mono text-[11.5px] font-medium text-[var(--color-ink)] shadow-warm"
+                              className="flex items-center gap-2 rounded-full border border-black/5 bg-[var(--color-warm-stone)] px-3 py-1.5 font-mono text-[11.5px] font-medium text-[var(--color-ink)] shadow-warm transition-all hover:shadow-[rgba(78,50,23,0.15)_0_6px_16px]"
                             >
                               <Terminal size={11} strokeWidth={1.6} />
                               {c.target}
@@ -191,6 +194,8 @@ export default function ChatbotPage() {
           </div>
         </div>
       </div>
+
+      <CitationDrawer target={openCitation} onClose={() => setOpenCitation(null)} />
     </div>
   );
 }
