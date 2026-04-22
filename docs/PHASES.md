@@ -7,13 +7,15 @@
 > 2. `docs/UI_UX.md` (Information architecture, features, & behavior)
 > 3. `docs/DESIGN.md` (Visual identity, typography, shadows)
 >
-> You MUST read those documents deeply. Decide for yourself *how* to implement the features based on the goals outlined in `UI_UX.md`. Do not wait for explicit micro-instructions. Use `docs/sample_pages` and `docs/screenshots` for inspiration, but do not copy them blindly.
+> You MUST read those documents deeply. Decide for yourself *how* to implement the features based on the goals outlined in `UI_UX.md`. Do not wait for explicit micro-instructions. Use `docs/sample_pages` and `docs/screenshots` for inspiration, but do not copy them blindly. But read them and see the images at least.
 >
 > **Smart Subagent Delegation:** Do not aggressively delegate every task to a subagent. Delegation should be reserved ONLY for tasks whose nature strictly benefits from isolated execution rather than inline execution by the main agent. Specifically, delegate tasks where isolating the subagent's context from the main chat history does not reduce the quality of the output. When you do delegate, you MUST ensure that you provide the subagent with absolutely all necessary information, docs, references, background, and context. Lack of context for a subagent is highly problematic. After the subagent completes its task, the main agent must rigorously review, test, and analyze the output.
 >
 > **Comprehensive Testing:** At the end of EVERY phase, you must run general tests (both unit/e2e and visual verification) for the *entire* phase. This is separate from subagent verification. Do not mark a phase as complete until the whole system works cohesively.
 >
 > NOTE: This system has github CLI installed. You can use it.
+>
+> NOTE: WHENEVER the FULL CONTEXT of SEED and UI/UX or DECISION is lost or compacted in your context, read them again and make sure all of them with all parts are always fresh in your context.
 
 ---
 
@@ -24,12 +26,16 @@
 * **Execution Details:** Implement the technical infrastructure detailed in `SEED.md` (Turborepo, Bun, Next.js 15, `shadcn/ui`, Tailwind v4, Biome, Vitest/Playwright).
 * **Definition of Done:** The monorepo compiles successfully without warnings, `shadcn/ui` is functional, the testing suite runs successfully, and the architecture cleanly separates the web app from shared packages.
 
-## Phase 2: Design System & Typography Foundation
+## [x] Phase 2: Design System & Typography Foundation
+**Status:** Complete
+**Goal:** Establish the global visual identity and design primitives.
 
-* **Status:** `[ ] Pending`
-* **Goal:** Implement the global visual identity and core primitives.
-* **Execution Details:** Apply the typography (Waldenburg loading mechanism), shadow systems, and base primitive styling strictly according to `DESIGN.md`.
-* **Definition of Done:** A rendered test page proves that the Waldenburg font loads correctly and the multi-layered shadows react perfectly to hover states, capturing the ethereal, premium vibe.
+### Deliverables
+- [x] **Typography system**: Raleway 300 (display) and Inter (body) wired as CSS variables.
+- [x] **Color Palette**: Implementation of warm stone tints and neutral black/whites.
+- [x] **Shadow System**: Multi-layered sub-0.1 opacity shadow stacks.
+- [x] **Component Primitives**: Global CSS classes for buttons, cards, and text roles.
+- [x] **Verification**: Design system showcase page and token unit tests.
 
 ## Phase 3: Mock Data Architecture & Generation (DeepWiki Integration)
 
