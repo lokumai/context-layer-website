@@ -18,6 +18,21 @@
   --color-border: #e5e5e5;
   --color-border-subtle: rgba(0, 0, 0, 0.05);
 
+  /* §12 Dev-Friendly Mode — canvas + accent palette */
+  --color-bg-canvas: #f9f9f9;
+  --color-ink-dark: #0a0a0a;
+
+  --color-accent-green-bg: #ecfdf5;
+  --color-accent-green-fg: #047857;
+  --color-accent-blue-bg: #eff6ff;
+  --color-accent-blue-fg: #1d4ed8;
+  --color-accent-amber-bg: #fffbeb;
+  --color-accent-amber-fg: #b45309;
+  --color-accent-red-bg: #fef2f2;
+  --color-accent-red-fg: #b91c1c;
+  --color-accent-neutral-bg: #f5f5f5;
+  --color-accent-neutral-fg: #525252;
+
   /* Shadow Primitives (Design Level 0.5 - 3) */
   --shadow-inset-border: rgba(0, 0, 0, 0.075) 0px 0px 0px 0.5px inset;
   --shadow-outline-ring: rgba(0, 0, 0, 0.06) 0px 0px 0px 1px, 
@@ -154,11 +169,19 @@
 }
 
 :root {
-  --background: var(--color-white);
+  --background: var(--color-bg-canvas);
   --foreground: var(--color-black);
 }
 
 body {
-  background-color: var(--color-white);
+  background-color: var(--color-bg-canvas);
   color: var(--color-black);
+}
+
+/* §12.6 Blueprint grid for schematic panels */
+@utility bg-blueprint {
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
+  background-size: 32px 32px;
 }

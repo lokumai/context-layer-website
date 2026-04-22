@@ -55,7 +55,8 @@ export function TerminalType({
       aria-hidden
     >
       {display.map((line, i) => (
-        <div key={`terminal-line-${i}`} className="whitespace-pre-wrap break-words">
+        // biome-ignore lint/suspicious/noArrayIndexKey: display reflects a fixed-length type-in progression; index is stable
+        <div key={`tl-${i}`} className="whitespace-pre-wrap break-words">
           {line?.startsWith("$ ") ? <span className="text-[#89d185]">$ </span> : null}
           <span>{line?.startsWith("$ ") ? line.slice(2) : line}</span>
           {i === currentLine && !reduceMotion ? (

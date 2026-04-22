@@ -215,3 +215,78 @@ What makes ElevenLabs distinctive is its multi-layered shadow system. Rather tha
 4. Positive letter-spacing on Inter body (+0.14px to +0.18px) — the airy reading quality
 5. Warm stone CTA is the signature — `rgba(245,242,239,0.8)` with `rgba(78,50,23,0.04)` shadow
 6. Pill (9999px) for buttons, generous radius (16px–24px) for cards
+
+---
+
+## 12. Dev-Friendly Mode — "ElevenLabs × Engineering Dashboard"
+
+The premium system in §1–§11 is the *foundation* and stays authoritative for hero surfaces, warm-stone CTAs, and the overall typography and shadow language. But below the fold and across dashboard-flavored surfaces (the playground UI, marketing pages' product maps, any information-dense block), we layer a **developer-dashboard treatment** on top — the look of tools like Linear, Vercel, or ElevenLabs' own product pages. The goal: pattern-match the visual vocabulary engineers already trust so the product feels usable on first glance.
+
+### 12.1 Canvas
+
+- **Body background**: `#f9f9f9` (soft grey) — NOT pure `#ffffff`. White cards sit on top of the canvas to gain definition.
+- White `#ffffff` is reserved for cards, panels, inputs, popovers — any surface that needs to read "elevated."
+- Warm Stone `#f5f2ef` still reserved for signature CTAs and warm-accent blocks.
+- Dark-accent bars: `#0a0a0a` with white text, used sparingly for the foundation-strip and featured bento rows.
+
+### 12.2 Semantic accent palette
+
+Strict five-pair palette — used ONLY for status pills, small icon accents, inline semantic chips, and targeted animation highlights. Never large background surfaces.
+
+| Role | Background | Foreground | Use |
+|------|-----------|-----------|-----|
+| indexed / success / health | `#ecfdf5` | `#047857` | "Indexed", "Live", green health dots |
+| processing / info / code | `#eff6ff` | `#1d4ed8` | "Syncing", "Running", code/terminal accents |
+| warning / pending / scan | `#fffbeb` | `#b45309` | "Outdated", "Pending", scan-line highlights |
+| error / critical | `#fef2f2` | `#b91c1c` | "Failed", "Critical" |
+| neutral | `#f5f5f5` | `#525252` | "Paused", "Inactive" |
+
+### 12.3 Status-pill utility
+
+Inline class pattern for semantic chips:
+
+```
+.status-pill
+  inline-flex items-center gap-1.5
+  px-2.5 py-0.5 rounded-pill
+  text-[11px] uppercase tracking-[0.08em] font-semibold
+  + bg/fg pair from §12.2
+```
+
+### 12.4 Iconography
+
+- Library: `lucide-react` (already installed).
+- Three standard sizes — **14 px** (inline small), **18 px** (card header), **28 px** (bento feature / hero).
+- Stroke width `1.5`. Color inherits from parent text so theming works automatically.
+- Use icons generously on cards, section eyebrows, status chips, nav items — anywhere an engineer would expect one.
+
+### 12.5 Density
+
+- Section vertical padding: reduce `py-32` → `py-20`–`py-24` for dashboard-style content-dense sections. Hero stays generous.
+- Card padding: default `p-6` (not `p-8`) for dense bento cards. Featured cards can still use `p-8`–`p-10`.
+- Card gap: default `gap-6` (not `gap-10`) for bento grids.
+- Body line-height: `1.50` (not `1.60`) in dashboard-like blocks.
+- Typography hierarchy mixed in a single view: 10 px uppercase eyebrow + 13–14 px body + 16–20 px sub-heading + 24–32 px card-heading. Multiple sizes create visual rhythm.
+
+### 12.6 Borders + blueprint grids
+
+Sample-page convention: cards use subtle borders plus occasional blueprint-grid backgrounds on tech panels.
+
+- Subtle card border (optional, on top of inset shadow): `border-[rgba(0,0,0,0.05)]`.
+- Blueprint grid background (for hero / schematic panels):
+  `background: linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px); background-size: 32px 32px;`
+
+### 12.7 What carries over unchanged
+
+- Raleway 300 display. Inter body with positive letter-spacing. Geist Mono for code.
+- Multi-layer sub-0.1 opacity shadows (§6).
+- Warm Stone CTA as the signature hero action (§4).
+- 9999 px pill buttons + generous card radii.
+- All existing tokens in `globals.css` (§2–§5).
+
+### 12.8 Composition rule
+
+- **Hero blocks** → premium treatment wins (wide whitespace, warm-stone CTAs, big light-weight display type).
+- **Below the fold** → density treatment wins (grey canvas, white cards on grey, colored chips, lucide icons, tighter padding).
+
+This is not a theme switch; it's a **compositional discipline** — premium is the foundation, dev-dashboard is the overlay, and the same typography + shadow system binds both.

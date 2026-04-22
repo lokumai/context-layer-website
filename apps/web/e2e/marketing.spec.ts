@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 
 const ROUTES = [
-  { path: "/", heading: /turn your codebase into living knowledge/i },
+  { path: "/", heading: /codebase knowledge/i },
   { path: "/product/context-layer", heading: /context layer/i },
   { path: "/product/code-translation", heading: /code translation/i },
   { path: "/product/code-modernization", heading: /code modernization/i },
