@@ -27,7 +27,7 @@ import {
   listArtifacts,
   listJobs,
   listSources,
-} from "../index.js";
+} from "../index";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const DATA_ROOT = join(here, "..", "..", "data");

@@ -1,5 +1,5 @@
-import type { Source } from "../types.js";
-import { readJSON } from "./_fs.js";
+import type { Source } from "../types";
+import { readJSON } from "./_fs";
 
 interface SourcesFile {
   sources: Source[];

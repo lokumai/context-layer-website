@@ -1,5 +1,5 @@
-import type { CannedQAPair, SuggestedPrompt } from "../types.js";
-import { readJSON } from "./_fs.js";
+import type { CannedQAPair, SuggestedPrompt } from "../types";
+import { readJSON } from "./_fs";
 
 interface PromptsFile {
   prompts: SuggestedPrompt[];

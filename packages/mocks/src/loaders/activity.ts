@@ -1,5 +1,5 @@
-import type { Job } from "../types.js";
-import { readJSON } from "./_fs.js";
+import type { Job } from "../types";
+import { readJSON } from "./_fs";
 
 interface JobsFile {
   jobs: Job[];

@@ -18,7 +18,7 @@ import {
   listArtifacts,
   listJobs,
   listSources,
-} from "../index.js";
+} from "../index";
 
 describe("@context-layer/mocks loaders", () => {
   it("workspace: exposes the microservices-product-catalog workspace", async () => {

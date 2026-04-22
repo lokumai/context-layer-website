@@ -1,0 +1,37 @@
+import { NextResponse } from "next/server";
+import { auth } from "./auth";
+
+// Public routes (and their prefixes). Everything else requires an authenticated
+// session; unauthenticated requests redirect to /login with a callbackUrl.
+const PUBLIC_PATHS = new Set<string>(["/", "/login"]);
+const PUBLIC_PREFIXES = ["/product/", "/api/auth/", "/_next/", "/assets/", "/favicon"];
+
+export default auth((req) => {
+  const { pathname, search } = req.nextUrl;
+
+  const isPublic =
+    PUBLIC_PATHS.has(pathname) || PUBLIC_PREFIXES.some((p) => pathname.startsWith(p));
+
+  // Bounce authenticated users away from /login so they don't re-auth.
+  if (pathname === "/login" && req.auth) {
+    const dest = req.nextUrl.clone();
+    dest.pathname = "/";
+    dest.search = "";
+    return NextResponse.redirect(dest);
+  }
+
+  if (isPublic) return NextResponse.next();
+
+  if (!req.auth) {
+    const login = req.nextUrl.clone();
+    login.pathname = "/login";
+    login.search = `?callbackUrl=${encodeURIComponent(pathname + search)}`;
+    return NextResponse.redirect(login);
+  }
+
+  return NextResponse.next();
+});
+
+export const config = {
+  matcher: ["/((?!_next/static|_next/image|favicon.ico|assets/).*)"],
+};

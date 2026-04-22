@@ -1,5 +1,5 @@
-import type { SagaFlowsDoc, Workspace, WorkspaceNarrative } from "../types.js";
-import { approxTokens, readJSON, readText } from "./_fs.js";
+import type { SagaFlowsDoc, Workspace, WorkspaceNarrative } from "../types";
+import { approxTokens, readJSON, readText } from "./_fs";
 
 export async function getWorkspace(): Promise<Workspace> {
   return readJSON<Workspace>("workspace/workspace.json");

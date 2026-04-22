@@ -1,5 +1,7 @@
 import type { Metadata } from "next"
 import { Inter, Raleway, Geist_Mono } from "next/font/google"
+import { SessionProvider } from "@/providers/session-provider"
+import { HydrationProvider } from "@/providers/hydration-provider"
 import "./globals.css"
 
 const inter = Inter({
@@ -33,7 +35,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${raleway.variable} ${geistMono.variable}`}>
       <body className="antialiased font-sans">
-        {children}
+        <SessionProvider>
+          <HydrationProvider>{children}</HydrationProvider>
+        </SessionProvider>
       </body>
     </html>
   )

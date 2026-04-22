@@ -4,8 +4,8 @@ import type {
   HealthMetric,
   KnowledgeGraph,
   SecurityReport,
-} from "../types.js";
-import { readJSON } from "./_fs.js";
+} from "../types";
+import { readJSON } from "./_fs";
 
 export async function getHealth(): Promise<HealthMetric> {
   return readJSON<HealthMetric>("intelligence/health.json");

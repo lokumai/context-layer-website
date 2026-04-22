@@ -1,6 +1,6 @@
 import { join } from "node:path";
-import type { LlmsTxt, WikiPage, WikiTree } from "../types.js";
-import { approxTokens, readJSON, readText } from "./_fs.js";
+import type { LlmsTxt, WikiPage, WikiTree } from "../types";
+import { approxTokens, readJSON, readText } from "./_fs";
 
 export async function getWikiTree(repoId: string): Promise<WikiTree> {
   return readJSON<WikiTree>(join("repos", repoId, "wiki", "tree.json"));

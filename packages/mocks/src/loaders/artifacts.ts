@@ -1,6 +1,6 @@
 import { join } from "node:path";
-import type { Artifact, ArtifactBundle } from "../types.js";
-import { readJSON, readText } from "./_fs.js";
+import type { Artifact, ArtifactBundle } from "../types";
+import { readJSON, readText } from "./_fs";
 
 interface ArtifactIndex {
   artifacts: Array<Omit<Artifact, "markdown">>;
