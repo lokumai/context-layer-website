@@ -1,4 +1,5 @@
-import { Button } from "../../ui/button"
+// Internal reference page — the Phase 2 design-token showcase. Not linked from marketing surfaces.
+import { Button } from "../../../../ui/button"
 
 export default function DesignSystemShowcase() {
   return (

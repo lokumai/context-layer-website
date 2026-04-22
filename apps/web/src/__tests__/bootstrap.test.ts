@@ -30,10 +30,12 @@ describe("bootstrapPayload", () => {
     expect(p.sources).toHaveLength(9);
 
     expect(p.wiki).not.toBeNull();
-    expect(Object.keys(p.wiki?.tree)).toHaveLength(9);
-    expect(p.wiki?.narrative).not.toBeNull();
-    expect(p.wiki?.sagaFlows).not.toBeNull();
-    expect(Object.keys(p.wiki?.llms)).toContain("_workspace");
+    const wiki = p.wiki;
+    if (!wiki) throw new Error("wiki unexpectedly null");
+    expect(Object.keys(wiki.tree)).toHaveLength(9);
+    expect(wiki.narrative).not.toBeNull();
+    expect(wiki.sagaFlows).not.toBeNull();
+    expect(Object.keys(wiki.llms)).toContain("_workspace");
 
     expect(p.intelligence).not.toBeNull();
     expect(p.intelligence?.health).toBeDefined();

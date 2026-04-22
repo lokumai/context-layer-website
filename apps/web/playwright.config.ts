@@ -21,5 +21,12 @@ export default defineConfig({
     command: 'bun run dev',
     url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,
+    timeout: 120_000,
+    env: {
+      AUTH_SECRET: process.env.AUTH_SECRET ?? 'playwright-test-secret',
+      AUTH_EMPTY_PASSWORD: 'e2e-empty',
+      AUTH_PARTIAL_PASSWORD: 'e2e-partial',
+      AUTH_FULL_PASSWORD: 'e2e-full',
+    },
   },
 });

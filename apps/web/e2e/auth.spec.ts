@@ -8,9 +8,9 @@ import { expect, test } from "@playwright/test";
 // which is the case under `bun run dev` in the repo.
 
 const PERSONAS = [
-  { id: "empty", password: "changeme-empty", expectedSources: 0 },
-  { id: "partial", password: "changeme-partial", expectedSources: 9 },
-  { id: "full", password: "changeme-full", expectedSources: 9 },
+  { id: "empty", password: "e2e-empty", expectedSources: 0 },
+  { id: "partial", password: "e2e-partial", expectedSources: 9 },
+  { id: "full", password: "e2e-full", expectedSources: 9 },
 ] as const;
 
 test.describe("auth + hydration", () => {
@@ -22,6 +22,7 @@ test.describe("auth + hydration", () => {
 
   for (const persona of PERSONAS) {
     test(`signs in as ${persona.id} and hydrates store`, async ({ page }) => {
+      test.setTimeout(90_000);
       await page.goto("/login");
       await page.getByLabel(/persona/i).fill(persona.id);
       await page.getByLabel(/password/i).fill(persona.password);
