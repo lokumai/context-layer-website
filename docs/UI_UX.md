@@ -1,6 +1,6 @@
-# Context Layer — Playground UI/UX Specification
+# Context Layer — UI/UX Specification
 
-This is the descriptive UI/UX document for the Context Layer playground. Landing pages are standard marketing pages; this document focuses on the authenticated, workspace-scoped playground experience where the real product is demonstrated.
+This document details the user experience for both the public-facing Marketing pages and the authenticated, workspace-scoped Playground environment.
 
 ---
 
@@ -694,3 +694,21 @@ Sources (single source of truth — inputs)
 ```
 
 This is the canonical information architecture. Every future decision — new pipelines, new artifact types, new dashboards — should slot into this map cleanly. If a new feature doesn't fit, the feature is likely misconceived, or the map needs an explicit, deliberated update.
+
+---
+
+## 11. Marketing Pages (Unauthenticated)
+
+The public-facing marketing pages (`/`, `/product/context-layer`, etc.) are the funnel into the playground. Because users rarely read heavy text blocks, these pages must communicate the product's value primarily through **visuals, sophisticated animations, and interactive elements**, aiming for an award-winning "Awwwards-style" presentation.
+
+### 11.1 Animation & Visualization Strategy
+- **"Show, Don't Tell":** The core product capabilities (e.g., how the 3-layer Wiki works, how OmniBoard generates podcasts from code) MUST be visualized using scroll-triggered animations, interactive diagrams, or high-fidelity mock UI components that animate as the user scrolls.
+- **Micro-interactions:** Buttons, cards, and links must have fluid, satisfying hover states (e.g., magnetic buttons, soft glow effects, gradient borders that follow the cursor).
+- **Hero Sections:** The top of every marketing page must feature a striking, dynamic element. Instead of a static screenshot, use floating UI layers, abstract 3D geometry representing the "Context Layer", or a simulated terminal typing out an AI generation command.
+
+### 11.2 Core Marketing Routes
+1. **Home (`/`):** The grand overview. Focus on the progression from raw code to living knowledge to generated artifacts. Use an animated pipeline visualization down the center of the page.
+2. **Products:** Dedicated pages for specific offerings. These should feature side-by-side sticky scrolling (text on one side, a dynamic updating graphic on the other).
+
+### 11.3 Call to Action (CTA)
+Every page must have a clear, floating or fixed header containing the **"Playground"** button in the top right. This button must be highly visible (perhaps with a subtle pulse or glow) and strictly redirect unauthenticated users to `/login`.
