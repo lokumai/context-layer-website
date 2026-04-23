@@ -130,17 +130,26 @@ Production build: all 4 marketing routes statically prerendered; middleware 92 k
 
 ## Phase 8: Knowledge UI (Intelligence Dashboards)
 
-* **Status:** `[ ] Pending`
-* **Goal:** Build the data-driven analytics and metrics dashboards.
-* **Execution Details:** Implement the Intelligence dashboards according to `UI_UX.md`. Apply the secondary gating logic ensuring the page only populates after an explicit "Intelligence Generation" trigger.
-* **Definition of Done:** When hydrated with the `full` persona, the page displays rich, interactive charts.
+* **Status:** `[x] Complete`
+* **Delivered (2026-04-23):**
+  * Intelligence page at `/workspace/[id]/intelligence/{overview,health,security,coverage,dependencies}` with a sidebar + two-tier gating (`hasWiki` → reachable; `hasIntelligence` → populated).
+  * Runtime `hasIntelligence` + `intelligenceRefreshedAt` added to `RuntimeWorkspace`; bootstrap sets them only for the `full` persona; new store actions `setHasIntelligence` + `setIntelligenceData`.
+  * New `/api/mocks/intelligence-payload` route + 10 s first-gen flow (6 accordion steps) that the `partial` persona can trigger from any dashboard page.
+  * "Refresh Now" config header strip on every dashboard with a Fresh / Recent / Stale / Refreshing StatusPill.
+  * 5 dashboards delegated to **gemini-cli Flash**: Overview (metric tiles + severity split + per-repo coverage + knowledge-graph snapshot), Health (filter pills + expandable fragile-area rows), Security (severity legend + findings table + per-row expand), Coverage (overall + per-repo cards), Dependencies (filters + table).
+  * 67 / 67 Vitest (+4 new intelligence-store tests) · 20 / 20 Playwright (+2 `intelligence.spec.ts`: full populated, partial Wiki-first empty state) · build clean · lint clean on all Phase 8 files.
 
 ## Phase 9: The Universal Chatbot
 
-* **Status:** `[ ] Pending`
-* **Goal:** Implement the primary conversational surface (full page and contextual side-panel).
-* **Execution Details:** Implement the Chatbot interfaces according to `UI_UX.md` and style them according to `DESIGN.md`. Ensure grounding controls and warm-stone citation chips are fully interactive.
-* **Definition of Done:** A visually distinct chat interface that handles conversation threads seamlessly.
+* **Status:** `[x] Complete`
+* **Delivered (2026-04-23):**
+  * Full chatbot page at `/workspace/[id]/chatbot`: three-pane layout (thread sidebar · messages · input with always-visible grounding chips), MCP-config button, suggested-prompt empty state, "Generate the Wiki first" fallback.
+  * Shared **`<ChatbotSideDock>`** floating bar + slide-over mounted on every Wiki View page and every Intelligence dashboard; threads are stored in the single Zustand slice so a conversation started in the side-panel keeps going on the full page.
+  * Streaming simulation (`lib/chatbot/stream.ts` + `lib/chatbot/match.ts`) — 1.2 s "thinking" phase then chunked deltas, abort-signal aware; answers are bag-of-words-matched against the 17 canned Q&A pairs and fall through to an "I don't have a grounded answer" stub.
+  * **Citation primitive** (UI_UX §9.7) — one `<CitationChip>` + `<CitationDrawer>` pair rendered via a React context. Chips inside chat bubbles (`[1]`, `[2]`, warm-stone / blue / green tints by kind) open a 520 px right-hand drawer with an "Open in Wiki" deep-link + a code-preview stub for `@repoId/path:start-end` anchors.
+  * Chatbot slice gained thread-CRUD actions — `createThread`, `appendMessage`, `patchLastMessage`, `renameThread`, `deleteThread`, `setActiveThread` — plus `activeThreadId` persisted across reloads.
+  * Wiki View's Phase-9 stub slide-over retired; the old "Chatbot arrives in Phase 9" placeholder is gone.
+  * Tests — Vitest 76/76 (+9 new: `chatbot-store` thread CRUD + `matchAnswer` + `chatbot-stream`); Playwright 23/23 (+3 new `chatbot.spec.ts`: partial chatbot nav locked, full page streams answer + opens citation drawer, Wiki View mounts the side dock). Build clean; lint clean on all Phase 9 files.
 
 ## Phase 10: Generate Tools (DocsGen & OmniBoard)
 

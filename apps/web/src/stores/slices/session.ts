@@ -1,6 +1,6 @@
 import type { StateCreator } from "zustand";
-import type { AppState, HydrationPayload, SessionSlice } from "../types";
 import type { PersonaId } from "@/lib/personas";
+import type { AppState, HydrationPayload, SessionSlice } from "../types";
 
 const EMPTY_PAYLOAD: HydrationPayload = {
   workspaces: [],
@@ -38,6 +38,7 @@ function projectPayload(p: HydrationPayload, personaId: PersonaId | null) {
     suggestedPrompts: p.chatbot?.suggestedPrompts ?? [],
     cannedQA: p.chatbot?.cannedQA ?? [],
     threads: p.chatbot?.threads ?? [],
+    activeThreadId: null,
     jobs: p.activity,
     personaId,
     hydratedAt: personaId ? new Date().toISOString() : null,

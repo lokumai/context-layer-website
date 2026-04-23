@@ -1,4 +1,4 @@
-import { type PersistOptions, createJSONStorage } from "zustand/middleware";
+import { createJSONStorage, type PersistOptions } from "zustand/middleware";
 import type { AppState, PersistedState } from "./types";
 
 export const PERSIST_VERSION = 1;
@@ -39,6 +39,7 @@ export function persistConfig(): PersistOptions<AppState, PersistedState> {
       suggestedPrompts: state.suggestedPrompts,
       cannedQA: state.cannedQA,
       threads: state.threads,
+      activeThreadId: state.activeThreadId,
       jobs: state.jobs,
       personaId: state.personaId,
       hydratedAt: state.hydratedAt,

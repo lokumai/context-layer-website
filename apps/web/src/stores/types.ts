@@ -1,6 +1,7 @@
 import type {
   Artifact,
   CannedQAPair,
+  ChatMessage,
   ChatThread,
   CoverageReport,
   DependencyReport,
@@ -25,6 +26,10 @@ import type { PersonaId } from "@/lib/personas";
 export interface RuntimeWorkspace extends Workspace {
   hasWiki: boolean;
   graduated: boolean;
+  /** Whether the IntelliGen job has been run for this workspace. */
+  hasIntelligence: boolean;
+  /** Last time Intelligence was refreshed (drives the Fresh / Stale / Refreshing badge). */
+  intelligenceRefreshedAt: string | null;
 }
 
 // The shape that /api/mocks/bootstrap returns. This is the on-the-wire
@@ -68,6 +73,8 @@ export interface WorkspacesSlice {
   renameWorkspace: (id: string, name: string) => void;
   /** Set graduation + hasWiki flags (called after the first Wiki generation). */
   setGraduated: (id: string, value: boolean) => void;
+  /** Toggle Intelligence availability and stamp the refreshed timestamp. */
+  setHasIntelligence: (id: string, value: boolean) => void;
 }
 
 export interface SourcesSlice {
@@ -97,12 +104,22 @@ export interface WikiSlice {
   setWikiData: (payload: WikiPayload) => void;
 }
 
+export interface IntelligencePayload {
+  health: HealthMetric;
+  security: SecurityReport;
+  coverage: CoverageReport;
+  dependencies: DependencyReport;
+  knowledgeGraph: KnowledgeGraph;
+}
+
 export interface IntelligenceSlice {
   health: HealthMetric | null;
   security: SecurityReport | null;
   coverage: CoverageReport | null;
   dependencies: DependencyReport | null;
   knowledgeGraph: KnowledgeGraph | null;
+  /** Populate intelligence slice after IntelliGen runs (or from bootstrap). */
+  setIntelligenceData: (payload: IntelligencePayload) => void;
 }
 
 export interface ArtifactsSlice {
@@ -113,6 +130,17 @@ export interface ChatbotSlice {
   suggestedPrompts: SuggestedPrompt[];
   cannedQA: CannedQAPair[];
   threads: ChatThread[];
+  /** Currently selected thread id (null → empty state with suggested prompts). */
+  activeThreadId: string | null;
+  setActiveThread: (id: string | null) => void;
+  /** Create a new thread; returns the new id. */
+  createThread: (title?: string) => string;
+  /** Append a message to a thread. For assistant messages the caller supplies citations. */
+  appendMessage: (threadId: string, message: ChatMessage) => void;
+  /** Replace (mutate in-place) the last message of a thread — used during streaming. */
+  patchLastMessage: (threadId: string, content: string) => void;
+  renameThread: (threadId: string, title: string) => void;
+  deleteThread: (threadId: string) => void;
 }
 
 export interface ActivitySlice {
@@ -178,6 +206,14 @@ export type PersistedState = Omit<
   | "markError"
   | "toggleAutoSync"
   | "setWikiData"
+  | "setIntelligenceData"
+  | "setHasIntelligence"
+  | "setActiveThread"
+  | "createThread"
+  | "appendMessage"
+  | "patchLastMessage"
+  | "renameThread"
+  | "deleteThread"
   | "hydrate"
   | "reset"
   | "isHydrated"

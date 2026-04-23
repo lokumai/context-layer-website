@@ -22,6 +22,8 @@ export const createWorkspacesSlice: StateCreator<AppState, [], [], WorkspacesSli
       description: "",
       hasWiki: false,
       graduated: false,
+      hasIntelligence: false,
+      intelligenceRefreshedAt: null,
     };
     set((s) => ({ workspaces: [...s.workspaces, ws], activeWorkspaceId: id }));
     return id;
@@ -34,6 +36,18 @@ export const createWorkspacesSlice: StateCreator<AppState, [], [], WorkspacesSli
     set((s) => ({
       workspaces: s.workspaces.map((w) =>
         w.id === id ? { ...w, graduated: value, hasWiki: value ? true : w.hasWiki } : w,
+      ),
+    })),
+  setHasIntelligence: (id, value) =>
+    set((s) => ({
+      workspaces: s.workspaces.map((w) =>
+        w.id === id
+          ? {
+              ...w,
+              hasIntelligence: value,
+              intelligenceRefreshedAt: value ? new Date().toISOString() : null,
+            }
+          : w,
       ),
     })),
 });

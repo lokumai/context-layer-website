@@ -49,6 +49,8 @@ export async function bootstrapPayload(persona: PersonaId): Promise<HydrationPay
           syncStatus: "outdated",
           hasWiki: false,
           graduated: false,
+          hasIntelligence: false,
+          intelligenceRefreshedAt: null,
         },
       ],
       sources,
@@ -94,7 +96,15 @@ export async function bootstrapPayload(persona: PersonaId): Promise<HydrationPay
   const llms = Object.fromEntries([["_workspace", masterLlms], ...llmsEntries]);
 
   return {
-    workspaces: [{ ...workspace, hasWiki: true, graduated: true }],
+    workspaces: [
+      {
+        ...workspace,
+        hasWiki: true,
+        graduated: true,
+        hasIntelligence: true,
+        intelligenceRefreshedAt: new Date().toISOString(),
+      },
+    ],
     sources,
     wiki: { tree: wikiTrees, narrative, sagaFlows, llms },
     intelligence: { health, security, coverage, dependencies, knowledgeGraph },
