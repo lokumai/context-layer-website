@@ -58,7 +58,7 @@ describe("LoginPage", () => {
       });
     });
     await waitFor(() => {
-      expect(mockPush).toHaveBeenCalledWith("/");
+      expect(mockPush).toHaveBeenCalledWith("/workspaces");
     });
   });
 

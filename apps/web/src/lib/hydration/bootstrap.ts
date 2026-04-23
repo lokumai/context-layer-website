@@ -43,7 +43,14 @@ export async function bootstrapPayload(persona: PersonaId): Promise<HydrationPay
     // locked until the first generation completes.
     return {
       ...EMPTY,
-      workspaces: [{ ...workspace, syncStatus: "outdated" }],
+      workspaces: [
+        {
+          ...workspace,
+          syncStatus: "outdated",
+          hasWiki: false,
+          graduated: false,
+        },
+      ],
       sources,
     };
   }
@@ -87,7 +94,7 @@ export async function bootstrapPayload(persona: PersonaId): Promise<HydrationPay
   const llms = Object.fromEntries([["_workspace", masterLlms], ...llmsEntries]);
 
   return {
-    workspaces: [workspace],
+    workspaces: [{ ...workspace, hasWiki: true, graduated: true }],
     sources,
     wiki: { tree: wikiTrees, narrative, sagaFlows, llms },
     intelligence: { health, security, coverage, dependencies, knowledgeGraph },

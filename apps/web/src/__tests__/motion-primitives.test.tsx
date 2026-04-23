@@ -57,8 +57,8 @@ describe("motion primitives render their children without crashing", () => {
     expect(screen.getByText("section")).toBeTruthy();
   });
 
-  it("PlaygroundButton defaults to /login", () => {
+  it("PlaygroundButton defaults to /workspaces", () => {
     render(<PlaygroundButton />);
-    expect(screen.getByTestId("playground-button").getAttribute("href")).toBe("/login");
+    expect(screen.getByTestId("playground-button").getAttribute("href")).toBe("/workspaces");
   });
 });

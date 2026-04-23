@@ -12,10 +12,12 @@ export default auth((req) => {
   const isPublic =
     PUBLIC_PATHS.has(pathname) || PUBLIC_PREFIXES.some((p) => pathname.startsWith(p));
 
-  // Bounce authenticated users away from /login so they don't re-auth.
+  // Bounce authenticated users away from /login into the playground.
+  // Honor the callbackUrl param if it points inside the playground; otherwise /workspaces.
   if (pathname === "/login" && req.auth) {
     const dest = req.nextUrl.clone();
-    dest.pathname = "/";
+    const callbackUrl = req.nextUrl.searchParams.get("callbackUrl");
+    dest.pathname = callbackUrl?.startsWith("/") ? callbackUrl : "/workspaces";
     dest.search = "";
     return NextResponse.redirect(dest);
   }

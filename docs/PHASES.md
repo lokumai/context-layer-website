@@ -136,7 +136,60 @@
 
 ## Phase 6: Workspaces & Sources Manager
 
-* **Status:** `[ ] Pending`
+* **Status:** `[x] Complete`
+* **Delivered (2026-04-23):**
+
+  **Route structure**
+  * New `(playground)` route group with server-side `auth()` gate + `<PlaygroundNavbar>`.
+  * `/workspaces` — gateway grid (UI_UX §3).
+  * `/workspace/[id]/sources` — primary source management (UI_UX §4).
+  * `/workspace/[id]/{knowledge,chatbot,generate,library}` — polite "Coming soon / Phase 7+" placeholder pages (gemini-flash delegated).
+  * Middleware tweaked: authenticated `/login` → `/workspaces` (honors `callbackUrl` if set).
+  * Login page default + marketing `<PlaygroundButton>` default `href` → `/workspaces`.
+
+  **Playground chrome (UI_UX §2)**
+  * `<PlaygroundNavbar>` fixed-top 64 px, three regions: left (logo + `<WorkspacePill>` + `<SyncHeartbeat>`), center (5 destinations with progressive gating), right (`<ProfileMenu>`).
+  * `<WorkspacePill>` dropdown — recent workspaces + "All workspaces".
+  * `<SyncHeartbeat>` — 4 states (live / syncing / queued / outdated) mapped to §12 accent palette.
+  * `<ProfileMenu>` — persona initial avatar, sign-out that also resets store + persist key.
+  * `<NavDestinations>` — progressive gating per UI_UX §9.9: Knowledge / Chatbot / Generate / Library render locked (`data-locked="true"` + Lock icon + tooltip "Generate the first Wiki to unlock") when `!hasWiki`. Full persona unlocks all; partial only has Sources unlocked.
+
+  **Workspaces page**
+  * Responsive grid (1/2/3/4 cols) — dotted-outline "+" Create card first, then one `<WorkspaceCard>` per workspace.
+  * `<WorkspaceCard>` — Raleway 300 title, 3-fact metadata row, StatusPill row ("Wiki Live" vs "Wiki Pending" + source count), cursor-follow warm-stone gradient on hover.
+  * `<CreateWorkspaceModal>` — single-input form; simulated latency (1.2 s) streams "Allocating workspace… → Wiring providers… → Ready"; routes to `/workspace/{newId}/sources`.
+  * `<WorkspacesEmptyState>` — Warm Stone "Create Workspace" CTA for the `empty` persona.
+
+  **Sources page** (modeled on `docs/sample_pages/sources.html`)
+  * Sticky toolbar: inset-shadow search (name / URL / path, debounced), 4 filter pills (All · Code · Files · Discussion), Grid/List view toggle, Warm Stone "Add Source" signature CTA.
+  * `<SourceCard>` (grid) — icon well per kind (blue GitBranch for code, green FileText for file, amber MessageSquare for discussion), colored `<SourceStatusBadge>` (Indexed / Indexing… / Error), hover elevation from `--shadow-inset-border` → `--shadow-card`.
+  * `<SourceRow>` (list view) — compact row with the same metadata.
+  * `<SourceActionsMenu>` `⋯` — Rename / Re-index (simulated 3.5 s latency with log stream; card badge cycles Indexed → Indexing… → Indexed) / Toggle auto-sync (disabled for `upload` + `url` categories) / Delete (with confirm).
+  * `<AddSourceChooser>` (gemini-flash delegated) — 3 category rows × 5–6 integrations each; clicking runs a 4.5 s simulated job with log stream ("Contacting provider → Authorizing → Cloning repository → Analyzing AST → Building index → Committing to wiki"); synthesizes a `Source` record and dispatches `addSource`.
+  * `<SourcePreviewModal>` (gemini-flash delegated) — right-side slide-over with status header + 2×2 fact grid for code sources; stub for files/discussion.
+  * `<SourcesEmptyState>` — integration-first CTAs (Connect GitHub, Connect Google Drive, Upload files, Paste URL).
+
+  **First-Time Workspace Wizard (UI_UX §3)**
+  * Pinned at top of Sources page when `activeWorkspace.graduated === false` and the user hasn't dismissed it this session.
+  * Step 1 (Add a source) — fully functional; auto-marks done when `sources.length > 0`.
+  * Step 2 (Choose a sync strategy) — functional `<select>` with 6 UI_UX-approved options; auto-marks done on select.
+  * Steps 3–5 (Configure Wiki / Generate Wiki / Generate Intelligence) — placeholder rows with `Phase 7+` neutral pills.
+  * Session-scoped "Continue exploring Sources" dismiss link.
+
+  **Store actions** (Phase 4 slices gained mutation surface)
+  * Workspaces: `createWorkspace` (returns id), `renameWorkspace`, `setGraduated`. New runtime fields on `RuntimeWorkspace`: `hasWiki`, `graduated`.
+  * Sources: `addSource`, `removeSource`, `renameSource`, `markIndexing`, `markIndexed`, `markError`, `toggleAutoSync`.
+  * UI: `createWorkspaceModalOpen`, `addSourceChooserOpen`, `activeSourcePreviewId`, `firstTimeWizardDismissedFor`.
+  * Bootstrap sets `hasWiki: true + graduated: true` only for the `full` persona; `partial` has both false (so gating locks Knowledge and siblings; wizard visible at step 2).
+  * `persist` middleware's partialize expanded to exclude all new action functions; UI slice still fully excluded from persistence.
+
+  **Tests**
+  * Vitest 59/59 — new `workspace-store-actions.test.ts` covers create/rename/graduate + source add/remove/rename/index/autoSync + UI slice toggles + wizard dismissal idempotency.
+  * Playwright 15/15 — new `playground.spec.ts` covers per-persona landing state (empty → empty-state, partial/full → workspace card), workspace entry → Sources page with 9 source cards, wizard visibility, and progressive-gating assertion on `nav-knowledge` via `data-locked`.
+  * Production build clean; 4 new `/workspace/[id]/*` routes registered as dynamic (session-dependent), 1 `/workspaces` route dynamic.
+
+  **Notes**
+  * Marketing `<PlaygroundButton>` href change also means unauthenticated marketing clicks now route to `/login?callbackUrl=%2Fworkspaces` via middleware — and post-auth lands users correctly inside the playground.
 * **Goal:** Build the authenticated entry point and the primary source management interface.
 * **Execution Details:** Implement the Workspaces and Sources pages strictly according to `UI_UX.md`. Connect them to the Zustand mock store.
 * **Definition of Done:** A user can navigate from selecting a workspace down to viewing/managing its connected sources.

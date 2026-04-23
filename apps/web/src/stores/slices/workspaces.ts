@@ -1,5 +1,5 @@
 import type { StateCreator } from "zustand";
-import type { AppState, WorkspacesSlice } from "../types";
+import type { AppState, RuntimeWorkspace, WorkspacesSlice } from "../types";
 
 export const createWorkspacesSlice: StateCreator<AppState, [], [], WorkspacesSlice> = (
   set,
@@ -7,4 +7,33 @@ export const createWorkspacesSlice: StateCreator<AppState, [], [], WorkspacesSli
   workspaces: [],
   activeWorkspaceId: null,
   setActiveWorkspace: (id) => set({ activeWorkspaceId: id }),
+  createWorkspace: (name) => {
+    const id = `ws-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 6)}`;
+    const now = new Date().toISOString();
+    const ws: RuntimeWorkspace = {
+      id,
+      name,
+      slug: name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || id,
+      createdAt: now,
+      lastActivity: now,
+      sourceCount: 0,
+      syncStatus: "outdated",
+      syncStrategy: "per-pr-merge",
+      description: "",
+      hasWiki: false,
+      graduated: false,
+    };
+    set((s) => ({ workspaces: [...s.workspaces, ws], activeWorkspaceId: id }));
+    return id;
+  },
+  renameWorkspace: (id, name) =>
+    set((s) => ({
+      workspaces: s.workspaces.map((w) => (w.id === id ? { ...w, name } : w)),
+    })),
+  setGraduated: (id, value) =>
+    set((s) => ({
+      workspaces: s.workspaces.map((w) =>
+        w.id === id ? { ...w, graduated: value, hasWiki: value ? true : w.hasWiki } : w,
+      ),
+    })),
 });

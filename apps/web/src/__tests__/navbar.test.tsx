@@ -13,10 +13,10 @@ describe("Marketing Navbar", () => {
     expect(screen.getByText(/code modernization/i)).toBeTruthy();
   });
 
-  it("includes a Playground button that routes to /login", () => {
+  it("includes a Playground button that routes to /workspaces", () => {
     render(<Navbar />);
     const buttons = screen.getAllByTestId("playground-button");
     expect(buttons.length).toBeGreaterThan(0);
-    for (const b of buttons) expect(b.getAttribute("href")).toBe("/login");
+    for (const b of buttons) expect(b.getAttribute("href")).toBe("/workspaces");
   });
 });

@@ -17,7 +17,7 @@ export default function LoginPage() {
 function LoginInner() {
   const router = useRouter();
   const params = useSearchParams();
-  const callbackUrl = params.get("callbackUrl") ?? "/";
+  const callbackUrl = params.get("callbackUrl") ?? "/workspaces";
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
