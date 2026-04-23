@@ -7,28 +7,48 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 interface Props {
   workspaceId: string;
   hasWiki: boolean;
+  sourceCount: number;
 }
 
-export function NavDestinations({ workspaceId, hasWiki }: Props) {
+export function NavDestinations({ workspaceId, hasWiki, sourceCount }: Props) {
   const pathname = usePathname() ?? "";
   const base = `/workspace/${workspaceId}`;
+
+  // Per UI_UX §9.9:
+  //   Sources always unlocked.
+  //   Knowledge (Wiki + Intelligence) — Wiki Configure is reachable after ≥1 source; Status/View/Logs after first Wiki. Surface the dropdown as unlocked whenever sources>0 so the user can reach Configure.
+  //   Chatbot / Generate / Library — all require hasWiki.
+  const knowledgeLocked = sourceCount === 0;
+  const downstreamLocked = !hasWiki;
 
   const items: Array<{
     label: string;
     href?: string;
     icon: ReactNode;
     dropdown?: Array<{ label: string; href: string }>;
+    locked: boolean;
   }> = [
-    { label: "Sources", href: `${base}/sources`, icon: <Inbox size={14} strokeWidth={1.5} /> },
+    {
+      label: "Sources",
+      href: `${base}/sources`,
+      icon: <Inbox size={14} strokeWidth={1.5} />,
+      locked: false,
+    },
     {
       label: "Knowledge",
       icon: <BookOpen size={14} strokeWidth={1.5} />,
       dropdown: [
-        { label: "Wiki", href: `${base}/knowledge` },
-        { label: "Intelligence", href: `${base}/knowledge` },
+        { label: "Wiki", href: `${base}/wiki/status` },
+        { label: "Intelligence", href: `${base}/intelligence` },
       ],
+      locked: knowledgeLocked,
     },
-    { label: "Chatbot", href: `${base}/chatbot`, icon: <MessageSquare size={14} strokeWidth={1.5} /> },
+    {
+      label: "Chatbot",
+      href: `${base}/chatbot`,
+      icon: <MessageSquare size={14} strokeWidth={1.5} />,
+      locked: downstreamLocked,
+    },
     {
       label: "Generate",
       icon: <Sparkles size={14} strokeWidth={1.5} />,
@@ -37,14 +57,19 @@ export function NavDestinations({ workspaceId, hasWiki }: Props) {
         { label: "OmniBoard", href: `${base}/generate` },
         { label: "MCPGen", href: `${base}/generate` },
       ],
+      locked: downstreamLocked,
     },
-    { label: "Library", href: `${base}/library`, icon: <Library size={14} strokeWidth={1.5} /> },
+    {
+      label: "Library",
+      href: `${base}/library`,
+      icon: <Library size={14} strokeWidth={1.5} />,
+      locked: downstreamLocked,
+    },
   ];
 
   return (
     <div className="flex items-center gap-1" data-testid="nav-destinations">
       {items.map((item) => {
-        const locked = !hasWiki && item.label !== "Sources";
         const isActive = item.href ? pathname.startsWith(item.href) : false;
         return (
           <NavItem
@@ -53,7 +78,7 @@ export function NavDestinations({ workspaceId, hasWiki }: Props) {
             href={item.href}
             icon={item.icon}
             dropdown={item.dropdown}
-            locked={locked}
+            locked={item.locked}
             active={isActive}
           />
         );

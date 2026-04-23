@@ -113,7 +113,17 @@ Production build: all 4 marketing routes statically prerendered; middleware 92 k
 
 ## Phase 7: Knowledge UI (The Living Wiki)
 
-* **Status:** `[ ] Pending`
+* **Status:** `[x] Complete`
+* **Delivered (2026-04-23):**
+  * Wiki page with sidebar + 4 tab segments under `/workspace/[id]/wiki/{status,view,configure,logs}`; deep-linkable routes `/view/[repoId]/[slug]`.
+  * **Configure tab** — 3-state machine (No-Wiki → Generating → Living); 8 s simulated generation with 6 step-accordions; Force Sync / Rebuild / Edit / Delete action row in Living; history card. Flips `hasWiki + graduated` on completion and fetches the full wiki substrate via the new `/api/mocks/wiki-payload` route.
+  * **Status tab** (gemini-flash) — 5 sub-sections: Health & Coverage, Knowledge Stats, Repository Insights, Recent Activity, Knowledge Graph SVG with searchable expand modal.
+  * **View tab** (gemini-flash) — 3-layer tree (Workspace · Repos · llms.txt) + `<WikiMarkdown>` renderer (react-markdown + remark-gfm, design-token styled, mermaid code-fence stub); export dropdown; chatbot floating bar → Phase-9-stub slide-over.
+  * **Logs tab** (gemini-flash) — timeline table + split Diff / Agent-logs detail view.
+  * **Wiki slice** — new `setWikiData` action + `WikiPayload` type; bootstrap unchanged (still persona-filtered); Configure "earns" the wiki slice via the new narrow route.
+  * **Navbar gating update (UI_UX §9.9)** — Knowledge dropdown unlocks at `sources.length > 0` (so `partial` can reach Configure); Chatbot/Generate/Library still gated on `hasWiki`.
+  * **Three carry-over fixes bundled** — Playground is now full-width (no inner `max-w`); navbar center destinations + workspace pill hide on `/workspaces`; `<SyncHeartbeat>` "Live" badge removed; logo stretches to full 64 px navbar height.
+  * Tests — Vitest 63/63 (+4 new wiki-gating tests); Playwright 18/18 (+3 new `wiki.spec.ts` scenarios: partial Configure landing, full sidebar tabs unlocked, `/workspaces` hides center destinations). Build clean; lint clean on all Phase 7 files.
 * **Goal:** Construct the 4-tab narrative knowledge base interface.
 * **Execution Details:** Implement the Wiki module according to `UI_UX.md`. Ensure it seamlessly renders the mock markdown data generated in Phase 3.
 * **Definition of Done:** A fully navigable Wiki supporting deep navigation, inline citations, and historical auditing.

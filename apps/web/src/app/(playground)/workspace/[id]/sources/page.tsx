@@ -35,7 +35,7 @@ export default function SourcesPage() {
   }, [sources, query, filter]);
 
   return (
-    <div className="mx-auto max-w-[1440px] px-6 lg:px-10 py-10">
+    <div className="w-full px-6 lg:px-10 py-10">
       <header className="mb-8 space-y-3">
         <p className="text-button-upper text-[#777169]">Workspace · Input Layer</p>
         <h1 className="text-display-hero text-black">Sources</h1>

@@ -13,7 +13,7 @@ export default function WorkspacesPage() {
   const showEmptyState = isHydrated && workspaces.length === 0;
 
   return (
-    <div className="mx-auto max-w-[1280px] px-6 lg:px-10 py-12">
+    <div className="w-full px-6 lg:px-10 py-12">
       <header className="mb-10 space-y-3">
         <p className="text-button-upper text-[#777169]">Gateway</p>
         <h1 className="text-display-hero text-black">Workspaces</h1>

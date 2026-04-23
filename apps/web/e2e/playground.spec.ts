@@ -68,11 +68,14 @@ test.describe("playground per-persona", () => {
         await expect(page.getByTestId("first-time-wizard")).toHaveCount(0);
       }
 
-      // Progressive gating: Knowledge locked for partial, unlocked for full.
-      const knowledge = page.getByTestId("nav-knowledge");
-      await expect(knowledge).toBeVisible();
+      // Progressive gating (UI_UX §9.9):
+      //   Knowledge: unlocked at sources.length > 0 (both partial + full).
+      //   Chatbot/Generate/Library: require hasWiki (locked for partial, unlocked for full).
+      await expect(page.getByTestId("nav-knowledge")).toBeVisible();
+      const chatbot = page.getByTestId("nav-chatbot");
+      await expect(chatbot).toBeVisible();
       if ((p as { expectLockedKnowledge?: boolean }).expectLockedKnowledge) {
-        await expect(knowledge).toHaveAttribute("data-locked", "true");
+        await expect(chatbot).toHaveAttribute("data-locked", "true");
       }
     });
   }

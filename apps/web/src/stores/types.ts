@@ -81,11 +81,20 @@ export interface SourcesSlice {
   toggleAutoSync: (id: string) => void;
 }
 
+export interface WikiPayload {
+  tree: Record<string, WikiTree>;
+  narrative: WorkspaceNarrative | null;
+  sagaFlows: SagaFlowsDoc | null;
+  llms: Record<string, LlmsTxt>;
+}
+
 export interface WikiSlice {
   wikiTrees: Record<string, WikiTree>;
   narrative: WorkspaceNarrative | null;
   sagaFlows: SagaFlowsDoc | null;
   llms: Record<string, LlmsTxt>;
+  /** Populate wiki slice after a Configure-tab generation (or from bootstrap). */
+  setWikiData: (payload: WikiPayload) => void;
 }
 
 export interface IntelligenceSlice {
@@ -168,6 +177,7 @@ export type PersistedState = Omit<
   | "markIndexed"
   | "markError"
   | "toggleAutoSync"
+  | "setWikiData"
   | "hydrate"
   | "reset"
   | "isHydrated"
