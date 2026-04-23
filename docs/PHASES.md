@@ -80,53 +80,15 @@
   * **Security Imperative:** You MUST use strict environment variables (e.g., `AUTH_FULL_PASSWORD`) to securely gate the personas. Do not hardcode passwords in the codebase.
 * **Definition of Done:** The `/login` page securely authenticates users via `.env` variables, and the application cleanly boots into different structural states based on the logged-in persona.
 
-## Phase 5: The Marketing Entry Page & Navigation
-
-* **Status:** `[x] Complete`
-* **Delivered (2026-04-22, refined 2026-04-23):**
-
-  **Route structure**
-  * Public `(marketing)` route group wrapping `/`, `/product/context-layer`, `/product/code-translation`, `/product/code-modernization`, and an internal `/design-system` (the Phase 2 showcase moved here).
-  * Shared fixed `<Navbar>` with pulsing `<PlaygroundButton>` (top-right) that routes unauthenticated users to `/login` — Phase 4 middleware handles the rest.
-  * `<Footer>` with 3-column link grid + copyright.
-  * Mobile: hamburger collapse at `<1024px`; Playground button stays visible as a compact pill.
-
-  **Motion primitives** (`apps/web/src/components/motion/`)
-  * `<FadeUp>`, `<ScrollSection>` + `<StickyScrollGroup>` (sticky-scroll context), `<MagneticButton>`, `<GlowPulse>`, `<TerminalType>`. All respect `prefers-reduced-motion`.
-  * `motion@12.38.0` added as a dependency; consumed via `motion/react`.
-
-  **Signature hero animation — `<ContextTriangleHero>`**
-  * Tells the full AI-SDLC story in one SVG: 5 source cards at the bottom (`offering-service/src/main.py`, `RFCs/architecture.pdf`, …) → amber scan-line travels upward → central green "Context" node fills progressively with Workspace / Repo / llms.txt check-rows → pulsing halo → tendrils drawn to **Human Dev** (top-left, blue) and **AI Agent** (top-right, green) → triangle edges (blue / green / amber) with traveling dots showing bidirectional context flow.
-  * Reduced-motion fallback keeps every element visible, all animations off.
-
-  **Design pivot (Phase 5.1) — "ElevenLabs × Engineering Dashboard"**
-  * Appended **§12 "Dev-Friendly Mode"** to `docs/DESIGN.md`: grey canvas `#f9f9f9` replaces pure white; 5-pair semantic accent palette (indexed-green / info-blue / warn-amber / error-red / neutral) with strict rules (status pills + small icon accents only, never large surfaces); `lucide-react` iconography at 14 / 18 / 28 px, stroke 1.5; denser bento-grid conventions; `bg-blueprint` utility for tech panels. Premium foundation §1–§11 fully preserved — hero blocks still ethereal, density wins below the fold.
-  * `globals.css` — canvas + accent tokens + body bg shift.
-
-  **Marketing content grounded in the real product philosophy**
-  * **H1** (verbatim): "Codebase Knowledge & Intelligence Infrastructure."
-  * **Signature tagline** (verbatim): "Build the context your codebase never had."
-  * **Closing tagline** (verbatim): "Knowledge is better when it's contextual."
-  * **Narrative sections**: Backward-Engineering wedge (vs Cursor / Claude Code / Copilot), AI-SDLC Triangle explainer, market positioning (Forward↔Backward + Horizontal↔Vertical 2×2 quadrants), Land-and-Expand sales strategy.
-
-  **Product map uses the 4-verb user-facing IA** (UI_UX §2 made primary)
-  * `01 Sources → 02 Knowledge (Wiki + Intelligence) → 03 Chatbot → 04 Generate (DocsGen + OmniBoard + MCPGen)` — same grouping as the playground navbar, so users learn the mental model before they enter.
-  * Dark-accent "Foundation" strip reinforces the moat ("Persistent · Versioned · Always-Synced Wiki") without exposing backend module names.
-
-  **Context Layer product page restructured around the same 4 verbs**
-  * "Built on the Wiki" prelude with 3 promise cards (Persistent / Multi-Layer / Always-Synced).
-  * Capability scroller has 4 sections (Sources, Knowledge, Chatbot, Generate). Each group names its user-facing modules correctly: Wiki, Intelligence, Chatbot, DocsGen, OmniBoard, MCPGen (tentative).
-
-  **Code Translation + Code Modernization pages**
-  * Refinement delegated to **gemini-cli Flash** (`gemini-3-flash-preview`) using the refined CL page as strict template. Pro not used — per user's quota note.
-  * Claude reviewed + integrated + fixed 3 post-delegation lint items (`any` cast, unused imports, array-index keys).
-
-  **Naming hygiene** — zero backend module names (`WikiGen` / `WikiSync` / `IntelliGen` / `QnA Chatbot`) anywhere in visible marketing copy. Grep confirms clean across `apps/web/src/app/(marketing)/`. Only user-facing names appear: Wiki, Intelligence, Chatbot, DocsGen, OmniBoard, MCPGen.
-
-  **Tests**
-  * Vitest 53/53 — marketing routing smoke, navbar Playground-button routing, motion primitive rendering, `home-hero.test.tsx` locking the three core taglines + the 4-verb IA presence.
-  * Playwright 9/9 — 4 auth + 5 marketing; each route verified for H1 + Playground button visibility; navbar Playground button routes to `/login`.
-  * Production build: all 4 marketing routes statically prerendered; middleware 92 kB.
+## Phase 5: The Marketing Entry Page & Navigation* **Delivered (2026-04-22, refined 2026-04-23):**
+  * **Design Pivot:** Implemented "ElevenLabs × Engineering Dashboard" aesthetic. Soft-grey canvas (#f9f9f9) with 5-pair semantic accent palette (Success/Info/Warning/Error). Detailed in `DESIGN.md` §12.
+  * **Brand Identity:** Established core taglines: "Codebase Knowledge & Intelligence Infrastructure" and "Build the context your codebase never had."
+  * **Marketing Route Group:** Built `/`, `/product/*`, and `/design-system` with shared `<Navbar>` and `<Footer>`.
+  * **Signature Hero:** `<ContextTriangleHero>` SVG animation telling the AI-SDLC story (Human ↔ Agent ↔ Codebase).
+  * **IA Alignment:** Unified marketing and playground navigation around the 4-verb strategy: `01 Sources → 02 Knowledge → 03 Chatbot → 04 Generate`.
+  * **Motion System:** Integrated `motion/react` with `<FadeUp>`, `<TerminalType>`, and sticky-scroll primitives; fully respects `prefers-reduced-motion`.
+  * **Validation:** 53 Vitest units and 9 Playwright E2E tests covering routing, taglines, and responsive navigation.
+Production build: all 4 marketing routes statically prerendered; middleware 92 kB.
 * **Goal:** Construct the public-facing promotional pages and establish the root route (`/`) as the main entry point.
 * **Execution Details:**
   * Ensure the absolute root route (`/`) is the Marketing Overview homepage.
@@ -138,58 +100,13 @@
 
 * **Status:** `[x] Complete`
 * **Delivered (2026-04-23):**
-
-  **Route structure**
-  * New `(playground)` route group with server-side `auth()` gate + `<PlaygroundNavbar>`.
-  * `/workspaces` — gateway grid (UI_UX §3).
-  * `/workspace/[id]/sources` — primary source management (UI_UX §4).
-  * `/workspace/[id]/{knowledge,chatbot,generate,library}` — polite "Coming soon / Phase 7+" placeholder pages (gemini-flash delegated).
-  * Middleware tweaked: authenticated `/login` → `/workspaces` (honors `callbackUrl` if set).
-  * Login page default + marketing `<PlaygroundButton>` default `href` → `/workspaces`.
-
-  **Playground chrome (UI_UX §2)**
-  * `<PlaygroundNavbar>` fixed-top 64 px, three regions: left (logo + `<WorkspacePill>` + `<SyncHeartbeat>`), center (5 destinations with progressive gating), right (`<ProfileMenu>`).
-  * `<WorkspacePill>` dropdown — recent workspaces + "All workspaces".
-  * `<SyncHeartbeat>` — 4 states (live / syncing / queued / outdated) mapped to §12 accent palette.
-  * `<ProfileMenu>` — persona initial avatar, sign-out that also resets store + persist key.
-  * `<NavDestinations>` — progressive gating per UI_UX §9.9: Knowledge / Chatbot / Generate / Library render locked (`data-locked="true"` + Lock icon + tooltip "Generate the first Wiki to unlock") when `!hasWiki`. Full persona unlocks all; partial only has Sources unlocked.
-
-  **Workspaces page**
-  * Responsive grid (1/2/3/4 cols) — dotted-outline "+" Create card first, then one `<WorkspaceCard>` per workspace.
-  * `<WorkspaceCard>` — Raleway 300 title, 3-fact metadata row, StatusPill row ("Wiki Live" vs "Wiki Pending" + source count), cursor-follow warm-stone gradient on hover.
-  * `<CreateWorkspaceModal>` — single-input form; simulated latency (1.2 s) streams "Allocating workspace… → Wiring providers… → Ready"; routes to `/workspace/{newId}/sources`.
-  * `<WorkspacesEmptyState>` — Warm Stone "Create Workspace" CTA for the `empty` persona.
-
-  **Sources page** (modeled on `docs/sample_pages/sources.html`)
-  * Sticky toolbar: inset-shadow search (name / URL / path, debounced), 4 filter pills (All · Code · Files · Discussion), Grid/List view toggle, Warm Stone "Add Source" signature CTA.
-  * `<SourceCard>` (grid) — icon well per kind (blue GitBranch for code, green FileText for file, amber MessageSquare for discussion), colored `<SourceStatusBadge>` (Indexed / Indexing… / Error), hover elevation from `--shadow-inset-border` → `--shadow-card`.
-  * `<SourceRow>` (list view) — compact row with the same metadata.
-  * `<SourceActionsMenu>` `⋯` — Rename / Re-index (simulated 3.5 s latency with log stream; card badge cycles Indexed → Indexing… → Indexed) / Toggle auto-sync (disabled for `upload` + `url` categories) / Delete (with confirm).
-  * `<AddSourceChooser>` (gemini-flash delegated) — 3 category rows × 5–6 integrations each; clicking runs a 4.5 s simulated job with log stream ("Contacting provider → Authorizing → Cloning repository → Analyzing AST → Building index → Committing to wiki"); synthesizes a `Source` record and dispatches `addSource`.
-  * `<SourcePreviewModal>` (gemini-flash delegated) — right-side slide-over with status header + 2×2 fact grid for code sources; stub for files/discussion.
-  * `<SourcesEmptyState>` — integration-first CTAs (Connect GitHub, Connect Google Drive, Upload files, Paste URL).
-
-  **First-Time Workspace Wizard (UI_UX §3)**
-  * Pinned at top of Sources page when `activeWorkspace.graduated === false` and the user hasn't dismissed it this session.
-  * Step 1 (Add a source) — fully functional; auto-marks done when `sources.length > 0`.
-  * Step 2 (Choose a sync strategy) — functional `<select>` with 6 UI_UX-approved options; auto-marks done on select.
-  * Steps 3–5 (Configure Wiki / Generate Wiki / Generate Intelligence) — placeholder rows with `Phase 7+` neutral pills.
-  * Session-scoped "Continue exploring Sources" dismiss link.
-
-  **Store actions** (Phase 4 slices gained mutation surface)
-  * Workspaces: `createWorkspace` (returns id), `renameWorkspace`, `setGraduated`. New runtime fields on `RuntimeWorkspace`: `hasWiki`, `graduated`.
-  * Sources: `addSource`, `removeSource`, `renameSource`, `markIndexing`, `markIndexed`, `markError`, `toggleAutoSync`.
-  * UI: `createWorkspaceModalOpen`, `addSourceChooserOpen`, `activeSourcePreviewId`, `firstTimeWizardDismissedFor`.
-  * Bootstrap sets `hasWiki: true + graduated: true` only for the `full` persona; `partial` has both false (so gating locks Knowledge and siblings; wizard visible at step 2).
-  * `persist` middleware's partialize expanded to exclude all new action functions; UI slice still fully excluded from persistence.
-
-  **Tests**
-  * Vitest 59/59 — new `workspace-store-actions.test.ts` covers create/rename/graduate + source add/remove/rename/index/autoSync + UI slice toggles + wizard dismissal idempotency.
-  * Playwright 15/15 — new `playground.spec.ts` covers per-persona landing state (empty → empty-state, partial/full → workspace card), workspace entry → Sources page with 9 source cards, wizard visibility, and progressive-gating assertion on `nav-knowledge` via `data-locked`.
-  * Production build clean; 4 new `/workspace/[id]/*` routes registered as dynamic (session-dependent), 1 `/workspaces` route dynamic.
-
-  **Notes**
-  * Marketing `<PlaygroundButton>` href change also means unauthenticated marketing clicks now route to `/login?callbackUrl=%2Fworkspaces` via middleware — and post-auth lands users correctly inside the playground.
+  * **Playground Architecture:** Created `(playground)` route group with server-side `auth()` gate. Unified navigation under `<PlaygroundNavbar>` with progressive gating (Knowledge/Chatbot locked until `hasWiki`).
+  * **Workspace Management:** Implemented `/workspaces` selection grid and `<CreateWorkspaceModal>` with simulated back-end provisioning latency.
+  * **Source Management:** Built `/workspace/[id]/sources` with grid/list views, real-time filtering, and `<SourceActionsMenu>` (Rename/Re-index/Delete).
+  * **First-Time Wizard:** Multi-step onboarding pinned to Sources page for non-graduated workspaces.
+  * **Intelligent Hydration:** Connected Zustand store to Phase 3 loaders, enabling persona-specific boots (Empty/Partial/Full).
+  * **Fixes:** Applied professional "Stretched Link" pattern to SourceCard to resolve nested-button errors while maintaining a11y.
+  * **Validation:** 59 Vitest units and 15 Playwright E2E tests covering per-persona landing states, store actions, and wizard graduation flows.
 * **Goal:** Build the authenticated entry point and the primary source management interface.
 * **Execution Details:** Implement the Workspaces and Sources pages strictly according to `UI_UX.md`. Connect them to the Zustand mock store.
 * **Definition of Done:** A user can navigate from selecting a workspace down to viewing/managing its connected sources.
