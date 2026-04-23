@@ -61,7 +61,18 @@
 
 ## Phase 4: State Management & Secure Hardcoded Auth
 
-* **Status:** `[ ] Pending`
+* **Status:** `[x] Complete`
+* **Delivered (2026-04-22):**
+  * **Auth.js v5 (beta.31)** with Credentials provider. Three demo personas (`empty` / `partial` / `full`) gated by env vars `AUTH_EMPTY_PASSWORD` / `AUTH_PARTIAL_PASSWORD` / `AUTH_FULL_PASSWORD`. Production refuses missing vars; dev warns and falls back to `changeme-<persona>`. Env-var names are dynamically constructed in `apps/web/src/lib/personas.ts` — zero plaintext passwords in source.
+  * **Session shape** — JWT strategy, `personaId` embedded via `jwt` + `session` callbacks; typed through TypeScript module augmentation on `next-auth`.
+  * **Zustand store** (v5.0.12) split into 9 domain slices: `workspaces`, `sources`, `wiki`, `intelligence`, `artifacts`, `chatbot`, `activity`, `ui` (transient, excluded from persist), `session` (meta).
+  * **Persona-keyed `persist` middleware** — `context-layer:empty|partial|full` localStorage buckets; `partialize` excludes the UI slice + action functions.
+  * **`/api/mocks/bootstrap`** — single branch-point route handler that reads the session's `personaId`, applies the persona filter, and returns a typed hydration payload from the Phase 3 loaders. Future phases swap this for a real backend without touching the store or UI.
+  * **`HydrationProvider`** — fetches bootstrap once per persona on sign-in, writes into the store, flips `isHydrated`; resets on logout.
+  * **Next.js middleware** — protects every path except the marketing roots (`/`, `/login`, `/product/**`) and Auth.js endpoints; unauthenticated hits to playground URLs redirect to `/login?callbackUrl=...`.
+  * **`/login` page** — DESIGN.md-aligned form (Raleway 300 heading, inset-border inputs, black-pill submit), generic error messaging (no username-vs-password leak), wrapped in `Suspense` for static prerender.
+  * **`simulate-latency.ts`** — async generator primitive for the fake-job progress UI_UX §9.10 requires; plumbing for Phase 6+ generation flows.
+  * **Tests** — 38 Vitest (personas env-var gate + fallback + hard-fail, store hydration + persist key scoping, bootstrap filters per persona, credential authorize, middleware path classification, login page RTL); 4 Playwright e2e (unauthenticated redirect + sign-in as each persona with localStorage + bootstrap-response assertions).
 * **Goal:** Implement the client-side state engine and a secure, hardcoded authentication layer suitable for public deployment.
 * **Execution Details:**
   * Implement `Zustand` (with persist middleware) and `Auth.js v5`.
@@ -71,7 +82,51 @@
 
 ## Phase 5: The Marketing Entry Page & Navigation
 
-* **Status:** `[ ] Pending`
+* **Status:** `[x] Complete`
+* **Delivered (2026-04-22, refined 2026-04-23):**
+
+  **Route structure**
+  * Public `(marketing)` route group wrapping `/`, `/product/context-layer`, `/product/code-translation`, `/product/code-modernization`, and an internal `/design-system` (the Phase 2 showcase moved here).
+  * Shared fixed `<Navbar>` with pulsing `<PlaygroundButton>` (top-right) that routes unauthenticated users to `/login` — Phase 4 middleware handles the rest.
+  * `<Footer>` with 3-column link grid + copyright.
+  * Mobile: hamburger collapse at `<1024px`; Playground button stays visible as a compact pill.
+
+  **Motion primitives** (`apps/web/src/components/motion/`)
+  * `<FadeUp>`, `<ScrollSection>` + `<StickyScrollGroup>` (sticky-scroll context), `<MagneticButton>`, `<GlowPulse>`, `<TerminalType>`. All respect `prefers-reduced-motion`.
+  * `motion@12.38.0` added as a dependency; consumed via `motion/react`.
+
+  **Signature hero animation — `<ContextTriangleHero>`**
+  * Tells the full AI-SDLC story in one SVG: 5 source cards at the bottom (`offering-service/src/main.py`, `RFCs/architecture.pdf`, …) → amber scan-line travels upward → central green "Context" node fills progressively with Workspace / Repo / llms.txt check-rows → pulsing halo → tendrils drawn to **Human Dev** (top-left, blue) and **AI Agent** (top-right, green) → triangle edges (blue / green / amber) with traveling dots showing bidirectional context flow.
+  * Reduced-motion fallback keeps every element visible, all animations off.
+
+  **Design pivot (Phase 5.1) — "ElevenLabs × Engineering Dashboard"**
+  * Appended **§12 "Dev-Friendly Mode"** to `docs/DESIGN.md`: grey canvas `#f9f9f9` replaces pure white; 5-pair semantic accent palette (indexed-green / info-blue / warn-amber / error-red / neutral) with strict rules (status pills + small icon accents only, never large surfaces); `lucide-react` iconography at 14 / 18 / 28 px, stroke 1.5; denser bento-grid conventions; `bg-blueprint` utility for tech panels. Premium foundation §1–§11 fully preserved — hero blocks still ethereal, density wins below the fold.
+  * `globals.css` — canvas + accent tokens + body bg shift.
+
+  **Marketing content grounded in the real product philosophy**
+  * **H1** (verbatim): "Codebase Knowledge & Intelligence Infrastructure."
+  * **Signature tagline** (verbatim): "Build the context your codebase never had."
+  * **Closing tagline** (verbatim): "Knowledge is better when it's contextual."
+  * **Narrative sections**: Backward-Engineering wedge (vs Cursor / Claude Code / Copilot), AI-SDLC Triangle explainer, market positioning (Forward↔Backward + Horizontal↔Vertical 2×2 quadrants), Land-and-Expand sales strategy.
+
+  **Product map uses the 4-verb user-facing IA** (UI_UX §2 made primary)
+  * `01 Sources → 02 Knowledge (Wiki + Intelligence) → 03 Chatbot → 04 Generate (DocsGen + OmniBoard + MCPGen)` — same grouping as the playground navbar, so users learn the mental model before they enter.
+  * Dark-accent "Foundation" strip reinforces the moat ("Persistent · Versioned · Always-Synced Wiki") without exposing backend module names.
+
+  **Context Layer product page restructured around the same 4 verbs**
+  * "Built on the Wiki" prelude with 3 promise cards (Persistent / Multi-Layer / Always-Synced).
+  * Capability scroller has 4 sections (Sources, Knowledge, Chatbot, Generate). Each group names its user-facing modules correctly: Wiki, Intelligence, Chatbot, DocsGen, OmniBoard, MCPGen (tentative).
+
+  **Code Translation + Code Modernization pages**
+  * Refinement delegated to **gemini-cli Flash** (`gemini-3-flash-preview`) using the refined CL page as strict template. Pro not used — per user's quota note.
+  * Claude reviewed + integrated + fixed 3 post-delegation lint items (`any` cast, unused imports, array-index keys).
+
+  **Naming hygiene** — zero backend module names (`WikiGen` / `WikiSync` / `IntelliGen` / `QnA Chatbot`) anywhere in visible marketing copy. Grep confirms clean across `apps/web/src/app/(marketing)/`. Only user-facing names appear: Wiki, Intelligence, Chatbot, DocsGen, OmniBoard, MCPGen.
+
+  **Tests**
+  * Vitest 53/53 — marketing routing smoke, navbar Playground-button routing, motion primitive rendering, `home-hero.test.tsx` locking the three core taglines + the 4-verb IA presence.
+  * Playwright 9/9 — 4 auth + 5 marketing; each route verified for H1 + Playground button visibility; navbar Playground button routes to `/login`.
+  * Production build: all 4 marketing routes statically prerendered; middleware 92 kB.
 * **Goal:** Construct the public-facing promotional pages and establish the root route (`/`) as the main entry point.
 * **Execution Details:**
   * Ensure the absolute root route (`/`) is the Marketing Overview homepage.
