@@ -31,9 +31,9 @@ export function WikiMarkdown({ markdown }: { markdown: string }) {
             </h4>
           ),
           p: ({ children }) => (
-            <p className="text-body text-[#4e4e4e] mb-4 leading-relaxed">
+            <div className="text-body text-[#4e4e4e] mb-4 leading-relaxed">
               {children}
-            </p>
+            </div>
           ),
           a: ({ children, href }) => (
             <a href={href} className="text-[#1d4ed8] hover:underline">
