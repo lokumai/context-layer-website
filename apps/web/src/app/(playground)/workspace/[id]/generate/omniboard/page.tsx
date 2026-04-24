@@ -1,11 +1,11 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { LibrarySurface } from "@/components/playground/library/library-surface";
+import { OmniBoardSurface } from "@/components/playground/generate/omniboard/surface";
 
-export default function LibraryPage() {
+export default function OmniBoardPage() {
   const params = useParams();
   const id = Array.isArray(params?.id) ? params.id[0] : (params?.id as string | undefined);
   if (!id) return null;
-  return <LibrarySurface workspaceId={id} />;
+  return <OmniBoardSurface workspaceId={id} />;
 }

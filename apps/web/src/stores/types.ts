@@ -124,6 +124,12 @@ export interface IntelligenceSlice {
 
 export interface ArtifactsSlice {
   artifacts: Artifact[];
+  /** Prepend (or upsert) a freshly generated artifact — DocsGen + OmniBoard both use this. */
+  addArtifact: (artifact: Artifact) => void;
+  /** In-place swap; used by the Regenerate flow so card position is preserved. */
+  replaceArtifact: (id: string, next: Artifact) => void;
+  /** Library delete (Phase 11 consumes this). */
+  removeArtifact: (id: string) => void;
 }
 
 export interface ChatbotSlice {
@@ -214,6 +220,9 @@ export type PersistedState = Omit<
   | "patchLastMessage"
   | "renameThread"
   | "deleteThread"
+  | "addArtifact"
+  | "replaceArtifact"
+  | "removeArtifact"
   | "hydrate"
   | "reset"
   | "isHydrated"

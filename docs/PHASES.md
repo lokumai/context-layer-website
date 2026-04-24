@@ -153,17 +153,28 @@ Production build: all 4 marketing routes statically prerendered; middleware 92 k
 
 ## Phase 10: Generate Tools (DocsGen & OmniBoard)
 
-* **Status:** `[ ] Pending`
-* **Goal:** Build the interfaces for one-shot artifact production.
-* **Execution Details:** Implement DocsGen and OmniBoard according to `UI_UX.md`. For generation jobs, mock the progress indicators before transitioning the state.
-* **Definition of Done:** Users can seamlessly configure a generation job via modals, watch a progress indicator, and see the job complete.
+* **Status:** `[x] Complete`
+* **Delivered (2026-04-23):**
+  * `/workspace/[id]/generate/{docsgen/[bundle], omniboard, mcpgen}` routes; `/generate` redirects into `/generate/docsgen/structure-architecture`. Generate dropdown in the navbar now points each entry at its own sub-route.
+  * **DocsGen** — 6-bundle tabbed view (Structure & Architecture, Specification & Knowledge, Health & Risk, Agentify, Institutional Memory, Research Docs). Per-bundle card grid with a 3-state `<ArtifactCard>`: Idle (Generate CTA) → Running (6-step ~8 s `simulateJob` + progress bar) → Done (StatusPill + View + Regenerate). View opens a `<PreviewModal>` rendering the artifact's markdown via `WikiMarkdown`. Regenerate reopens the modal with defaults pre-filled.
+  * **`DOCSGEN_CATALOG`** — single source of truth keyed off `cardSlug`, exactly matching the 21 Phase 3 mock artifacts, so the `full` persona lands on every tab with cards already in "Done" state. A Vitest integrity test asserts the match.
+  * **OmniBoard** — specialized chatbot environment per UI_UX §7.2: landing with modality picker (Slides / Audio / Video × option chips) → split session (Phase 9 chat reused verbatim on the left + plan panel on the right that unlocks "Generate" once the user types a goal) → 15 s 5-step generation progress → success card with Library link. OmniBoard artifacts get `tool: "omniboard"` + the new `slides / audio / video` formats.
+  * **Artifact type** — `format` union extended to 6 values, optional `tool: "docsgen" | "omniboard" | "mcpgen"` (existing mocks stamped with `"docsgen"` in the loader — no data file changes). Artifacts slice gained `addArtifact` (upsert by id), `replaceArtifact`, `removeArtifact`. `PersistedState` Omit list updated.
+  * **MCPGen** placeholder: minimal "Tentative · UI_UX §7.3" card with disabled button — keeps the nav slot honest without committing design.
+  * Delegated the 5 DocsGen UI leaves (`bundle-view`, `tabs-header`, `artifact-card`, `generate-modal`, `preview-modal`) to **gemini-cli Flash**; main agent built types, slice, routes, catalog, OmniBoard, tests.
+  * 82 / 82 Vitest (+6 new: `artifacts-store` 3, `docsgen-catalog` 3) · 27 / 27 Playwright (+4 new across `docsgen.spec.ts` + `omniboard.spec.ts`: full persona Done grid, Regenerate running→done, partial Generate locked, OmniBoard end-to-end with artifact-count assertion) · build clean (5 new dynamic routes) · lint clean on every Phase 10 file.
 
 ## Phase 11: The Library (Artifact Storage)
 
-* **Status:** `[ ] Pending`
-* **Goal:** Construct the central repository for generated artifacts.
-* **Execution Details:** Implement the Library according to `UI_UX.md`. Ensure it accurately filters and displays the mock artifacts generated in Phase 3.
-* **Definition of Done:** The Library effectively filters and displays the array of mock artifacts.
+* **Status:** `[x] Complete`
+* **Delivered (2026-04-23):**
+  * `/workspace/[id]/library` replaces the Phase-7 "Coming Soon" stub with the real Library — 2-column layout (filter sidebar + main grid/list area), per UI_UX §8.
+  * **Filter sidebar**: search (title + description, case-insensitive), Source Tool pills (DocsGen / OmniBoard / MCPGen), DocsGen Bundle pills (6 from `DOCSGEN_CATALOG`, hidden when tool filter excludes DocsGen), Format pills (Markdown / PDF / JSON / Slides / Audio / Video), Status pills (Current / Superseded / Failed), Created-Within select (Any / 7d / 30d / 90d). Pure filter logic in `filter-hook.ts` — 9 new Vitest tests pin AND-combination, substring search, undefined-tool → docsgen default, and the 7-day cutoff.
+  * **Grid/list toggle**: `<ArtifactTile>` for cards, `<ArtifactRow>` for rows; bundle-icon map (GitBranch / FileText / Shield / Bot / BookMarked / FlaskConical) overridden by format for OmniBoard outputs (FileImage / Headphones / Video).
+  * **Actions menu** (kebab on every artifact): View → `<ArtifactPreview>` (delegates to Phase-10 `PreviewModal` for markdown/pdf/json; renders Slides / Audio / Video stubs for OmniBoard outputs — deck preview with page indicators, waveform + disabled play, poster-framed video); Download → alert stub; Regenerate → deep-links back to the originating Generate surface (no generation duplication); Delete → `<DeleteConfirmModal>` → `removeArtifact`.
+  * **Empty states**: no Wiki → `NeedsWikiLibraryState`; Wiki but zero artifacts → `LibraryEmptyState` with DocsGen / OmniBoard CTAs; filtered-but-empty → "No artifacts match your filters." card.
+  * Delegated all 8 leaf UI components (`sidebar`, `grid-view`, `list-view`, `artifact-tile`, `artifact-row`, `actions-menu`, `delete-confirm`, `empty-state`) to **gemini-cli Flash**; main agent built `filter-hook`, `library-surface`, `artifact-preview`, `needs-wiki-state`, tests, and PHASES.md.
+  * 91 / 91 Vitest (+9 new `library-filters` tests) · 31 / 31 Playwright (+4 new `library.spec.ts`: partial locked, 21-tile full-persona landing + `agentify` filter→5, delete-flow count drop, grid↔list toggle + preview open) · build clean (Library route size 14 kB) · lint clean on every Phase 11 file.
 
 ## Phase 12: Context Layer MCP Server
 

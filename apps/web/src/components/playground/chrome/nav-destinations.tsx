@@ -1,8 +1,8 @@
 "use client";
 
-import { ChevronDown, Inbox, Lock, MessageSquare, BookOpen, Sparkles, Library } from "lucide-react";
+import { BookOpen, ChevronDown, Inbox, Library, Lock, MessageSquare, Sparkles } from "lucide-react";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { type ReactNode, useEffect, useRef, useState } from "react";
 
 interface Props {
   workspaceId: string;
@@ -53,9 +53,9 @@ export function NavDestinations({ workspaceId, hasWiki, sourceCount }: Props) {
       label: "Generate",
       icon: <Sparkles size={14} strokeWidth={1.5} />,
       dropdown: [
-        { label: "DocsGen", href: `${base}/generate` },
-        { label: "OmniBoard", href: `${base}/generate` },
-        { label: "MCPGen", href: `${base}/generate` },
+        { label: "DocsGen", href: `${base}/generate/docsgen` },
+        { label: "OmniBoard", href: `${base}/generate/omniboard` },
+        { label: "MCPGen", href: `${base}/generate/mcpgen` },
       ],
       locked: downstreamLocked,
     },
@@ -170,11 +170,7 @@ function NavItem({
   }
 
   return (
-    <a
-      href={href}
-      className={`${base} ${tone}`}
-      data-testid={`nav-${label.toLowerCase()}`}
-    >
+    <a href={href} className={`${base} ${tone}`} data-testid={`nav-${label.toLowerCase()}`}>
       {icon}
       <span>{label}</span>
     </a>

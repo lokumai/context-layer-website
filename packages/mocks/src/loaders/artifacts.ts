@@ -16,7 +16,9 @@ async function loadAll(): Promise<Artifact[]> {
     const md = await readText(
       join("artifacts", meta.bundle, meta.id, "content.md"),
     );
-    hydrated.push({ ...meta, markdown: md });
+    // Stamp the provenance field — every Phase 3 artifact was DocsGen-produced.
+    // OmniBoard runtime-generates its own with tool: "omniboard".
+    hydrated.push({ tool: "docsgen", ...meta, markdown: md });
   }
   cachedIndex = hydrated;
   return hydrated;

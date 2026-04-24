@@ -199,6 +199,10 @@ export type ArtifactBundle =
   | "institutional-memory"
   | "research-docs";
 
+export type ArtifactFormat = "markdown" | "pdf" | "json" | "slides" | "audio" | "video";
+
+export type ArtifactTool = "docsgen" | "omniboard" | "mcpgen";
+
 export interface Artifact {
   id: string;
   bundle: ArtifactBundle;
@@ -209,11 +213,13 @@ export interface Artifact {
   createdAt: string;
   sizeBytes: number;
   /** Output format of the source-of-truth file. */
-  format: "markdown" | "pdf" | "json";
+  format: ArtifactFormat;
   status: "current" | "superseded" | "failed";
   sourceRepos: string[];
   /** Markdown content preloaded for convenience. */
   markdown: string;
+  /** Which Generate tool produced this. Defaults to "docsgen" for Phase 3 mocks. */
+  tool?: ArtifactTool;
 }
 
 // ─────────────────────────────────── Chatbot ────────────────────────────────────
