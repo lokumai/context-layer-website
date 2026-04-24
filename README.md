@@ -1,33 +1,44 @@
-# Context Layer — Website
+# Context Layer
 
-Landing pages and authenticated playground for the [Context Layer Ecosystem](https://github.com/amirkiarafiei/context-layer).
+**Codebase Knowledge & Intelligence Infrastructure.**
 
-## What's Here
+"Build the context your codebase never had."
 
-**Landing pages** — product overview, Context Layer, Code Translation, Code Modernization.
+---
 
-**Playground** — auth-gated demo of the Context Layer base product. Mock-first: all outputs are pre-generated; service interfaces are designed for zero-friction swap to real agents later.
+## 🏗️ The Infrastructure
+Context Layer is a high-density engineering platform designed to bridge the gap between Human Developers, AI Agents, and raw Codebases through persistent, versioned, and always-synced Knowledge.
 
-Demo workspace: [microservices-product-catalog](https://github.com/amirkiarafiei/microservices-product-catalog) — 9 repos, TMForum/FastAPI, showcasing cross-repo saga flows that single-repo tools cannot produce.
+### 🛠️ Capabilities
+- **01 Sources**: Connect GitHub, local files, or discussion threads as raw context streams.
+- **02 Knowledge**: Multi-layer Narrative Wiki + Intelligence Dashboards (Security, Health, Coverage).
+- **03 Chatbot**: Grounding-first agent with citation-backed responses and code-anchor deep-linking.
+- **04 Generate**: DocsGen (Institutional Memory bundles), OmniBoard (Slides/Audio/Video), and MCPGen.
+- **05 Library**: Central versioned repository for all generated artifacts.
 
-## Stack
+---
 
-| Layer | Choice |
-|---|---|
-| Runtime / Package Manager | Bun |
-| Monorepo | Turborepo |
-| Framework | Next.js 15 (App Router) |
-| Styling | Tailwind CSS v4 |
-| Components | shadcn/ui |
-| Animation | Motion |
-| Auth | Auth.js v5 |
-| State | Zustand |
-| Testing | Vitest + Playwright |
-| Linting | Biome |
+## 🛠️ Technical Stack
+Built on the "Vercel Meta" 2026 stack:
+- **Core**: Next.js 15 (App Router), Turborepo, Bun
+- **UI**: Tailwind CSS v4, Motion, Lucide, shadcn/ui
+- **State/Auth**: Zustand (Persona-keyed Persist), Auth.js v5
+- **Quality**: Vitest, Playwright, Biome
 
-## Docs
+---
 
-- [docs/SEED.md](docs/SEED.md) — decisions log
-- [docs/UI_UX.md](docs/UI_UX.md) — playground UI/UX spec
-- [docs/DESIGN.md](docs/DESIGN.md) — design system
+## 🚀 Getting Started
+1. **Install**: `bun install`
+2. **Dev**: `bun run dev`
+3. **Demo Personas**: Sign in via `/login` using the following passwords (set in `.env.local`):
+   - `empty`: Zero-state onboarding
+   - `partial`: Active sources, no Wiki generated
+   - `full`: Complete 9-repo workspace with Wiki, Intelligence, and Chatbot history
 
+---
+
+## 📚 Documentation
+- [docs/DESIGN.md](docs/DESIGN.md) — ElevenLabs × Engineering Dashboard visual identity.
+- [docs/UI_UX.md](docs/UI_UX.md) — Core information architecture and user flows.
+- [docs/PHASES.md](docs/PHASES.md) — Milestone tracking and delivery logs.
+- [docs/SEED.md](docs/SEED.md) — Technical foundation and initial decisions.

@@ -1,0 +1,29 @@
+{
+  "name": "@context-layer/mcp",
+  "version": "1.0.0",
+  "description": "MCP (Model Context Protocol) server exposing a Context Layer workspace's indexed knowledge to external AI clients.",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./server": "./src/server.ts"
+  },
+  "bin": {
+    "context-layer-mcp": "./src/bin.ts"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "smoke": "bun src/scripts/smoke.ts",
+    "start": "bun src/bin.ts"
+  },
+  "dependencies": {
+    "@context-layer/mocks": "workspace:*",
+    "@modelcontextprotocol/sdk": "^1.0.4",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "typescript": "^5",
+    "vitest": "^4.1.5"
+  }
+}

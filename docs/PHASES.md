@@ -178,7 +178,14 @@ Production build: all 4 marketing routes statically prerendered; middleware 92 k
 
 ## Phase 12: Context Layer MCP Server
 
-* **Status:** `[ ] Pending`
-* **Goal:** Build the MCP server integration exposing the playground's mocked knowledge base to external AI clients.
-* **Execution Details:** Establish the `@context-layer/mcp` package. Implement the tools (`get_wiki_content`, `get_code_intelligence`, `ask_context_layer`) reading directly from the mock storage architecture.
-* **Definition of Done:** An external MCP client can successfully retrieve accurate workspace data and simulated conversational responses.
+* **Status:** `[x] Complete`
+* **Delivered (2026-04-24):**
+  * New workspace package **`@context-layer/mcp`** — stdio-first MCP server built on `@modelcontextprotocol/sdk@1.29`, backed entirely by the existing `@context-layer/mocks` loaders.
+  * Three canonical tools promised by the Phase 9 MCP-config modal are now live:
+    * **`get_wiki_content`** — `scope: workspace | repo | page | llms` → narrative+saga / wiki tree+llms.txt / single page / llms index.
+    * **`get_code_intelligence`** — `topic: overview | health | security | coverage | dependencies | graph`, optionally scoped by `repoId` (per-repo narrowing on every collection).
+    * **`ask_context_layer`** — `question: string` → bag-of-words match against the 17 canned Q&A pairs (same algorithm as the Phase 9 chatbot, copy-adapted into `src/match.ts`); on miss returns a "no grounded answer" fallback plus 3 suggested starter prompts.
+  * Two entry points: library factory `createMcpServer(config)` for any transport (tests, future HTTP host) + shebanged `src/bin.ts` stdio CLI so `npx -y @context-layer/mcp` from a Claude Desktop / Cursor config "just works". Env: `CONTEXT_LAYER_WORKSPACE` (advisory), `CONTEXT_LAYER_TOKEN` (reserved for production; ignored in mock mode).
+  * Tests — Vitest 7/7 using the SDK's `InMemoryTransport.createLinkedPair()` paired-client pattern: tool advertisement, workspace/page wiki fetch, security-scoped intelligence, overview summary shape, Q&A match with citations, Q&A fallback text. Plus `src/scripts/smoke.ts` — an in-process CLI that invokes all six scenarios and exits 0.
+  * Package inherits biome + tsconfig from `packages/config`; tsc + biome clean; web-app regression untouched (91 Vitest / 31 Playwright / production build all green).
+  * README covers Claude Desktop / Cursor config JSON, programmatic usage, and per-tool reference — the publishable surface of the package.
