@@ -1,3 +1,10 @@
+# DESIGN: Context Layer
+**AI-native Codebase Knowledge & Intelligence Infrastructure**
+
+Context Layer is an **AI-native infrastructure** that automatically builds, syncs, and evolves the context your projects have been missing. It bridges the gap between Humans, Agents, and the Codebase by providing a persistent, high-quality knowledge layer that makes legacy systems **Agent-ready** and **Human-ready**.
+
+---
+
 # Design System Inspired by ElevenLabs
 ## 1. Visual Theme & Atmosphere
 ElevenLabs' website is a study in restrained elegance — a near-white canvas (`#ffffff`, `#f5f5f5`) where typography and subtle shadows do all the heavy lifting. The design feels like a premium audio product brochure: clean, spacious, and confident enough to let the content speak (literally, given ElevenLabs makes voice AI). There's an almost Apple-like quality to the whitespace strategy, but warmer — the occasional warm stone tint (`#f5f2ef`, `#777169`) prevents the purity from feeling clinical.
@@ -96,7 +103,10 @@ What makes ElevenLabs distinctive is its multi-layered shadow system. Rather tha
 - Border: `1px solid #e5e5e5` or shadow-as-border
 - Radius: 16px–24px
 - Shadow: multi-layer stack (inset + outline + elevation)
-- Content: product screenshots, code examples, audio waveform previews
+
+**Codebase Knowledge & Intelligence Infrastructure**
+
+Context Layer is an **AI-native infrastructure** that automatically builds, syncs, and evolves the context your projects have been missing. It bridges the gap between Humans, Agents, and the Codebase by providing a persistent, high-quality knowledge layer that makes legacy systems **Agent-ready** and **Human-ready**.
 ### Inputs & Forms
 - Textarea: padding 12px 20px, transparent text at default
 - Select: white background, standard styling

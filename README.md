@@ -1,13 +1,13 @@
 # Context Layer
 
-**Codebase Knowledge & Intelligence Infrastructure.**
+**AI-native Codebase Knowledge & Intelligence Infrastructure.**
 
 "Build the context your codebase never had."
 
 ---
 
 ## 🏗️ The Infrastructure
-Context Layer is a high-density engineering platform designed to bridge the gap between Human Developers, AI Agents, and raw Codebases through persistent, versioned, and always-synced Knowledge.
+Context Layer is an **AI-native infrastructure** that automatically builds, syncs, and evolves the context your projects have been missing — making codebases both **Agent-ready** and **Human-ready**.
 
 ### 🛠️ Capabilities
 - **01 Sources**: Connect GitHub, local files, or discussion threads as raw context streams.

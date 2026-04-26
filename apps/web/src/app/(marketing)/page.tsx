@@ -19,9 +19,9 @@ export default function HomePage() {
             <div className="space-y-6">
               <FadeUp>
                 <div className="flex flex-wrap items-center gap-2">
-                  <StatusPill tone="indexed" dot>Persistent</StatusPill>
-                  <StatusPill tone="info" dot>Versioned</StatusPill>
-                  <StatusPill tone="warn" dot>Always-Synced</StatusPill>
+                  <StatusPill tone="indexed" dot>AI-Native</StatusPill>
+                  <StatusPill tone="info" dot>Agent-Ready</StatusPill>
+                  <StatusPill tone="warn" dot>Human-Ready</StatusPill>
                 </div>
               </FadeUp>
               <FadeUp delay={0.05}>
@@ -38,8 +38,9 @@ export default function HomePage() {
               </FadeUp>
               <FadeUp delay={0.18}>
                 <p className="text-body-large text-[#4e4e4e] max-w-[540px]">
-                  Build the context your codebase never had. A persistent, versioned, multi-repo
-                  knowledge layer — auto-synced with every commit. Human-ready and agent-ready.
+                  Build the context your codebase never had. An AI-native codebase
+                  knowledge and intelligence infrastructure — automatically built,
+                  synced, and agent-ready.
                 </p>
               </FadeUp>
               <FadeUp delay={0.24}>
