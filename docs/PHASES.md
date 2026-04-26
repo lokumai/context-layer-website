@@ -189,3 +189,71 @@ Production build: all 4 marketing routes statically prerendered; middleware 92 k
   * Tests — Vitest 7/7 using the SDK's `InMemoryTransport.createLinkedPair()` paired-client pattern: tool advertisement, workspace/page wiki fetch, security-scoped intelligence, overview summary shape, Q&A match with citations, Q&A fallback text. Plus `src/scripts/smoke.ts` — an in-process CLI that invokes all six scenarios and exits 0.
   * Package inherits biome + tsconfig from `packages/config`; tsc + biome clean; web-app regression untouched (91 Vitest / 31 Playwright / production build all green).
   * README covers Claude Desktop / Cursor config JSON, programmatic usage, and per-tool reference — the publishable surface of the package.
+
+## Phase 13: Kinetic Minimalism & Component Refinement
+* **Status:** `[ ] Pending`
+* **Goal:** Apply the "Restrained Kinetic" motion framework and fix basic layout issues.
+* **Execution Details:**
+  * Implement Framer Motion for Snappy Springs (stiffness 300, damping 30) across all page transitions and modal pop-ins.
+  * Implement the "Warp Effect" (layoutId) for workspace switching and navbar highlights.
+  * Add Glassmorphism ("Near-White Frost" with `backdrop-blur-[12px]`) to the Navbar and Sidebars.
+  * Fix Workspaces/Sources typography (wrapping, sizes) and add search/filter bars to Workspaces and Intelligence.
+
+## Phase 14: Sources Manager & Modal Upgrades
+* **Status:** `[ ] Pending`
+* **Goal:** Bring the input layer to full compliance with the updated UI/UX specifications.
+* **Execution Details:**
+  * Overhaul the "Add Source" modal to use a vertical list of cards with a "more..." expansion button rather than a horizontal scroller.
+  * Implement the strict status badge pipeline on sources: `Processing` → `Indexed` → `Synced` / `Outdated`.
+  * Add snappy entrance/exit transitions and drag-to-expand functionality to sidebars.
+  * Provide realistic mock previews instead of empty placeholders in the source detail sidebar.
+
+## Phase 15: Content Rendering & The "Illusion of Processing"
+* **Status:** `[ ] Pending`
+* **Goal:** Ensure the mock data feels real, both during generation and while reading.
+* **Execution Details:**
+  * Implement the "Triangle Loading State" geometric morph for fake latency.
+  * Introduce proper syntax highlighting (dark theme) for `typescript` and other code blocks in the Wiki View.
+  * Integrate a Mermaid renderer for architecture diagrams in the Wiki and DocsGen.
+  * Ensure "Generating" states across the app show trickling, realistic fake agent logs rather than a simple spinner.
+
+## Phase 16: Wiki Logs Audit & Graph Depth
+* **Status:** `[ ] Pending`
+* **Goal:** Fix the non-compliant UI elements that promise deep data but currently deliver stubs.
+* **Execution Details:**
+  * Rebuild the Wiki Logs split view to actually render a "native git diff" of what changed in the mock data, side-by-side with agent logs.
+  * Wire up the Knowledge Graph search bar in the modal so it actually filters nodes/edges.
+  * Fix the First-Time Workspace Wizard so it properly guides users through steps 3, 4, and 5 (Wiki Configure and Intelligence) instead of acting as a stale placeholder.
+
+## Phase 17: OmniBoard "NotebookLM" Exploration
+* **Status:** `[ ] Pending`
+* **Goal:** Fulfill the promise of a multimodal exploration environment.
+* **Execution Details:**
+  * Modify the OmniBoard generation flow so it doesn't dead-end at a "Done" screen.
+  * After artifact generation, automatically transition into an exploration session.
+  * Allow the user to view the artifact (Slides/Video/Audio placeholder) while chatting with the specialized OmniBoard chatbot to ask questions about it or request revisions.
+
+## Phase 18: MCP Server Web Transport & Polish
+* **Status:** `[ ] Pending`
+* **Goal:** Prepare the `@context-layer/mcp` package for live, external demo consumption.
+* **Execution Details:**
+  * Extend the MCP server to support HTTP/SSE transport (in addition to stdio) so it can be exposed securely over the web.
+  * Refine the tools (`get_wiki_content`, `get_code_intelligence`) to ensure they handle the multi-repo mock data perfectly and output highly structured, agent-friendly text.
+
+## Phase 19: Client-Centric Demo Scenarios
+* **Status:** `[ ] Pending`
+* **Goal:** Create bulletproof, repeatable demo scenarios to impress clients.
+* **Execution Details:**
+  * Define and script exactly how to run 3 "Wow Factor" scenarios using an external tool like Claude Code connected to our MCP.
+  * Scenario 1: Multi-repository Knowledge (Claude fixing a cross-repo saga flow).
+  * Scenario 2: Multi-repo Code Intelligence (Claude analyzing tech debt across 7 services).
+  * Scenario 3: External Library API checks (Claude querying the chatbot for up-to-date specs).
+
+## Phase 20: Monorepo Dockerization & DigitalOcean Deployment
+* **Status:** `[ ] Pending`
+* **Goal:** Take the entire simulated playground and MCP server live.
+* **Execution Details:**
+  * Create robust `Dockerfile`s for the Next.js frontend and the MCP server.
+  * Set up GitHub Actions to push images to the GitHub Container Registry.
+  * Configure for DigitalOcean deployment, ensuring all `.env` gates (Auth personas, MCP tokens) are securely injected.
+  * Verify the live URLs work flawlessly for marketing, playground login, and remote MCP connections.

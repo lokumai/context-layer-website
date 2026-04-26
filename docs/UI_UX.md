@@ -82,13 +82,13 @@ The Workspaces page is the gateway into the playground. Without selecting or cre
 
 ### Layout
 
-A grid of rectangular cards, each representing a workspace. Each workspace resembles a project that may be single-repo or multi-repo. Each card shows the workspace name and a small amount of metadata (created date, source count, last activity).
+A grid of rectangular cards, each representing a workspace. Each workspace resembles a project that may be single-repo or multi-repo. Each card shows the workspace name and a small amount of metadata (created date, source count, last activity). The workspace name font should be reasonably sized and wrap to the next line if too long. There must also be a **search and filter bar** at the top to filter workspaces.
 
 The first card in the grid is always a dotted-outline, unfilled rectangle with a "+" sign — the "Create Workspace" card.
 
 ### Creation
 
-Clicking the "+" card opens a minimal modal: the only required field is the workspace name. No GitHub URLs are required at this stage. Sources are added later, inside the workspace, on the Sources page.
+Clicking the "+" card opens a minimal modal: the required field is the workspace name. There is also an optional text area for writing 2 or 3 lines of description. No GitHub URLs are required at this stage. Sources are added later, inside the workspace, on the Sources page.
 
 ### Selection
 
@@ -134,19 +134,25 @@ A Google-Drive-like interface:
 - Search bar at the top for searching by name or URL
 - Filter by type (code, file, all)
 - Each source is displayed as a card (grid) or row (list) with:
-  - Name
+  - Name (wrapping if too long)
   - Type icon (repo vs. file)
   - Indexing status badge
-  - Last-indexed timestamp
-- Clicking a source opens a modal showing its content (similar to Google Drive's file preview)
+  - Last Sync with Knowledge timestamp
+- Clicking a source opens an **expandable sidebar** showing its content with a real preview. The appearance and disappearance of the sidebar must have snappy transitions, and it should be draggable/expandable.
 
 ### Indexing Status Badges
 
-Every source carries a status badge that tells the user whether it's usable by agents:
+Every source carries a status badge pipeline that tells the user its state in our system:
 
-- **Indexed** — ready, green, no friction
-- **Indexing…** — spinner, in-progress
-- **Error** — red with a small "?" icon; hovering the "?" reveals a tooltip explaining what went wrong and how to fix it
+- **Processing** — spinner, currently being uploaded and indexed as a source.
+- **Indexed** — ready, green, successfully uploaded but not necessarily synced to Knowledge.
+- **Synced** — green badge indicating the indexed source is synced with Knowledge.
+- **Outdated** — yellow/red badge indicating the source is indexed but NOT synced with Knowledge.
+- **Error** — red with a small "?" icon; hovering the "?" reveals a tooltip explaining what went wrong and how to fix it.
+
+### Adding a Source
+
+When a user clicks "Add Source", they are presented with a chooser showing the available connection options grouped by category. The chooser modal should display a **vertical list of cards** (rectangles) with only the most important ones visible by default, and a "more..." button at the bottom of each group to expand the list.
 
 ### Adding a Source
 
@@ -249,7 +255,7 @@ The three-layer Wiki structure:
 2. **Repo-level** — a DeepWiki/CodeWiki-style set of nested markdown pages per repository. Headers, sections, diagrams, code snippets.
 3. **llms.txt** — the most granular layer, rebranded from "file-level wiki" to match the emerging industry standard (popularized by Mintlify and used by many libraries to feed full project context into AI agents). This is a set of markdown files plus an index page, optimized for LLM consumption rather than human reading. File-level granularity for humans is handled on-demand via the Chatbot with agentic RAG and live code discovery — a persistent file-level wiki isn't necessary.
 
-The viewer itself is modeled on DeepWiki: a scrollable file-system-style tree on the left spanning vertically, collapsible/expandable, with the selected page's rendered markdown content in the main area. Mermaid diagrams, ASCII art, code snippets, and citations all render inline.
+The viewer itself is modeled on DeepWiki: a scrollable file-system-style tree on the left spanning vertically, collapsible/expandable, with the selected page's rendered markdown content in the main area. **The left-most sidebar itself must be collapsible.** Mermaid diagrams must render correctly. Code snippets in ` ```typescript ` blocks must have colorful syntax highlighting (using a good linting color scheme, dark theme). ASCII art and citations all render inline. Note: Mock content should be populated for all layers, including actual fake docs for the repositories.
 
 Users can **export** the Wiki (or individual pages) as markdown or PDF.
 
@@ -338,8 +344,8 @@ Intelligence is the sibling of Wiki under the Knowledge group. It provides dashb
 
 **What lives here**
 
-- Health dashboards (tech debt, fragile areas, architecture violations)
-- Security posture (vulnerabilities, exposure)
+- Health dashboards (tech debt, fragile areas, architecture violations) — with search/filter bars and proper icons.
+- Security posture (vulnerabilities, exposure) — with search/filter bars.
 - Test coverage landscape (which critical flows lack coverage)
 - Dependency analytics (cross-repo, outdated, risky)
 - Other metric-driven views as the product grows
