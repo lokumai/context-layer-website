@@ -2,8 +2,8 @@
 
 import { CheckCircle2, ChevronDown, ChevronRight, CircleDashed, Loader2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { simulateJob } from "@/lib/simulate-latency";
 import { StatusPill } from "@/components/marketing/status-pill";
+import { simulateJob } from "@/lib/simulate-latency";
 
 const STEPS = [
   "Clone sources",
@@ -58,7 +58,10 @@ export function GenerationInProgress({
         if (cancelled.current) return;
         if (next.done) break;
         const fragment = LOG_FRAGMENTS[stepIdx % LOG_FRAGMENTS.length];
-        onStepAdvance(stepIdx, `[${new Date().toISOString().slice(11, 19)}] ${fragment} ${next.value.step}`);
+        onStepAdvance(
+          stepIdx,
+          `[${new Date().toISOString().slice(11, 19)}] ${fragment} ${next.value.step}`,
+        );
         stepIdx += 1;
       }
       if (!cancelled.current) onComplete();
@@ -76,15 +79,17 @@ export function GenerationInProgress({
   }
 
   return (
-    <section className="bg-white rounded-section shadow-[var(--shadow-outline-ring)] p-8 space-y-6" data-testid="wiki-generating">
+    <section
+      className="bg-white rounded-section shadow-[var(--shadow-outline-ring)] p-8 space-y-6"
+      data-testid="wiki-generating"
+    >
       <header className="flex items-start justify-between gap-4">
         <div className="space-y-1">
           <p className="text-button-upper text-[#1d4ed8]">Generation in progress</p>
-          <h2 className="text-card-heading text-black">
-            Generating your first Wiki…
-          </h2>
+          <h2 className="text-card-heading text-black">Generating your first Wiki…</h2>
           <p className="text-caption text-[#4e4e4e]">
-            {Math.min(currentStep + 1, STEPS.length)} / {STEPS.length} steps running · background job
+            {Math.min(currentStep + 1, STEPS.length)} / {STEPS.length} steps running · background
+            job
           </p>
         </div>
         <button
@@ -105,8 +110,7 @@ export function GenerationInProgress({
 
       <ol className="space-y-2">
         {STEPS.map((step, i) => {
-          const state =
-            i < currentStep ? "done" : i === currentStep ? "active" : "pending";
+          const state = i < currentStep ? "done" : i === currentStep ? "active" : "pending";
           const isOpen = expanded[i] ?? state === "active";
           const logs = stepLogs[i] ?? [];
           return (

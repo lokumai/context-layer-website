@@ -1,9 +1,7 @@
 import type { StateCreator } from "zustand";
 import type { AppState, RuntimeWorkspace, WorkspacesSlice } from "../types";
 
-export const createWorkspacesSlice: StateCreator<AppState, [], [], WorkspacesSlice> = (
-  set,
-) => ({
+export const createWorkspacesSlice: StateCreator<AppState, [], [], WorkspacesSlice> = (set) => ({
   workspaces: [],
   activeWorkspaceId: null,
   setActiveWorkspace: (id) => set({ activeWorkspaceId: id }),
@@ -13,7 +11,11 @@ export const createWorkspacesSlice: StateCreator<AppState, [], [], WorkspacesSli
     const ws: RuntimeWorkspace = {
       id,
       name,
-      slug: name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || id,
+      slug:
+        name
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/^-|-$/g, "") || id,
       createdAt: now,
       lastActivity: now,
       sourceCount: 0,

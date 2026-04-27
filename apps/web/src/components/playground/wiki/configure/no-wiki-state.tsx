@@ -1,17 +1,11 @@
 "use client";
 
+import type { Source } from "@context-layer/mocks";
 import { Sparkles, X } from "lucide-react";
 import { type FormEvent, useEffect, useState } from "react";
-import type { Source } from "@context-layer/mocks";
 import { useStore } from "@/stores";
 
-type SyncStrategy =
-  | "per-pr-merge"
-  | "per-commit"
-  | "hourly"
-  | "daily"
-  | "weekly"
-  | "manual";
+type SyncStrategy = "per-pr-merge" | "per-commit" | "hourly" | "daily" | "weekly" | "manual";
 
 const STRATEGIES: Array<{ id: SyncStrategy; label: string }> = [
   { id: "per-pr-merge", label: "Per PR merge (balanced default)" },
@@ -67,7 +61,8 @@ export function NoWikiState({ onStart }: { onStart: () => void }) {
       <div className="space-y-3">
         <h2 className="text-section-heading text-black">No Wiki yet.</h2>
         <p className="text-body text-[#4e4e4e] max-w-[520px] mx-auto">
-          Pick which sources feed the Wiki and choose a sync cadence. Generation runs in the background; you can navigate away and come back.
+          Pick which sources feed the Wiki and choose a sync cadence. Generation runs in the
+          background; you can navigate away and come back.
         </p>
       </div>
       <button
@@ -81,9 +76,7 @@ export function NoWikiState({ onStart }: { onStart: () => void }) {
         <span className="text-button-upper">Generate Wiki</span>
       </button>
       {sources.length === 0 ? (
-        <p className="text-caption text-[#777169]">
-          Add at least one source before generating.
-        </p>
+        <p className="text-caption text-[#777169]">Add at least one source before generating.</p>
       ) : null}
 
       {open ? (

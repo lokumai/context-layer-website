@@ -5,12 +5,9 @@ export const createSourcesSlice: StateCreator<AppState, [], [], SourcesSlice> = 
   sources: [],
   addSource: (source) =>
     set((s) => ({
-      sources: s.sources.some((x) => x.id === source.id)
-        ? s.sources
-        : [...s.sources, source],
+      sources: s.sources.some((x) => x.id === source.id) ? s.sources : [...s.sources, source],
     })),
-  removeSource: (id) =>
-    set((s) => ({ sources: s.sources.filter((x) => x.id !== id) })),
+  removeSource: (id) => set((s) => ({ sources: s.sources.filter((x) => x.id !== id) })),
   renameSource: (id, newName) =>
     set((s) => ({
       sources: s.sources.map((x) => (x.id === id ? { ...x, name: newName } : x)),
@@ -22,9 +19,7 @@ export const createSourcesSlice: StateCreator<AppState, [], [], SourcesSlice> = 
   markIndexed: (id) =>
     set((s) => ({
       sources: s.sources.map((x) =>
-        x.id === id
-          ? { ...x, status: "indexed", lastIndexed: new Date().toISOString() }
-          : x,
+        x.id === id ? { ...x, status: "indexed", lastIndexed: new Date().toISOString() } : x,
       ),
     })),
   markError: (id, _message) =>
@@ -34,5 +29,13 @@ export const createSourcesSlice: StateCreator<AppState, [], [], SourcesSlice> = 
   toggleAutoSync: (id) =>
     set((s) => ({
       sources: s.sources.map((x) => (x.id === id ? { ...x, autoSync: !x.autoSync } : x)),
+    })),
+  markSynced: (id) =>
+    set((s) => ({
+      sources: s.sources.map((x) => (x.id === id ? { ...x, knowledgeSync: "synced" } : x)),
+    })),
+  markOutdated: (id) =>
+    set((s) => ({
+      sources: s.sources.map((x) => (x.id === id ? { ...x, knowledgeSync: "outdated" } : x)),
     })),
 });

@@ -1,17 +1,10 @@
 "use client";
 
-import {
-  RefreshCw,
-  Zap,
-  ListChecks,
-  Inbox,
-  FileText,
-  Trash2,
-} from "lucide-react";
+import { FileText, Inbox, ListChecks, RefreshCw, Trash2, Zap } from "lucide-react";
 import { useState } from "react";
-import { useStore } from "@/stores";
 import { StatusPill } from "@/components/marketing/status-pill";
 import { simulateJob } from "@/lib/simulate-latency";
+import { useStore } from "@/stores";
 
 export function LivingState({
   workspaceId,
@@ -24,6 +17,7 @@ export function LivingState({
 }) {
   const workspace = useStore((s) => s.workspaces.find((w) => w.id === workspaceId));
   const sources = useStore((s) => s.sources);
+  const markSynced = useStore((s) => s.markSynced);
   const [syncing, setSyncing] = useState(false);
   const [lastSyncLabel, setLastSyncLabel] = useState("Just now");
 
@@ -37,6 +31,8 @@ export function LivingState({
       const next = await iter.next();
       if (next.done) break;
     }
+    // Phase 14: every source the Wiki feeds on is now back in lock-step.
+    for (const s of sources) markSynced(s.id);
     setLastSyncLabel("Just now");
     setSyncing(false);
   }
@@ -44,11 +40,16 @@ export function LivingState({
   if (!workspace) return null;
 
   return (
-    <section className="bg-white rounded-section shadow-[var(--shadow-outline-ring)] p-8 space-y-6" data-testid="wiki-living">
+    <section
+      className="bg-white rounded-section shadow-[var(--shadow-outline-ring)] p-8 space-y-6"
+      data-testid="wiki-living"
+    >
       <header className="flex items-start justify-between gap-4">
         <div className="space-y-2">
           <div className="flex items-center gap-2">
-            <StatusPill tone="indexed" dot>Wiki Live</StatusPill>
+            <StatusPill tone="indexed" dot>
+              Wiki Live
+            </StatusPill>
             <StatusPill tone="info">Persistent · Versioned</StatusPill>
           </div>
           <h2 className="text-card-heading text-black">Your Wiki is live.</h2>
@@ -59,10 +60,22 @@ export function LivingState({
       </header>
 
       <dl className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Fact icon={<RefreshCw size={14} strokeWidth={1.5} />} label="Sync strategy" value={strategyLabel(workspace.syncStrategy)} />
+        <Fact
+          icon={<RefreshCw size={14} strokeWidth={1.5} />}
+          label="Sync strategy"
+          value={strategyLabel(workspace.syncStrategy)}
+        />
         <Fact icon={<Zap size={14} strokeWidth={1.5} />} label="Last sync" value={lastSyncLabel} />
-        <Fact icon={<ListChecks size={14} strokeWidth={1.5} />} label="Last-run outcome" value="Success · 0 errors" />
-        <Fact icon={<Inbox size={14} strokeWidth={1.5} />} label="Sources feeding" value={`${sources.length} of ${sources.length}`} />
+        <Fact
+          icon={<ListChecks size={14} strokeWidth={1.5} />}
+          label="Last-run outcome"
+          value="Success · 0 errors"
+        />
+        <Fact
+          icon={<Inbox size={14} strokeWidth={1.5} />}
+          label="Sources feeding"
+          value={`${sources.length} of ${sources.length}`}
+        />
       </dl>
 
       <div className="bg-[#f9f9f9] rounded-card px-4 py-3 shadow-[var(--shadow-inset-border)]">
@@ -80,15 +93,39 @@ export function LivingState({
           disabled={syncing}
           primary
         />
-        <ActionButton icon={<Zap size={14} strokeWidth={1.5} />} label="Force Rebuild" onClick={onRebuild} />
-        <ActionButton icon={<RefreshCw size={14} strokeWidth={1.5} />} label="Change Sync Strategy" onClick={() => window.alert("Sync strategy modal arrives with the rest of Configure polish.")} />
-        <ActionButton icon={<Inbox size={14} strokeWidth={1.5} />} label="Edit Sources" onClick={() => window.alert("Source-picker modal re-opens with the existing checkbox UI.")} />
-        <ActionButton icon={<FileText size={14} strokeWidth={1.5} />} label="Edit Instructions" onClick={() => window.alert("Instructions modal — same textarea as first-gen.")} />
+        <ActionButton
+          icon={<Zap size={14} strokeWidth={1.5} />}
+          label="Force Rebuild"
+          onClick={onRebuild}
+        />
+        <ActionButton
+          icon={<RefreshCw size={14} strokeWidth={1.5} />}
+          label="Change Sync Strategy"
+          onClick={() =>
+            window.alert("Sync strategy modal arrives with the rest of Configure polish.")
+          }
+        />
+        <ActionButton
+          icon={<Inbox size={14} strokeWidth={1.5} />}
+          label="Edit Sources"
+          onClick={() =>
+            window.alert("Source-picker modal re-opens with the existing checkbox UI.")
+          }
+        />
+        <ActionButton
+          icon={<FileText size={14} strokeWidth={1.5} />}
+          label="Edit Instructions"
+          onClick={() => window.alert("Instructions modal — same textarea as first-gen.")}
+        />
         <ActionButton
           icon={<Trash2 size={14} strokeWidth={1.5} />}
           label="Delete Wiki"
           onClick={() => {
-            if (window.confirm("Delete the Wiki and start over? Your Wiki markdown will be cleared. This cannot be undone.")) {
+            if (
+              window.confirm(
+                "Delete the Wiki and start over? Your Wiki markdown will be cleared. This cannot be undone.",
+              )
+            ) {
               onDelete();
             }
           }}

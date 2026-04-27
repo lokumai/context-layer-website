@@ -1,19 +1,17 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import type { WikiPayload } from "@/stores/types";
 import { useStore } from "@/stores";
-import { NoWikiState } from "./no-wiki-state";
+import type { WikiPayload } from "@/stores/types";
 import { GenerationInProgress } from "./generation-in-progress";
-import { LivingState } from "./living-state";
 import { HistoryCard } from "./history-card";
+import { LivingState } from "./living-state";
+import { NoWikiState } from "./no-wiki-state";
 
 export type ConfigureMode = "idle" | "generating" | "living";
 
 export function WikiConfigure({ workspaceId }: { workspaceId: string }) {
-  const hasWiki = useStore(
-    (s) => s.workspaces.find((w) => w.id === workspaceId)?.hasWiki ?? false,
-  );
+  const hasWiki = useStore((s) => s.workspaces.find((w) => w.id === workspaceId)?.hasWiki ?? false);
   const setGraduated = useStore((s) => s.setGraduated);
   const setWikiData = useStore((s) => s.setWikiData);
 
@@ -44,7 +42,8 @@ export function WikiConfigure({ workspaceId }: { workspaceId: string }) {
           Define the rules. The Wiki takes care of itself.
         </h1>
         <p className="text-body text-[#4e4e4e]">
-          The first generation is the only inherently manual step. Once launched, WikiSync keeps the Wiki fresh on your chosen cadence.
+          The first generation is the only inherently manual step. Once launched, WikiSync keeps the
+          Wiki fresh on your chosen cadence.
         </p>
       </header>
 

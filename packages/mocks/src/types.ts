@@ -26,6 +26,14 @@ export type SourceCategory =
   | "linear"
   | "jira";
 
+/**
+ * Whether the indexed source is in lock-step with the workspace's Wiki.
+ * `synced`   — Wiki reflects this source's current state.
+ * `outdated` — Source has changed (or was just added) and the Wiki hasn't been re-generated yet.
+ * `undefined` — unknown / not applicable (used for tests + stale persisted state).
+ */
+export type KnowledgeSyncStatus = "synced" | "outdated";
+
 export interface Source {
   id: string;
   name: string;
@@ -42,6 +50,8 @@ export interface Source {
   tokenCount: number;
   primaryLanguage: string;
   description: string;
+  /** Optional — runtime-stamped at bootstrap (full persona) or by Wiki Configure's Force Sync. */
+  knowledgeSync?: KnowledgeSyncStatus;
 }
 
 export interface Workspace {

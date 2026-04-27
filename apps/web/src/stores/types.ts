@@ -87,6 +87,10 @@ export interface SourcesSlice {
   markIndexed: (id: string) => void;
   markError: (id: string, message: string) => void;
   toggleAutoSync: (id: string) => void;
+  /** Flip a source's knowledgeSync to "synced" (called by Wiki Configure's Force Sync). */
+  markSynced: (id: string) => void;
+  /** Flip a source's knowledgeSync to "outdated" (default for newly added sources). */
+  markOutdated: (id: string) => void;
 }
 
 export interface WikiPayload {
@@ -212,6 +216,8 @@ export type PersistedState = Omit<
   | "markIndexed"
   | "markError"
   | "toggleAutoSync"
+  | "markSynced"
+  | "markOutdated"
   | "setWikiData"
   | "setIntelligenceData"
   | "setHasIntelligence"

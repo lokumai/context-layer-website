@@ -2,6 +2,7 @@
 
 import type { Source } from "@context-layer/mocks";
 import { useStore } from "@/stores";
+import { KnowledgeSyncBadge } from "./knowledge-sync-badge";
 import { SourceActionsMenu } from "./source-actions-menu";
 import { SourceIcon } from "./source-icon";
 import { SourceStatusBadge } from "./status-badge";
@@ -35,7 +36,10 @@ export function SourceRow({ source }: { source: Source }) {
           {formatRelative(source.lastIndexed)}
         </span>
       </button>
-      <SourceStatusBadge status={source.status} />
+      <div className="flex items-center gap-2">
+        <SourceStatusBadge status={source.status} />
+        <KnowledgeSyncBadge status={source.knowledgeSync} />
+      </div>
       <SourceActionsMenu source={source} />
     </div>
   );

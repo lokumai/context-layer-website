@@ -1,9 +1,12 @@
 import type { IndexingStatus } from "@context-layer/mocks";
 import { StatusPill, type StatusTone } from "@/components/marketing/status-pill";
 
+// Per IMPROVE.md / Phase 14: when status === "indexing" the label reads
+// "Processing…" so users understand the source is being parsed. The
+// underlying IndexingStatus union stays unchanged — mock data remains valid.
 const MAP: Record<IndexingStatus, { tone: StatusTone; label: string }> = {
   indexed: { tone: "indexed", label: "Indexed" },
-  indexing: { tone: "info", label: "Indexing…" },
+  indexing: { tone: "info", label: "Processing…" },
   error: { tone: "error", label: "Error" },
 };
 

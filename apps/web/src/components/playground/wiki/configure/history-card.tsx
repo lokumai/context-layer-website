@@ -1,8 +1,8 @@
 "use client";
 
 import { History } from "lucide-react";
-import { useStore } from "@/stores";
 import { StatusPill } from "@/components/marketing/status-pill";
+import { useStore } from "@/stores";
 
 function relativeTime(iso: string | null): string {
   if (!iso) return "—";
@@ -47,7 +47,9 @@ export function HistoryCard({ workspaceId }: { workspaceId: string }) {
             <span className="text-caption text-[#4e4e4e] hidden md:inline">
               {j.durationMs ? `${Math.round(j.durationMs / 1000)}s` : "—"}
             </span>
-            <StatusPill tone={j.status === "success" ? "indexed" : j.status === "failed" ? "error" : "info"}>
+            <StatusPill
+              tone={j.status === "success" ? "indexed" : j.status === "failed" ? "error" : "info"}
+            >
               {j.status}
             </StatusPill>
           </li>

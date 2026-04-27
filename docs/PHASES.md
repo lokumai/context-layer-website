@@ -204,13 +204,17 @@ Production build: all 4 marketing routes statically prerendered; middleware 92 k
   * **Tests** — Vitest 97/97 (+6 new `workspace-search.test.ts` covering substring + AND combinations + undefined description); Playwright 37/37 (+6 new `phase13.spec.ts`: search filter, no WORKSPACE pretitle, no "Workspace · Input Layer" subtitle, "Last Sync with Knowledge" label, Health search input, no "Gateway" pretitle); existing `intelligence.spec.ts` migrated from `intelligence-config-header` testid to `intelligence-freshness-controls`. Production build clean. Biome clean on every Phase 13 file.
 
 ## Phase 14: Sources Manager & Modal Upgrades
-* **Status:** `[ ] Pending`
-* **Goal:** Bring the input layer to full compliance with the updated UI/UX specifications.
-* **Execution Details:**
-  * Overhaul the "Add Source" modal to use a vertical list of cards with a "more..." expansion button rather than a horizontal scroller.
-  * Implement the strict status badge pipeline on sources: `Processing` → `Indexed` → `Synced` / `Outdated`.
-  * Add snappy entrance/exit transitions and drag-to-expand functionality to sidebars.
-  * Provide realistic mock previews instead of empty placeholders in the source detail sidebar.
+* **Status:** `[x] Complete`
+* **Delivered (2026-04-24):**
+  * **Two-axis status pipeline** — `IndexingStatus` keeps its existing values; UI label flips from `Indexing…` → **`Processing…`** while indexing. New optional `knowledgeSync?: "synced" | "outdated"` field on `Source` (additive — no mock data churn). Bootstrap stamps `synced` on the `full` persona's 9 sources; the Add-Source flow defaults new sources to `outdated` until the next Wiki Force Sync flips them via `markSynced`.
+  * **`<KnowledgeSyncBadge>`** new component renders alongside the existing status badge in `SourceCard`, `SourceRow`, and the preview slide-over. `data-testid` `knowledge-sync-synced` / `knowledge-sync-outdated`; `undefined` renders nothing.
+  * **Slice extension** — `markSynced(id)` + `markOutdated(id)` actions on the sources slice; `PersistedState` Omit list updated.
+  * **Add-Source modal redesign** — replaced the horizontal scroller with a vertical sectioned layout: 3 buckets (Code · Docs · Discussion) × 2 primary connector strips each + a **"More options"** expander animating open via `motion/react` `AnimatePresence` with `CONTEXT_SPRING`. New `connector-catalog.ts` is the typed source-of-truth (16 connectors total).
+  * **Connect spinner on the strip** — clicking a connector replaces its `Connect` / `Paste` / `Upload` CTA pill with an inline `Loader2` + the current step (`"Cloning repository…"`); the legacy bottom blue badge is gone. The submit pipeline now exercises both slice actions: `addSource(status: "indexing", knowledgeSync: "outdated")` → `simulateJob` (4.5 s, 6 steps) → `markIndexed`.
+  * **Source preview slide-over upgrades** — wrapped in `motion.aside` + `<AnimatePresence>` for snappy entrance/exit (`x: "100%" → 0`, scrim opacity); **expand toggle** (Maximize2/Minimize2) flips between 540 px and 900 px; left-edge **drag-to-resize** handle (380–95vw clamp) lets the user dial in any width.
+  * **Real per-kind preview content** in `<SourcePreviewBody>` — code sources get a fake file tree + 30-line code panel with line numbers (Python or TypeScript snippet branching off `primaryLanguage`); file sources get a 6-section outline + 2-paragraph excerpt; discussion sources get a 4-message thread mock. All deterministic per-source — no new mock JSONs.
+  * **Wiki Configure Force Sync** now iterates sources and calls `markSynced(id)` after the simulated sync — the new badge is dynamic.
+  * 102 / 102 Vitest (+5 new `sources-store` tests covering `markSynced` / `markOutdated` / `addSource` defaults / orthogonal pipeline) · 41 / 41 Playwright (+4 new `phase14.spec.ts`: `Indexed + Synced` on every full-persona card, vertical chooser layout with primary/more split, on-strip Connect spinner + new source ends up `Indexed + Outdated`, slide-over expand toggle + real `preview-code` content + drag handle reachable). Build clean. Biome lint clean on every Phase 14 file.
 
 ## Phase 15: Content Rendering & The "Illusion of Processing"
 * **Status:** `[ ] Pending`

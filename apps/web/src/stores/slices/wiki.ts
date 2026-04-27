@@ -1,5 +1,5 @@
 import type { StateCreator } from "zustand";
-import type { AppState, WikiSlice, WikiPayload } from "../types";
+import type { AppState, WikiPayload, WikiSlice } from "../types";
 
 export const createWikiSlice: StateCreator<AppState, [], [], WikiSlice> = (set) => ({
   wikiTrees: {},

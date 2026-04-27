@@ -2,7 +2,7 @@
 
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import type { AppState } from "./types";
+import { persistConfig, persistKey } from "./persist-config";
 import { createActivitySlice } from "./slices/activity";
 import { createArtifactsSlice } from "./slices/artifacts";
 import { createChatbotSlice } from "./slices/chatbot";
@@ -12,7 +12,7 @@ import { createSourcesSlice } from "./slices/sources";
 import { createUiSlice } from "./slices/ui";
 import { createWikiSlice } from "./slices/wiki";
 import { createWorkspacesSlice } from "./slices/workspaces";
-import { persistConfig, persistKey } from "./persist-config";
+import type { AppState } from "./types";
 
 // Root store. A single `create()` composes every slice. Persona-keyed
 // persistence is handled via `setPersistKey()` — the HydrationProvider calls

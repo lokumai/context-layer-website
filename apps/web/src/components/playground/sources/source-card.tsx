@@ -4,6 +4,7 @@ import type { Source } from "@context-layer/mocks";
 import { motion } from "motion/react";
 import { CONTEXT_SPRING } from "@/lib/motion/spring";
 import { useStore } from "@/stores";
+import { KnowledgeSyncBadge } from "./knowledge-sync-badge";
 import { SourceActionsMenu } from "./source-actions-menu";
 import { SourceIcon } from "./source-icon";
 import { SourceStatusBadge } from "./status-badge";
@@ -61,9 +62,15 @@ export function SourceCard({ source }: { source: Source }) {
           </div>
         </div>
 
-        {/* Status badge sits between the name/url block and the bottom divider — per IMPROVE.md item 4. */}
-        <div className="flex items-center pb-3 mb-3 border-b border-[#f5f5f5]">
+        {/*
+          Status row sits between the name/url block and the bottom divider.
+          Two orthogonal axes (per Phase 14 / IMPROVE.md):
+            • Indexing status: Processing → Indexed → (Error)
+            • Knowledge sync : Synced vs. Outdated
+        */}
+        <div className="flex flex-wrap items-center gap-2 pb-3 mb-3 border-b border-[#f5f5f5]">
           <SourceStatusBadge status={source.status} />
+          <KnowledgeSyncBadge status={source.knowledgeSync} />
         </div>
 
         <div className="flex items-center justify-between">

@@ -1,124 +1,102 @@
 "use client";
 
-import type { Source, SourceCategory, SourceKind } from "@context-layer/mocks";
-import { FileText, GitBranch, MessageSquare, X } from "lucide-react";
+import type { Source } from "@context-layer/mocks";
+import { ChevronDown, Loader2, X } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
+import { CONTEXT_SPRING } from "@/lib/motion/spring";
 import { simulateJob } from "@/lib/simulate-latency";
 import { useStore } from "@/stores";
+import { BUCKETS, type Bucket, CONNECTORS_BY_BUCKET, type Connector } from "./connector-catalog";
 
-const ROWS = [
-  {
-    eyebrow: "Code",
-    kind: "code" as SourceKind,
-    accent: "bg-[var(--color-accent-blue-bg)] text-[var(--color-accent-blue-fg)]",
-    icon: GitBranch,
-    integrations: [
-      { name: "GitHub", category: "github" as SourceCategory, label: "Connect" },
-      { name: "GitLab", category: "gitlab" as SourceCategory, label: "Connect" },
-      { name: "Bitbucket", category: "bitbucket" as SourceCategory, label: "Connect" },
-      { name: "Gitea", category: "gitea" as SourceCategory, label: "Connect" },
-      { name: "Paste URL", category: "url" as SourceCategory, label: "Paste" },
-      { name: "Upload zip", category: "upload" as SourceCategory, label: "Upload" },
-    ],
-  },
-  {
-    eyebrow: "Docs and Wikis",
-    kind: "file" as SourceKind,
-    accent: "bg-[var(--color-accent-green-bg)] text-[var(--color-accent-green-fg)]",
-    icon: FileText,
-    integrations: [
-      { name: "Notion", category: "notion" as SourceCategory, label: "Connect" },
-      { name: "Confluence", category: "confluence" as SourceCategory, label: "Connect" },
-      { name: "Google Drive", category: "drive" as SourceCategory, label: "Connect" },
-      { name: "SharePoint", category: "sharepoint" as SourceCategory, label: "Connect" },
-      { name: "Upload file", category: "upload" as SourceCategory, label: "Upload" },
-    ],
-  },
-  {
-    eyebrow: "Discussion and Memory",
-    kind: "discussion" as SourceKind,
-    accent: "bg-[var(--color-accent-amber-bg)] text-[var(--color-accent-amber-fg)]",
-    icon: MessageSquare,
-    integrations: [
-      { name: "Slack", category: "slack" as SourceCategory, label: "Connect" },
-      { name: "Discord", category: "discord" as SourceCategory, label: "Connect" },
-      { name: "Linear", category: "linear" as SourceCategory, label: "Connect" },
-      { name: "Jira", category: "jira" as SourceCategory, label: "Connect" },
-      { name: "GitHub Discussions", category: "github" as SourceCategory, label: "Connect" },
-    ],
-  },
+const STEPS = [
+  "Contacting provider",
+  "Authorizing",
+  "Cloning repository",
+  "Analyzing AST",
+  "Building index",
+  "Committing to wiki",
 ] as const;
 
 export function AddSourceChooser() {
   const isOpen = useStore((s) => s.addSourceChooserOpen);
   const setOpen = useStore((s) => s.setAddSourceChooserOpen);
   const addSource = useStore((s) => s.addSource);
+  const markIndexed = useStore((s) => s.markIndexed);
 
-  const [busy, setBusy] = useState(false);
+  const [activeId, setActiveId] = useState<string | null>(null);
   const [currentStep, setCurrentStep] = useState("");
+  const [expanded, setExpanded] = useState<Record<Bucket, boolean>>({
+    code: false,
+    docs: false,
+    discussion: false,
+  });
 
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && !busy) setOpen(false);
+      if (e.key === "Escape" && !activeId) setOpen(false);
     };
     window.addEventListener("keydown", handleEsc);
     return () => window.removeEventListener("keydown", handleEsc);
-  }, [busy, setOpen]);
+  }, [activeId, setOpen]);
 
   if (!isOpen) return null;
 
-  const handleConnect = async (
-    kind: SourceKind,
-    integration: { name: string; category: SourceCategory; label: string },
-  ) => {
-    if (busy) return;
-    setBusy(true);
+  const busy = activeId !== null;
 
-    const steps = [
-      "Contacting provider",
-      "Authorizing",
-      "Cloning repository",
-      "Analyzing AST",
-      "Building index",
-      "Committing to wiki",
-    ];
+  async function handleConnect(connector: Connector) {
+    if (busy) return;
+
+    // Two-phase pipeline (Phase 14):
+    //   1. addSource immediately with status="indexing", knowledgeSync="outdated"
+    //   2. simulateJob runs the 6 steps
+    //   3. markIndexed flips status; knowledgeSync stays "outdated"
+    const id = globalThis.crypto.randomUUID();
+    setActiveId(connector.name);
+    setCurrentStep(STEPS[0]);
+
+    const slug = connector.name.toLowerCase().replace(/\s+/g, "-");
+    const source: Source = {
+      id,
+      name: `${connector.name} new source`,
+      kind: connector.kind,
+      category: connector.category,
+      url: `https://${slug}.example/new`,
+      path: "new",
+      status: "indexing",
+      autoSync: connector.category !== "upload" && connector.category !== "url",
+      lastIndexed: new Date().toISOString(),
+      lineCount: 0,
+      tokenCount: 0,
+      primaryLanguage: "Unknown",
+      description: "",
+      knowledgeSync: "outdated",
+    };
+    addSource(source);
 
     try {
-      const finalize = () => {
-        const slug = integration.name.toLowerCase().replace(/\s+/g, "-");
-        const source: Source = {
-          id: globalThis.crypto.randomUUID(),
-          name: `${integration.name} new source`,
-          kind,
-          category: integration.category,
-          url: `https://${slug}.example/new`,
-          path: "new",
-          status: "indexed",
-          autoSync: integration.category !== "upload" && integration.category !== "url",
-          lastIndexed: new Date().toISOString(),
-          lineCount: 0,
-          tokenCount: 0,
-          primaryLanguage: "Unknown",
-          description: "",
-        };
-        addSource(source);
-      };
-
-      const job = simulateJob(steps, finalize, { totalMs: 4500, minStepMs: 400 });
+      const job = simulateJob([...STEPS], () => undefined, {
+        totalMs: 4500,
+        minStepMs: 400,
+      });
       for await (const event of job) {
         setCurrentStep(event.step);
       }
-      setOpen(false);
+      markIndexed(id);
     } finally {
-      setBusy(false);
+      setActiveId(null);
       setCurrentStep("");
+      setOpen(false);
     }
-  };
+  }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/30 backdrop-blur-sm">
-      <div className="bg-white rounded-section p-8 max-w-3xl w-full shadow-[var(--shadow-card)] relative">
-        <div className="flex items-center justify-between mb-8">
+    <div
+      className="fixed inset-0 z-50 flex items-start justify-center p-6 pt-[8vh] bg-black/30 backdrop-blur-sm overflow-y-auto"
+      data-testid="add-source-chooser"
+    >
+      <div className="bg-white rounded-section p-7 max-w-xl w-full shadow-[var(--shadow-card)] relative">
+        <div className="flex items-center justify-between mb-2">
           <h2 className="text-card-heading">Add Source</h2>
           <button
             type="button"
@@ -130,45 +108,138 @@ export function AddSourceChooser() {
             <X size={18} strokeWidth={1.5} />
           </button>
         </div>
+        <p className="text-body text-[#777169] mb-6">
+          Pick where to import from. The most common providers per category are shown first; expand
+          for the rest.
+        </p>
 
-        <div className="space-y-8">
-          {ROWS.map((row) => (
-            <div key={row.eyebrow} className="space-y-4">
-              <p className="text-button-upper text-[#777169]">{row.eyebrow}</p>
-              <div className="flex gap-3 overflow-x-auto pb-2 -mx-2 px-2 scrollbar-hide">
-                {row.integrations.map((int) => (
-                  <button
-                    key={int.name}
-                    type="button"
-                    onClick={() => handleConnect(row.kind, int)}
-                    disabled={busy}
-                    className="flex-shrink-0 flex items-center gap-4 bg-white rounded-card px-4 py-3 shadow-[var(--shadow-inset-border)] hover:shadow-[var(--shadow-outline-ring)] transition-shadow group text-left"
+        <div className="space-y-6">
+          {BUCKETS.map((bucket) => {
+            const list = CONNECTORS_BY_BUCKET[bucket.id];
+            const primary = list.filter((c) => c.primary);
+            const more = list.filter((c) => !c.primary);
+            const isExpanded = expanded[bucket.id];
+            return (
+              <section key={bucket.id} className="space-y-3" data-testid={`bucket-${bucket.id}`}>
+                <div className="flex items-center gap-3">
+                  <div
+                    className={`w-7 h-7 rounded-[6px] flex items-center justify-center ${bucket.accent}`}
                   >
-                    <div
-                      className={`w-8 h-8 rounded-[6px] flex items-center justify-center ${row.accent}`}
-                    >
-                      <row.icon size={18} strokeWidth={1.5} />
-                    </div>
-                    <span className="text-body-medium text-black whitespace-nowrap">
-                      {int.name}
-                    </span>
-                    <span className="ml-auto text-[11px] uppercase tracking-[0.08em] px-3 py-1 bg-black text-white rounded-pill">
-                      {int.label}
-                    </span>
-                  </button>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
+                    <bucket.icon size={14} strokeWidth={1.75} />
+                  </div>
+                  <div>
+                    <h3 className="text-body-medium text-black leading-tight">{bucket.title}</h3>
+                    <p className="text-caption text-[#777169] leading-tight">{bucket.subtitle}</p>
+                  </div>
+                </div>
 
-        {busy && (
-          <div className="mt-8 bg-[#eff6ff] text-[#1d4ed8] rounded-card px-3 py-2 flex items-center gap-2">
-            <div className="w-1.5 h-1.5 rounded-full bg-current animate-pulse" />
-            <p className="text-caption font-medium">{currentStep}...</p>
-          </div>
-        )}
+                <div className="space-y-2">
+                  {primary.map((c) => (
+                    <ConnectorStrip
+                      key={c.name}
+                      connector={c}
+                      onConnect={handleConnect}
+                      busyConnector={activeId}
+                      currentStep={currentStep}
+                    />
+                  ))}
+
+                  <AnimatePresence initial={false}>
+                    {isExpanded ? (
+                      <motion.div
+                        key="more"
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={CONTEXT_SPRING}
+                        className="space-y-2 overflow-hidden"
+                      >
+                        {more.map((c) => (
+                          <ConnectorStrip
+                            key={c.name}
+                            connector={c}
+                            onConnect={handleConnect}
+                            busyConnector={activeId}
+                            currentStep={currentStep}
+                          />
+                        ))}
+                      </motion.div>
+                    ) : null}
+                  </AnimatePresence>
+
+                  {more.length > 0 ? (
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setExpanded((prev) => ({ ...prev, [bucket.id]: !prev[bucket.id] }))
+                      }
+                      disabled={busy}
+                      className="inline-flex items-center gap-1.5 text-caption text-[#4e4e4e] hover:text-black transition-colors px-2 py-1 disabled:opacity-40"
+                      data-testid={`bucket-${bucket.id}-more`}
+                      aria-expanded={isExpanded}
+                    >
+                      <ChevronDown
+                        size={12}
+                        strokeWidth={1.75}
+                        className={`transition-transform ${isExpanded ? "rotate-180" : ""}`}
+                      />
+                      {isExpanded ? "Hide options" : `More options (${more.length})`}
+                    </button>
+                  ) : null}
+                </div>
+              </section>
+            );
+          })}
+        </div>
       </div>
     </div>
+  );
+}
+
+function ConnectorStrip({
+  connector,
+  onConnect,
+  busyConnector,
+  currentStep,
+}: {
+  connector: Connector;
+  onConnect: (c: Connector) => void;
+  busyConnector: string | null;
+  currentStep: string;
+}) {
+  const isThisBusy = busyConnector === connector.name;
+  const otherBusy = busyConnector !== null && !isThisBusy;
+  const Icon = connector.icon;
+
+  return (
+    <button
+      type="button"
+      onClick={() => onConnect(connector)}
+      disabled={busyConnector !== null}
+      className={`w-full flex items-center gap-3 bg-white rounded-card px-4 py-3 shadow-[var(--shadow-inset-border)] transition-all text-left group ${
+        otherBusy ? "opacity-40 cursor-not-allowed" : "hover:shadow-[var(--shadow-outline-ring)]"
+      }`}
+      data-testid={`connector-${connector.category}-${connector.name.toLowerCase().replace(/\s+/g, "-")}`}
+    >
+      <div
+        className={`w-8 h-8 rounded-[6px] flex items-center justify-center shrink-0 ${connector.accent}`}
+      >
+        <Icon size={16} strokeWidth={1.75} />
+      </div>
+      <span className="text-body-medium text-black flex-1 truncate">{connector.name}</span>
+      {isThisBusy ? (
+        <span
+          className="inline-flex items-center gap-1.5 text-[11px] uppercase tracking-[0.08em] px-3 py-1.5 bg-[#1d4ed8] text-white rounded-pill min-w-[140px] justify-center"
+          data-testid="connector-spinner"
+        >
+          <Loader2 size={12} strokeWidth={2} className="animate-spin" />
+          <span className="truncate">{currentStep}</span>
+        </span>
+      ) : (
+        <span className="text-[11px] uppercase tracking-[0.08em] px-3 py-1.5 bg-black text-white rounded-pill group-hover:bg-[#1a1a1a] transition-colors">
+          {connector.label}
+        </span>
+      )}
+    </button>
   );
 }

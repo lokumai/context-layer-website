@@ -15,8 +15,8 @@ import {
   listJobs,
   listSources,
 } from "@context-layer/mocks";
-import type { HydrationPayload } from "@/stores/types";
 import type { PersonaId } from "@/lib/personas";
+import type { HydrationPayload } from "@/stores/types";
 
 // The single branch-point where persona-specific state is projected from the
 // Phase 3 mock loaders. Downstream phases swap these loader calls for real
@@ -105,7 +105,8 @@ export async function bootstrapPayload(persona: PersonaId): Promise<HydrationPay
         intelligenceRefreshedAt: new Date().toISOString(),
       },
     ],
-    sources,
+    // Full persona arrives with the Wiki already generated, so every source is in lock-step.
+    sources: sources.map((s) => ({ ...s, knowledgeSync: "synced" as const })),
     wiki: { tree: wikiTrees, narrative, sagaFlows, llms },
     intelligence: { health, security, coverage, dependencies, knowledgeGraph },
     artifacts,
