@@ -1,10 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-async function signIn(
-  page: import("@playwright/test").Page,
-  persona: string,
-  password: string,
-) {
+async function signIn(page: import("@playwright/test").Page, persona: string, password: string) {
   await page.goto("/login");
   await page.getByLabel(/persona/i).fill(persona);
   await page.getByLabel(/password/i).fill(password);
@@ -46,9 +42,9 @@ test.describe("OmniBoard", () => {
     await expect(generate).toBeEnabled({ timeout: 30_000 });
     await generate.click();
 
-    // Progress, then Done.
+    // Progress, then Exploration (Phase 17 replaced the old "Done" celebration card).
     await expect(page.getByTestId("omniboard-generation-progress")).toBeVisible();
-    await expect(page.getByTestId("omniboard-done")).toBeVisible({ timeout: 30_000 });
+    await expect(page.getByTestId("omniboard-exploration")).toBeVisible({ timeout: 30_000 });
 
     const after = await page.evaluate(() => {
       const raw = localStorage.getItem("context-layer:full");

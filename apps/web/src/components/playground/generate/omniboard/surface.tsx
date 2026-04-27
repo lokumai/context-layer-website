@@ -1,22 +1,24 @@
 "use client";
 
 import type { Artifact, ArtifactFormat } from "@context-layer/mocks";
-import { BookOpen, Check, ChevronLeft } from "lucide-react";
+import { BookOpen } from "lucide-react";
 import Link from "next/link";
 import { useCallback, useState } from "react";
 import { useStore } from "@/stores";
+import { OmniBoardExploration } from "./exploration";
 import { OmniBoardGenerationProgress } from "./generation-progress";
 import { type ModalityPick, OmniBoardLanding } from "./landing";
 import { OmniBoardSession } from "./session";
 
 // Per UI_UX §7.2, OmniBoard is a specialized chatbot environment:
-// Landing → modality picked → Session (chat + plan) → Generate → Progress → Success.
+// Landing → modality picked → Session (chat + plan) → Generate → Progress
+// → **Exploration** (NotebookLM-style — Phase 17 replaced the old Done card).
 
 type SessionPhase =
   | { kind: "landing" }
   | { kind: "session"; pick: ModalityPick }
   | { kind: "generating"; pick: ModalityPick; goal: string }
-  | { kind: "done"; pick: ModalityPick; artifact: Artifact };
+  | { kind: "exploring"; pick: ModalityPick; artifact: Artifact };
 
 export function OmniBoardSurface({ workspaceId }: { workspaceId: string }) {
   const workspace = useStore((s) => s.workspaces.find((w) => w.id === workspaceId));
@@ -53,7 +55,7 @@ export function OmniBoardSurface({ workspaceId }: { workspaceId: string }) {
         tool: "omniboard",
       };
       addArtifact(artifact);
-      setPhase({ kind: "done", pick, artifact });
+      setPhase({ kind: "exploring", pick, artifact });
     },
     [addArtifact],
   );
@@ -81,12 +83,12 @@ export function OmniBoardSurface({ workspaceId }: { workspaceId: string }) {
         />
       ) : null}
 
-      {phase.kind === "done" ? (
-        <DoneSurface
+      {phase.kind === "exploring" ? (
+        <OmniBoardExploration
           workspaceId={workspaceId}
           pick={phase.pick}
           artifact={phase.artifact}
-          onNew={() => setPhase({ kind: "landing" })}
+          onPlanAnother={() => setPhase({ kind: "landing" })}
         />
       ) : null}
     </div>
@@ -111,44 +113,6 @@ function NeedsWikiEmpty({ workspaceId }: { workspaceId: string }) {
       >
         Go to Wiki Configure
       </Link>
-    </div>
-  );
-}
-
-function DoneSurface({
-  workspaceId,
-  pick,
-  artifact,
-  onNew,
-}: {
-  workspaceId: string;
-  pick: ModalityPick;
-  artifact: Artifact;
-  onNew: () => void;
-}) {
-  return (
-    <div className="max-w-2xl mx-auto py-20 text-center" data-testid="omniboard-done">
-      <div className="mx-auto w-[64px] h-[64px] rounded-[18px] bg-[#f0fdf4] text-[#15803d] flex items-center justify-center mb-6">
-        <Check size={32} strokeWidth={1.5} />
-      </div>
-      <h1 className="text-section-heading text-black mb-3">Your {pick.modality} is ready</h1>
-      <p className="text-body text-[#4e4e4e] mb-8">"{artifact.title}" saved to the Library.</p>
-      <div className="flex items-center justify-center gap-3">
-        <Link
-          href={`/workspace/${workspaceId}/library`}
-          className="inline-flex items-center gap-2 bg-black text-white rounded-pill px-5 py-2 text-button hover:bg-[#1a1a1a] transition-colors"
-        >
-          Open Library
-        </Link>
-        <button
-          type="button"
-          onClick={onNew}
-          className="inline-flex items-center gap-2 rounded-pill px-4 py-2 text-button text-[#4e4e4e] hover:text-black hover:bg-[#f5f2ef] transition-colors"
-        >
-          <ChevronLeft size={14} strokeWidth={1.5} />
-          Plan another
-        </button>
-      </div>
     </div>
   );
 }

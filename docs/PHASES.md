@@ -238,12 +238,15 @@ Production build: all 4 marketing routes statically prerendered; middleware 92 k
   * **Tests** — Vitest 118/118 (+13 new: 7 `kg-filter` tests covering empty/casing/substring/edge-narrowing/no-results, 6 `diff-renderer` tests covering determinism, repo-paths, `+`/`-` proportion, 50-line cap, and empty-repoIds fallback). Playwright 47/47 (+3 new `phase16.spec.ts`: row expand-with-diff, KG search filters node count + no-results, partial wizard steps 3-5 interactive + step-3 link routes to `/wiki/configure`). Build clean. Biome clean on every Phase 16 file.
 
 ## Phase 17: OmniBoard "NotebookLM" Exploration
-* **Status:** `[ ] Pending`
-* **Goal:** Fulfill the promise of a multimodal exploration environment.
-* **Execution Details:**
-  * Modify the OmniBoard generation flow so it doesn't dead-end at a "Done" screen.
-  * After artifact generation, automatically transition into an exploration session.
-  * Allow the user to view the artifact (Slides/Video/Audio placeholder) while chatting with the specialized OmniBoard chatbot to ask questions about it or request revisions.
+* **Status:** `[x] Complete`
+* **Delivered (2026-04-24):**
+  * **OmniBoard's `done` phase replaced by `exploring`** — `omniboard/surface.tsx`'s `SessionPhase` discriminator renamed; `finishGeneration()` now lands the user in the new split-view `<OmniBoardExploration>` instead of the old centred `DoneSurface` (deleted).
+  * **Multimodal preview extraction** — Phase 14's inline `SlidesStub` / `AudioStub` / `VideoStub` lifted out of `library/artifact-preview.tsx` into a shared `components/playground/artifacts/multimodal-preview.tsx` with a top-level `<MultimodalPreviewBody>` switcher. The Library's preview modal + the new OmniBoard exploration view both consume it; existing `preview-slides-stub` / `-audio-stub` / `-video-stub` testids preserved.
+  * **NotebookLM-style exploration view** (`omniboard/exploration.tsx`):
+    * Header: tool badge, modality / option, `Saved to Library` indexed pill, *Plan another* + *Open in Library* CTAs.
+    * Left (60%): `<MultimodalPreviewBody>` rendering the stub for the artifact's format + the Notes markdown panel.
+    * Right (40%): per-visit exploration chat reusing Phase 9 `MessageList` / `ChatInput` / `CitationProvider` / `matchAnswer` / `streamAnswer`. Seeded with a contextual greeting; surfaces 4 modality-tailored suggested prompts on first render; *Request revision* synthesises a stub reply note.
+  * **Tests** — Vitest 118/118 unchanged (the view is presentational). Playwright 51/51: `omniboard.spec.ts` surgically updated (`omniboard-done` → `omniboard-exploration`); 4 new `phase17.spec.ts` cases (post-generation lands in exploration not Done, slides stub renders in viewer, suggested-prompt click streams an assistant reply, *Plan another* returns to landing). Build clean. Biome clean across every Phase 17 file.
 
 ## Phase 18: MCP Server Web Transport & Polish
 * **Status:** `[ ] Pending`
