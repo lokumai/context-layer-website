@@ -1,10 +1,10 @@
 "use client";
 
-import { MoreHorizontal, Pencil, RefreshCw, Trash2, Zap } from "lucide-react";
 import type { Source } from "@context-layer/mocks";
+import { MoreHorizontal, Pencil, RefreshCw, Trash2, Zap } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { useStore } from "@/stores";
 import { simulateJob } from "@/lib/simulate-latency";
+import { useStore } from "@/stores";
 
 const REINDEX_STEPS = [
   "Re-contacting provider",
@@ -105,11 +105,7 @@ export function SourceActionsMenu({ source }: { source: Source }) {
             {source.autoSync ? "Disable auto-sync" : "Enable auto-sync"}
           </MenuBtn>
           <div className="border-t border-[rgba(0,0,0,0.05)]" />
-          <MenuBtn
-            onClick={doDelete}
-            icon={<Trash2 size={14} strokeWidth={1.5} />}
-            destructive
-          >
+          <MenuBtn onClick={doDelete} icon={<Trash2 size={14} strokeWidth={1.5} />} destructive>
             Delete
           </MenuBtn>
         </div>

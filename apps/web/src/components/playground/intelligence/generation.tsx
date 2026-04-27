@@ -9,10 +9,10 @@ import {
   Sparkles,
 } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { IntelligencePayload } from "@/stores/types";
-import { useStore } from "@/stores";
 import { StatusPill } from "@/components/marketing/status-pill";
 import { simulateJob } from "@/lib/simulate-latency";
+import { useStore } from "@/stores";
+import type { IntelligencePayload } from "@/stores/types";
 
 const STEPS = [
   "Scanning Health",
@@ -91,15 +91,18 @@ export function GenerateIntelligenceSurface({ workspaceId }: { workspaceId: stri
 
 function GenerateIntelligenceCard({ onStart }: { onStart: () => void }) {
   return (
-    <section className="bg-white rounded-section shadow-[var(--shadow-outline-ring)] px-10 py-16 text-center space-y-6 max-w-[760px] mx-auto" data-testid="generate-intelligence-card">
+    <section
+      className="bg-white rounded-section shadow-[var(--shadow-outline-ring)] px-10 py-16 text-center space-y-6 max-w-[760px] mx-auto"
+      data-testid="generate-intelligence-card"
+    >
       <div className="mx-auto w-14 h-14 rounded-comfortable bg-[#eff6ff] text-[#1d4ed8] flex items-center justify-center">
         <Sparkles size={28} strokeWidth={1.5} />
       </div>
       <div className="space-y-3">
         <h2 className="text-section-heading text-black">Intelligence isn't generated yet.</h2>
         <p className="text-body text-[#4e4e4e] max-w-[520px] mx-auto">
-          Intelligence scans your codebase for health, security, coverage, and dependencies. This
-          is a long-running job — it can take a while the first time. Subsequent refreshes chain
+          Intelligence scans your codebase for health, security, coverage, and dependencies. This is
+          a long-running job — it can take a while the first time. Subsequent refreshes chain
           automatically after every Wiki sync.
         </p>
       </div>
@@ -179,7 +182,8 @@ function GenerationInProgress({
           <p className="text-button-upper text-[#1d4ed8]">Generation in progress</p>
           <h2 className="text-card-heading text-black">Generating Intelligence…</h2>
           <p className="text-caption text-[#4e4e4e]">
-            {Math.min(currentStep + 1, STEPS.length)} / {STEPS.length} steps running · background job
+            {Math.min(currentStep + 1, STEPS.length)} / {STEPS.length} steps running · background
+            job
           </p>
         </div>
         <button
@@ -202,8 +206,7 @@ function GenerationInProgress({
 
       <ol className="space-y-2">
         {STEPS.map((step, i) => {
-          const state =
-            i < currentStep ? "done" : i === currentStep ? "active" : "pending";
+          const state = i < currentStep ? "done" : i === currentStep ? "active" : "pending";
           const isOpen = expanded[i] ?? state === "active";
           const logs = stepLogs[i] ?? [];
           return (
@@ -219,23 +222,11 @@ function GenerationInProgress({
               >
                 <span className="shrink-0">
                   {state === "done" ? (
-                    <CheckCircle2
-                      size={16}
-                      strokeWidth={1.5}
-                      className="text-[#047857]"
-                    />
+                    <CheckCircle2 size={16} strokeWidth={1.5} className="text-[#047857]" />
                   ) : state === "active" ? (
-                    <Loader2
-                      size={16}
-                      strokeWidth={1.5}
-                      className="text-[#1d4ed8] animate-spin"
-                    />
+                    <Loader2 size={16} strokeWidth={1.5} className="text-[#1d4ed8] animate-spin" />
                   ) : (
-                    <CircleDashed
-                      size={16}
-                      strokeWidth={1.5}
-                      className="text-[#9ca3af]"
-                    />
+                    <CircleDashed size={16} strokeWidth={1.5} className="text-[#9ca3af]" />
                   )}
                 </span>
                 <span className="flex-1 text-body-medium text-black">{step}</span>

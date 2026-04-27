@@ -25,7 +25,8 @@ test.describe("intelligence per-persona", () => {
     await page.waitForURL(/\/intelligence\/overview/, { timeout: 60_000 });
 
     await expect(page.getByTestId("intelligence-sidebar")).toBeVisible();
-    await expect(page.getByTestId("intelligence-config-header")).toBeVisible();
+    // Phase 13: the standalone config-header strip was removed; refresh + freshness pill now sit in the dashboard's heading row.
+    await expect(page.getByTestId("intelligence-freshness-controls")).toBeVisible();
     await expect(page.getByRole("heading", { name: /intelligence at a glance/i })).toBeVisible();
   });
 

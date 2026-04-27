@@ -1,6 +1,6 @@
 "use client";
 
-import { BookOpen, FileText, Gauge, Lock, Settings, ScrollText } from "lucide-react";
+import { BookOpen, FileText, Gauge, Lock, ScrollText, Settings } from "lucide-react";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 import { useStore } from "@/stores";
@@ -53,13 +53,11 @@ const TABS: TabDef[] = [
 export function WikiSidebar({ workspaceId }: { workspaceId: string }) {
   const pathname = usePathname() ?? "";
   const base = `/workspace/${workspaceId}/wiki`;
-  const hasWiki = useStore(
-    (s) => s.workspaces.find((w) => w.id === workspaceId)?.hasWiki ?? false,
-  );
+  const hasWiki = useStore((s) => s.workspaces.find((w) => w.id === workspaceId)?.hasWiki ?? false);
 
   return (
     <aside
-      className="hidden lg:flex lg:w-[260px] shrink-0 flex-col border-r border-[rgba(0,0,0,0.05)] bg-white"
+      className="hidden lg:flex lg:w-[260px] shrink-0 flex-col border-r border-[rgba(0,0,0,0.04)] bg-white/80 backdrop-blur-[12px] shadow-[var(--shadow-inset-border)]"
       data-testid="wiki-sidebar"
     >
       <div className="px-5 py-5 border-b border-[rgba(0,0,0,0.05)]">
@@ -129,9 +127,7 @@ function SidebarItem({
           <span className="text-body-medium leading-tight">{label}</span>
           {locked ? <Lock size={12} strokeWidth={1.5} /> : null}
         </span>
-        <span className="block text-caption text-[#777169] leading-snug mt-0.5">
-          {description}
-        </span>
+        <span className="block text-caption text-[#777169] leading-snug mt-0.5">{description}</span>
       </span>
     </>
   );
@@ -149,11 +145,7 @@ function SidebarItem({
     );
   }
   return (
-    <a
-      href={href}
-      className={`${base} ${tone}`}
-      data-testid={`wiki-tab-${label.toLowerCase()}`}
-    >
+    <a href={href} className={`${base} ${tone}`} data-testid={`wiki-tab-${label.toLowerCase()}`}>
       {content}
     </a>
   );

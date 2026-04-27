@@ -3,14 +3,12 @@
 import { X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { type FormEvent, useEffect, useState } from "react";
-import { useStore } from "@/stores";
 import { simulateJob } from "@/lib/simulate-latency";
+import { useStore } from "@/stores";
 
-const STEPS = [
-  "Allocating workspace",
-  "Wiring providers",
-  "Ready",
-] as const;
+const STEPS = ["Allocating workspace", "Wiring providers", "Ready"] as const;
+
+const DESCRIPTION_MAX = 280;
 
 export function CreateWorkspaceModal() {
   const open = useStore((s) => s.createWorkspaceModalOpen);
@@ -18,12 +16,14 @@ export function CreateWorkspaceModal() {
   const createWorkspace = useStore((s) => s.createWorkspace);
   const router = useRouter();
   const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
   const [busy, setBusy] = useState(false);
   const [progress, setProgress] = useState<string | null>(null);
 
   useEffect(() => {
     if (!open) {
       setName("");
+      setDescription("");
       setBusy(false);
       setProgress(null);
     }
@@ -46,10 +46,11 @@ export function CreateWorkspaceModal() {
     if (!trimmed || busy) return;
     setBusy(true);
 
-    const iter = simulateJob([...STEPS], () => createWorkspace(trimmed), {
-      totalMs: 1200,
-      minStepMs: 250,
-    });
+    const iter = simulateJob(
+      [...STEPS],
+      () => createWorkspace(trimmed, description.trim() || undefined),
+      { totalMs: 1200, minStepMs: 250 },
+    );
     let newId = "";
     while (true) {
       const next = await iter.next();
@@ -98,8 +99,31 @@ export function CreateWorkspaceModal() {
               onChange={(e) => setName(e.target.value)}
               className="w-full text-body-standard text-black bg-white rounded-card px-4 py-3 shadow-[var(--shadow-inset-border)] placeholder:text-[#aaa] focus:outline-none focus:shadow-[var(--shadow-outline-ring)] transition-shadow"
             />
+          </div>
+
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <label htmlFor="workspace-description" className="text-caption text-[#4e4e4e]">
+                Description <span className="text-[#9ca3af]">(optional)</span>
+              </label>
+              <span className="text-caption text-[#9ca3af]">
+                {description.length}/{DESCRIPTION_MAX}
+              </span>
+            </div>
+            <textarea
+              id="workspace-description"
+              name="description"
+              rows={3}
+              disabled={busy}
+              maxLength={DESCRIPTION_MAX}
+              placeholder="What's indexed here? Who's it for?"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="w-full text-body-standard text-black bg-white rounded-card px-4 py-3 shadow-[var(--shadow-inset-border)] placeholder:text-[#aaa] focus:outline-none focus:shadow-[var(--shadow-outline-ring)] transition-shadow resize-none"
+              data-testid="workspace-description-input"
+            />
             <p className="text-caption text-[#777169]">
-              Sources are added after the workspace is created.
+              Shown on the workspace card. Sources are added after the workspace is created.
             </p>
           </div>
 

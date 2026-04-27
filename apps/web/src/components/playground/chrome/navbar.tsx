@@ -19,7 +19,7 @@ export function PlaygroundNavbar() {
 
   return (
     <header
-      className="fixed top-0 left-0 right-0 z-40 h-16 bg-white/90 backdrop-blur-md border-b border-[rgba(0,0,0,0.05)]"
+      className="fixed top-0 left-0 right-0 z-40 h-16 bg-white/80 backdrop-blur-[12px] shadow-[var(--shadow-inset-border)] border-b border-[rgba(0,0,0,0.04)]"
       data-testid="playground-navbar"
     >
       <nav className="w-full px-6 lg:px-8 h-full flex items-center justify-between gap-4">

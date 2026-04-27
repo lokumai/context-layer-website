@@ -1,10 +1,10 @@
 "use client";
 
+import type { Source, SourceCategory, SourceKind } from "@context-layer/mocks";
+import { FileText, GitBranch, MessageSquare, X } from "lucide-react";
 import { useEffect, useState } from "react";
-import { X, GitBranch, FileText, MessageSquare } from "lucide-react";
-import { useStore } from "@/stores";
 import { simulateJob } from "@/lib/simulate-latency";
-import type { Source, SourceKind, SourceCategory } from "@context-layer/mocks";
+import { useStore } from "@/stores";
 
 const ROWS = [
   {
@@ -69,7 +69,7 @@ export function AddSourceChooser() {
 
   const handleConnect = async (
     kind: SourceKind,
-    integration: { name: string; category: SourceCategory; label: string }
+    integration: { name: string; category: SourceCategory; label: string },
   ) => {
     if (busy) return;
     setBusy(true);
@@ -94,8 +94,7 @@ export function AddSourceChooser() {
           url: `https://${slug}.example/new`,
           path: "new",
           status: "indexed",
-          autoSync:
-            integration.category !== "upload" && integration.category !== "url",
+          autoSync: integration.category !== "upload" && integration.category !== "url",
           lastIndexed: new Date().toISOString(),
           lineCount: 0,
           tokenCount: 0,
@@ -166,9 +165,7 @@ export function AddSourceChooser() {
         {busy && (
           <div className="mt-8 bg-[#eff6ff] text-[#1d4ed8] rounded-card px-3 py-2 flex items-center gap-2">
             <div className="w-1.5 h-1.5 rounded-full bg-current animate-pulse" />
-            <p className="text-caption font-medium">
-              {currentStep}...
-            </p>
+            <p className="text-caption font-medium">{currentStep}...</p>
           </div>
         )}
       </div>

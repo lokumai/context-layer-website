@@ -1,8 +1,9 @@
 "use client";
 
-import { Calendar, FileCode, Clock, ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Calendar, Clock, FileCode } from "lucide-react";
+import { motion } from "motion/react";
 import { type MouseEvent, useRef } from "react";
-import { StatusPill } from "@/components/marketing/status-pill";
+import { CONTEXT_SPRING, staggerDelay } from "@/lib/motion/spring";
 import type { RuntimeWorkspace } from "@/stores/types";
 
 function formatRelative(iso: string): string {
@@ -15,7 +16,13 @@ function formatRelative(iso: string): string {
   return `${Math.round(days / 30)}mo ago`;
 }
 
-export function WorkspaceCard({ workspace }: { workspace: RuntimeWorkspace }) {
+export function WorkspaceCard({
+  workspace,
+  index = 0,
+}: {
+  workspace: RuntimeWorkspace;
+  index?: number;
+}) {
   const ref = useRef<HTMLAnchorElement | null>(null);
   function onMove(e: MouseEvent<HTMLAnchorElement>) {
     const el = ref.current;
@@ -25,12 +32,22 @@ export function WorkspaceCard({ workspace }: { workspace: RuntimeWorkspace }) {
     el.style.setProperty("--y", `${e.clientY - rect.top}px`);
   }
 
+  // Description is mock-populated for the `full` persona; user-created
+  // workspaces start with an empty string until the create modal collects
+  // one. When empty we render a subtle placeholder so the card height stays
+  // consistent across the grid.
+  const description = workspace.description?.trim();
+
   return (
-    <a
+    <motion.a
       ref={ref}
       href={`/workspace/${workspace.id}/sources`}
       onMouseMove={onMove}
-      className="group relative flex flex-col gap-5 rounded-large bg-white p-6 shadow-[var(--shadow-outline-ring)] hover:shadow-[var(--shadow-card)] transition-shadow overflow-hidden"
+      initial={{ opacity: 0, y: 8, scale: 0.98 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ ...CONTEXT_SPRING, delay: staggerDelay(index) }}
+      whileHover={{ y: -2 }}
+      className="group relative flex flex-col gap-4 rounded-large bg-white p-6 shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-outline-ring)] transition-shadow overflow-hidden"
       data-testid="workspace-card"
       style={{ "--x": "50%", "--y": "50%" } as React.CSSProperties}
     >
@@ -44,30 +61,44 @@ export function WorkspaceCard({ workspace }: { workspace: RuntimeWorkspace }) {
       />
 
       <div className="relative flex items-start justify-between gap-3">
-        <div className="space-y-2 min-w-0">
-          <p className="text-button-upper text-[#777169]">Workspace</p>
-          <h3 className="text-card-heading text-black truncate">{workspace.name}</h3>
-        </div>
-        <ArrowUpRight size={18} strokeWidth={1.5} className="text-[#9ca3af] group-hover:text-black shrink-0 transition-colors" />
+        <h3
+          className="text-card-heading text-black line-clamp-2 break-words flex-1"
+          data-testid="workspace-card-name"
+        >
+          {workspace.name}
+        </h3>
+        <ArrowUpRight
+          size={18}
+          strokeWidth={1.5}
+          className="text-[#9ca3af] group-hover:text-black shrink-0 transition-colors mt-1"
+        />
       </div>
 
-      <dl className="relative grid grid-cols-3 gap-3 text-caption">
-        <Fact icon={<FileCode size={14} strokeWidth={1.5} />} label="Sources" value={`${workspace.sourceCount}`} />
-        <Fact icon={<Clock size={14} strokeWidth={1.5} />} label="Last activity" value={formatRelative(workspace.lastActivity)} />
-        <Fact icon={<Calendar size={14} strokeWidth={1.5} />} label="Created" value={formatRelative(workspace.createdAt)} />
+      <p
+        className="relative text-body text-[#4e4e4e] line-clamp-2 min-h-[2.6em]"
+        data-testid="workspace-card-description"
+      >
+        {description || <span className="text-[#9ca3af] italic">No description</span>}
+      </p>
+
+      <dl className="relative grid grid-cols-3 gap-3 pt-3 border-t border-[rgba(0,0,0,0.05)]">
+        <Fact
+          icon={<FileCode size={14} strokeWidth={1.5} />}
+          label="Sources"
+          value={`${workspace.sourceCount}`}
+        />
+        <Fact
+          icon={<Clock size={14} strokeWidth={1.5} />}
+          label="Last activity"
+          value={formatRelative(workspace.lastActivity)}
+        />
+        <Fact
+          icon={<Calendar size={14} strokeWidth={1.5} />}
+          label="Created"
+          value={formatRelative(workspace.createdAt)}
+        />
       </dl>
-
-      <div className="relative flex flex-wrap items-center gap-2 pt-3 border-t border-[rgba(0,0,0,0.05)]">
-        {workspace.hasWiki ? (
-          <StatusPill tone="indexed" dot>Wiki Live</StatusPill>
-        ) : (
-          <StatusPill tone="warn" dot>Wiki Pending</StatusPill>
-        )}
-        <StatusPill tone={workspace.sourceCount > 0 ? "info" : "neutral"} dot>
-          {workspace.sourceCount} {workspace.sourceCount === 1 ? "source" : "sources"}
-        </StatusPill>
-      </div>
-    </a>
+    </motion.a>
   );
 }
 

@@ -1,18 +1,18 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { useStore } from "@/stores";
-import { FirstTimeWizard } from "@/components/playground/wizard/first-time-wizard";
 import { AddSourceChooser } from "@/components/playground/sources/add-source-chooser";
 import { SourceCard } from "@/components/playground/sources/source-card";
 import { SourcePreviewModal } from "@/components/playground/sources/source-preview-modal";
 import { SourceRow } from "@/components/playground/sources/source-row";
+import { SourcesEmptyState } from "@/components/playground/sources/sources-empty-state";
 import {
   type SourceFilter,
-  type SourceView,
   SourcesToolbar,
+  type SourceView,
 } from "@/components/playground/sources/sources-toolbar";
-import { SourcesEmptyState } from "@/components/playground/sources/sources-empty-state";
+import { FirstTimeWizard } from "@/components/playground/wizard/first-time-wizard";
+import { useStore } from "@/stores";
 
 export default function SourcesPage() {
   const sources = useStore((s) => s.sources);
@@ -37,10 +37,10 @@ export default function SourcesPage() {
   return (
     <div className="w-full px-6 lg:px-10 py-10">
       <header className="mb-8 space-y-3">
-        <p className="text-button-upper text-[#777169]">Workspace · Input Layer</p>
         <h1 className="text-display-hero text-black">Sources</h1>
         <p className="text-body text-[#4e4e4e] max-w-[640px]">
-          The single source of truth. Everything downstream — Wiki, Intelligence, Chatbot, Generate — derives from what's indexed here.
+          The single source of truth. Everything downstream — Wiki, Intelligence, Chatbot, Generate
+          — derives from what's indexed here.
         </p>
       </header>
 
@@ -58,7 +58,10 @@ export default function SourcesPage() {
       {isHydrated && sources.length === 0 ? (
         <SourcesEmptyState />
       ) : view === "grid" ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5" data-testid="sources-grid">
+        <div
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5"
+          data-testid="sources-grid"
+        >
           {filtered.map((s) => (
             <SourceCard key={s.id} source={s} />
           ))}

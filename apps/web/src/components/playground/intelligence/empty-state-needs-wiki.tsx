@@ -4,7 +4,10 @@ import { Gauge, Sparkles } from "lucide-react";
 
 export function IntelligenceNeedsWikiState({ workspaceId }: { workspaceId: string }) {
   return (
-    <div className="w-full max-w-2xl mx-auto mt-16 text-center bg-white rounded-section shadow-[var(--shadow-outline-ring)] p-10 space-y-6" data-testid="intelligence-needs-wiki">
+    <div
+      className="w-full max-w-2xl mx-auto mt-16 text-center bg-white rounded-section shadow-[var(--shadow-outline-ring)] p-10 space-y-6"
+      data-testid="intelligence-needs-wiki"
+    >
       <div className="mx-auto w-14 h-14 rounded-comfortable bg-[#ecfdf5] text-[#047857] flex items-center justify-center">
         <Gauge size={28} strokeWidth={1.5} />
       </div>

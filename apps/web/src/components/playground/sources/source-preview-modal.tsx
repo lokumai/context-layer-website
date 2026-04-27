@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
 import { X } from "lucide-react";
+import { useEffect } from "react";
 import { useStore } from "@/stores";
 import { SourceStatusBadge } from "./status-badge";
 
@@ -22,11 +22,7 @@ export function SourcePreviewModal() {
 
   return (
     <div className="fixed inset-0 z-50 flex justify-end bg-black/30">
-      <div
-        className="fixed inset-0"
-        onClick={() => setActiveId(null)}
-        aria-hidden="true"
-      />
+      <div className="fixed inset-0" onClick={() => setActiveId(null)} aria-hidden="true" />
       <div className="relative w-full max-w-[540px] h-full bg-white shadow-[var(--shadow-card)] flex flex-col overflow-hidden">
         <header className="sticky top-0 flex items-center justify-between p-6 border-b border-[rgba(0,0,0,0.05)] bg-white z-10">
           <div className="flex flex-col gap-1">
@@ -52,18 +48,14 @@ export function SourcePreviewModal() {
             <>
               <div className="bg-[#f9f9f9] rounded-card p-6 border border-[rgba(0,0,0,0.05)] text-center">
                 <p className="text-body text-[#777169]">
-                  Wiki preview lands with Phase 7 (Knowledge UI). For now this is
-                  a placeholder.
+                  Wiki preview lands with Phase 7 (Knowledge UI). For now this is a placeholder.
                 </p>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <FactCard label="Line Count" value={source.lineCount.toLocaleString()} />
                 <FactCard label="Token Count" value={source.tokenCount.toLocaleString()} />
-                <FactCard
-                  label="Primary Language"
-                  value={source.primaryLanguage}
-                />
+                <FactCard label="Primary Language" value={source.primaryLanguage} />
                 <FactCard label="Category" value={source.category} />
               </div>
             </>

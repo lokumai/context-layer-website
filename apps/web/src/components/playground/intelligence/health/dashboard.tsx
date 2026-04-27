@@ -4,21 +4,35 @@
 /** biome-ignore-all lint/suspicious/noArrayIndexKey: deterministic data arrays with no reorder risk — index is a stable enough key for this static render. */
 "use client";
 
-import { useStore } from "@/stores";
+import { ChevronDown, ChevronRight, Search, X } from "lucide-react";
+import { useMemo, useState } from "react";
 import { StatusPill } from "@/components/marketing/status-pill";
-import { ChevronRight, ChevronDown } from "lucide-react";
-import { useState } from "react";
+import { useStore } from "@/stores";
+import { IntelligenceFreshnessControls } from "../config-header";
 
-export function IntelligenceHealth({ workspaceId: _workspaceId }: { workspaceId: string }) {
+export function IntelligenceHealth({ workspaceId }: { workspaceId: string }) {
   const health = useStore((state) => state.health);
   const [filter, setFilter] = useState<string>("All");
+  const [query, setQuery] = useState("");
   const [expandedRepos, setExpandedRepos] = useState<Set<string>>(new Set());
+
+  const filteredRepos = useMemo(() => {
+    if (!health) return [];
+    const base =
+      filter === "All" ? health.perRepo : health.perRepo.filter((r) => r.repoId === filter);
+    const q = query.trim().toLowerCase();
+    if (!q) return base;
+    return base.filter((r) => {
+      if (r.repoId.toLowerCase().includes(q)) return true;
+      return r.fragileAreas.some((a) => a.toLowerCase().includes(q));
+    });
+  }, [health, filter, query]);
 
   if (!health) {
     return <div className="p-8 text-body text-[#777169]">Loading health metrics...</div>;
   }
 
-  const repoIds = ["All", ...health.perRepo.map(r => r.repoId)];
+  const repoIds = ["All", ...health.perRepo.map((r) => r.repoId)];
 
   const toggleExpand = (repoId: string) => {
     const next = new Set(expandedRepos);
@@ -26,10 +40,6 @@ export function IntelligenceHealth({ workspaceId: _workspaceId }: { workspaceId:
     else next.add(repoId);
     setExpandedRepos(next);
   };
-
-  const filteredRepos = filter === "All" 
-    ? health.perRepo 
-    : health.perRepo.filter(r => r.repoId === filter);
 
   const getStatusTone = (score: number) => {
     if (score > 80) return "indexed";
@@ -45,11 +55,41 @@ export function IntelligenceHealth({ workspaceId: _workspaceId }: { workspaceId:
 
   return (
     <div className="space-y-6">
-      <div>
-        <div className="text-micro uppercase tracking-widest text-[#777169] mb-1 font-semibold">
-          HEALTH
-        </div>
+      <div className="flex flex-wrap items-start justify-between gap-3">
         <h1 className="text-section-heading">Health & Fragility</h1>
+        <IntelligenceFreshnessControls workspaceId={workspaceId} />
+      </div>
+
+      {/* Search bar */}
+      <div className="max-w-md">
+        <div
+          className="relative flex items-center bg-white rounded-pill shadow-[var(--shadow-card)] focus-within:shadow-[var(--shadow-outline-ring)] transition-shadow"
+          data-testid="health-search-shell"
+        >
+          <Search
+            size={16}
+            strokeWidth={1.5}
+            className="absolute left-4 text-[#9ca3af] pointer-events-none"
+          />
+          <input
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Filter by repo or fragile area…"
+            className="w-full bg-transparent pl-11 pr-10 py-2.5 text-body text-black placeholder:text-[#9ca3af] outline-none rounded-pill"
+            data-testid="health-search-input"
+          />
+          {query ? (
+            <button
+              type="button"
+              onClick={() => setQuery("")}
+              aria-label="Clear search"
+              className="absolute right-3 p-1 rounded-full text-[#9ca3af] hover:text-black hover:bg-[#f5f2ef] transition-colors"
+            >
+              <X size={14} strokeWidth={1.5} />
+            </button>
+          ) : null}
+        </div>
       </div>
 
       {/* Overall score card */}
@@ -62,21 +102,20 @@ export function IntelligenceHealth({ workspaceId: _workspaceId }: { workspaceId:
           </StatusPill>
         </div>
         <div className="flex-1">
-          <p className="text-body text-[#4e4e4e] leading-relaxed">
-            {health.summary}
-          </p>
+          <p className="text-body text-[#4e4e4e] leading-relaxed">{health.summary}</p>
         </div>
       </div>
 
       {/* Filter pills */}
       <div className="flex flex-wrap gap-2">
-        {repoIds.map(id => (
-          <button type="button"
+        {repoIds.map((id) => (
+          <button
+            type="button"
             key={id}
             onClick={() => setFilter(id)}
             className={`px-4 py-2 rounded-pill text-button transition-colors ${
-              filter === id 
-                ? "bg-[#4e4e4e] text-white" 
+              filter === id
+                ? "bg-[#4e4e4e] text-white"
                 : "bg-white border border-[rgba(0,0,0,0.1)] text-[#777169] hover:bg-[#f5f5f5]"
             }`}
           >
@@ -87,12 +126,16 @@ export function IntelligenceHealth({ workspaceId: _workspaceId }: { workspaceId:
 
       {/* Per-repo list */}
       <div className="space-y-2">
-        {filteredRepos.map(repo => {
+        {filteredRepos.map((repo) => {
           const isExpanded = expandedRepos.has(repo.repoId);
           const tone = getStatusTone(repo.score);
           return (
-            <div key={repo.repoId} className="bg-white rounded-card shadow-[var(--shadow-inset-border)] overflow-hidden">
-              <button type="button" 
+            <div
+              key={repo.repoId}
+              className="bg-white rounded-card shadow-[var(--shadow-inset-border)] overflow-hidden"
+            >
+              <button
+                type="button"
                 onClick={() => toggleExpand(repo.repoId)}
                 className="w-full text-left p-4 flex items-center gap-4 hover:bg-[#f9f9f9] transition-colors"
               >
@@ -101,31 +144,41 @@ export function IntelligenceHealth({ workspaceId: _workspaceId }: { workspaceId:
                 </div>
                 <div className="flex-1">
                   <div className="flex justify-between items-center mb-2">
-                    <span className="text-body-medium font-bold text-black uppercase tracking-wider">{repo.repoId}</span>
+                    <span className="text-body-medium font-bold text-black uppercase tracking-wider">
+                      {repo.repoId}
+                    </span>
                     <span className="text-body-medium font-bold">{repo.score}</span>
                   </div>
                   <div className="h-2 w-full bg-[#f5f5f5] rounded-pill overflow-hidden">
-                    <div 
-                      className="h-full rounded-pill" 
-                      style={{ 
-                        width: `${repo.score}%`, 
-                        backgroundColor: tone === "indexed" ? "#10b981" : tone === "warn" ? "#f59e0b" : "#ef4444" 
+                    <div
+                      className="h-full rounded-pill"
+                      style={{
+                        width: `${repo.score}%`,
+                        backgroundColor:
+                          tone === "indexed" ? "#10b981" : tone === "warn" ? "#f59e0b" : "#ef4444",
                       }}
                     />
                   </div>
                 </div>
                 <div className="hidden md:flex flex-col items-end gap-1 ml-4 min-w-[140px]">
-                  <span className="text-caption text-[#4e4e4e]">{repo.architectureViolations} violations</span>
+                  <span className="text-caption text-[#4e4e4e]">
+                    {repo.architectureViolations} violations
+                  </span>
                   <span className="text-caption text-[#4e4e4e]">{repo.codeSmells} code smells</span>
                 </div>
               </button>
-              
+
               {isExpanded && (
                 <div className="px-14 pb-6 pt-2 bg-[#fdfdfd] border-t border-[rgba(0,0,0,0.03)]">
-                  <h4 className="text-micro font-bold text-[#777169] uppercase tracking-wider mb-3">Fragile Areas</h4>
+                  <h4 className="text-micro font-bold text-[#777169] uppercase tracking-wider mb-3">
+                    Fragile Areas
+                  </h4>
                   <ul className="space-y-2">
                     {repo.fragileAreas.map((area, i) => (
-                      <li key={i} className="flex items-start gap-2 text-body-standard text-[#4e4e4e]">
+                      <li
+                        key={i}
+                        className="flex items-start gap-2 text-body-standard text-[#4e4e4e]"
+                      >
                         <span className="mt-1.5 w-1 h-1 rounded-full bg-[var(--color-accent-amber-fg)] flex-shrink-0" />
                         {area}
                       </li>

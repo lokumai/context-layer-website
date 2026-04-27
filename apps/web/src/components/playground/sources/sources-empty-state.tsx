@@ -20,7 +20,8 @@ export function SourcesEmptyState() {
       <div className="space-y-3">
         <h2 className="text-section-heading text-black">Add your first source</h2>
         <p className="text-body text-[#4e4e4e] max-w-[520px] mx-auto">
-          Connect a code repo, your doc workspace, or a discussion tool. Everything you add becomes searchable and agent-ready.
+          Connect a code repo, your doc workspace, or a discussion tool. Everything you add becomes
+          searchable and agent-ready.
         </p>
       </div>
       <div className="flex flex-wrap justify-center gap-2">

@@ -191,13 +191,17 @@ Production build: all 4 marketing routes statically prerendered; middleware 92 k
   * README covers Claude Desktop / Cursor config JSON, programmatic usage, and per-tool reference — the publishable surface of the package.
 
 ## Phase 13: Kinetic Minimalism & Component Refinement
-* **Status:** `[ ] Pending`
-* **Goal:** Apply the "Restrained Kinetic" motion framework and fix basic layout issues.
-* **Execution Details:**
-  * Implement Framer Motion for Snappy Springs (stiffness 300, damping 30) across all page transitions and modal pop-ins.
-  * Implement the "Warp Effect" (layoutId) for workspace switching and navbar highlights.
-  * Add Glassmorphism ("Near-White Frost" with `backdrop-blur-[12px]`) to the Navbar and Sidebars.
-  * Fix Workspaces/Sources typography (wrapping, sizes) and add search/filter bars to Workspaces and Intelligence.
+* **Status:** `[x] Complete`
+* **Delivered (2026-04-24):**
+  * **Motion primitives** — new `apps/web/src/lib/motion/spring.ts` exports `CONTEXT_SPRING` (stiffness 300 / damping 30 / mass 1), `MICRO_SPRING`, `LAYOUT_SPRING`, and `staggerDelay()`. Applied across WorkspaceCard + SourceCard ingress (initial + animate + whileHover lift) and to the layoutId Warp Effect.
+  * **Warp Effect on the navbar** — `<NavDestinations>` now wraps its items in a `LayoutGroup`. The active background highlight is rendered as a `<motion.span layoutId="nav-active-bg">` so it slides between Sources / Knowledge / Chatbot / Generate / Library as the user navigates. Locked entries + `data-testid`s preserved.
+  * **Glassmorphism (Near-White Frost)** — Navbar + Wiki sidebar + Library sidebar + Intelligence sidebar all bumped to `bg-white/80 backdrop-blur-[12px] shadow-[var(--shadow-inset-border)]` per AI Report §4.1.
+  * **Workspaces page** — removed the "Gateway" pretitle; added a `workspaces-search-input` (filters by name + description, case-insensitive) above the grid; rebuilt `<WorkspaceCard>` to drop the "WORKSPACE" pretitle and the Wiki Live / source-count badges; new line-clamped `<workspace-card-name>` + `<workspace-card-description>` block; promoted Sources / Last Activity / Created into the footer; staggered Context Spring entrance across cards.
+  * **CreateWorkspaceModal** — added an optional 280-char Description textarea; `createWorkspace(name, description?)` extended through the slice + types; defaults to empty string for backwards-compat.
+  * **Sources page** — removed the "Workspace · Input Layer" subtitle; bumped pill + view-toggle backgrounds to `bg-white shadow-[var(--shadow-card)]` for proper contrast; SourceCard now `line-clamp-2` on names, status badge sits between the name/url block and the divider, "Last synced" → **"Last Sync with Knowledge"**, card uses Context Spring ingress + hover lift.
+  * **Intelligence header rework** — removed the standalone `intelligence-config-header` strip from `page-shell.tsx`; refactored config-header into `<IntelligenceFreshnessControls>` (data-testid `intelligence-freshness-controls`); each of the 5 dashboards (Overview / Health / Security / Coverage / Dependencies) now renders its own heading row with the controls on the right; removed every "INTELLIGENCE · X" pretitle.
+  * **Search bars** — Health filters per-repo rows by `repoId` + `fragileAreas[]`; Security filters findings by `title` + `description` + `category` (additive on top of severity / repo filters).
+  * **Tests** — Vitest 97/97 (+6 new `workspace-search.test.ts` covering substring + AND combinations + undefined description); Playwright 37/37 (+6 new `phase13.spec.ts`: search filter, no WORKSPACE pretitle, no "Workspace · Input Layer" subtitle, "Last Sync with Knowledge" label, Health search input, no "Gateway" pretitle); existing `intelligence.spec.ts` migrated from `intelligence-config-header` testid to `intelligence-freshness-controls`. Production build clean. Biome clean on every Phase 13 file.
 
 ## Phase 14: Sources Manager & Modal Upgrades
 * **Status:** `[ ] Pending`

@@ -53,10 +53,7 @@ export function WorkspacePill({ workspace, allWorkspaces }: Props) {
             </a>
           ))}
           <div className="border-t border-[rgba(0,0,0,0.05)]" />
-          <a
-            href="/workspaces"
-            className="block px-3 py-2 text-[#4e4e4e] hover:bg-[#f9f9f9]"
-          >
+          <a href="/workspaces" className="block px-3 py-2 text-[#4e4e4e] hover:bg-[#f9f9f9]">
             All workspaces →
           </a>
         </div>

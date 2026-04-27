@@ -2,9 +2,9 @@
 
 import { RefreshCw } from "lucide-react";
 import { useState } from "react";
-import { useStore } from "@/stores";
 import { StatusPill, type StatusTone } from "@/components/marketing/status-pill";
 import { simulateJob } from "@/lib/simulate-latency";
+import { useStore } from "@/stores";
 
 const REFRESH_STEPS = [
   "Recomputing health",
@@ -30,7 +30,12 @@ function relativeTime(iso: string | null): string {
   return `${Math.round(delta / 86_400_000)}d ago`;
 }
 
-export function IntelligenceConfigHeader({ workspaceId }: { workspaceId: string }) {
+/**
+ * Compact freshness indicator + Refresh-Now button. Per Phase 13, this
+ * lives inside each dashboard's heading row instead of a standalone strip
+ * (no more `intelligence-config-header` row at the page top).
+ */
+export function IntelligenceFreshnessControls({ workspaceId }: { workspaceId: string }) {
   const workspace = useStore((s) => s.workspaces.find((w) => w.id === workspaceId));
   const setHasIntelligence = useStore((s) => s.setHasIntelligence);
   const [refreshing, setRefreshing] = useState(false);
@@ -61,31 +66,27 @@ export function IntelligenceConfigHeader({ workspaceId }: { workspaceId: string 
     : freshnessFromAge(workspace.intelligenceRefreshedAt);
 
   return (
-    <div
-      className="flex flex-wrap items-center justify-between gap-3 bg-white rounded-card px-5 py-3 shadow-[var(--shadow-inset-border)]"
-      data-testid="intelligence-config-header"
-    >
-      <div className="flex items-center gap-3">
+    <div className="flex items-center gap-3" data-testid="intelligence-freshness-controls">
+      <div className="hidden sm:flex items-center gap-2">
         <StatusPill tone={fresh.tone} dot>
           {fresh.label}
         </StatusPill>
-        <span className="text-caption text-[#4e4e4e]">
-          {refreshing ? currentStep : `Last refreshed ${relativeTime(workspace.intelligenceRefreshedAt)}`}
+        <span className="text-caption text-[#777169] truncate max-w-[200px]">
+          {refreshing ? currentStep : `Updated ${relativeTime(workspace.intelligenceRefreshedAt)}`}
         </span>
       </div>
       <button
         type="button"
         onClick={handleRefresh}
         disabled={refreshing}
-        className="inline-flex items-center gap-2 bg-white text-black rounded-pill px-4 py-1.5 shadow-[var(--shadow-inset-border)] hover:shadow-[var(--shadow-outline-ring)] disabled:opacity-40 disabled:cursor-not-allowed text-button"
+        className="inline-flex items-center gap-2 bg-white text-black rounded-pill px-4 py-1.5 shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-outline-ring)] disabled:opacity-40 disabled:cursor-not-allowed text-button transition-shadow"
       >
-        <RefreshCw
-          size={14}
-          strokeWidth={1.5}
-          className={refreshing ? "animate-spin" : ""}
-        />
+        <RefreshCw size={14} strokeWidth={1.5} className={refreshing ? "animate-spin" : ""} />
         <span>{refreshing ? "Refreshing…" : "Refresh Now"}</span>
       </button>
     </div>
   );
 }
+
+// Backwards-compat alias — anything still importing the old name keeps working.
+export const IntelligenceConfigHeader = IntelligenceFreshnessControls;

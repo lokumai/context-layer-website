@@ -41,7 +41,7 @@ export function LibrarySidebar({ api, totalCount }: { api: LibraryFilterApi; tot
   return (
     <aside
       data-testid="library-sidebar"
-      className="w-[280px] h-full flex-shrink-0 bg-white border-r border-[rgba(0,0,0,0.05)] overflow-y-auto flex flex-col"
+      className="w-[280px] h-full flex-shrink-0 bg-white/80 backdrop-blur-[12px] border-r border-[rgba(0,0,0,0.04)] shadow-[var(--shadow-inset-border)] overflow-y-auto flex flex-col"
     >
       <div className="p-6 flex flex-col gap-8">
         <section>

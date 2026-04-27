@@ -1,8 +1,10 @@
 "use client";
 
 import { BookOpen, ChevronDown, Inbox, Library, Lock, MessageSquare, Sparkles } from "lucide-react";
+import { LayoutGroup, motion } from "motion/react";
 import { usePathname } from "next/navigation";
 import { type ReactNode, useEffect, useRef, useState } from "react";
+import { LAYOUT_SPRING } from "@/lib/motion/spring";
 
 interface Props {
   workspaceId: string;
@@ -68,22 +70,26 @@ export function NavDestinations({ workspaceId, hasWiki, sourceCount }: Props) {
   ];
 
   return (
-    <div className="flex items-center gap-1" data-testid="nav-destinations">
-      {items.map((item) => {
-        const isActive = item.href ? pathname.startsWith(item.href) : false;
-        return (
-          <NavItem
-            key={item.label}
-            label={item.label}
-            href={item.href}
-            icon={item.icon}
-            dropdown={item.dropdown}
-            locked={item.locked}
-            active={isActive}
-          />
-        );
-      })}
-    </div>
+    // LayoutGroup scopes the shared layoutId so the active-bg pill warps
+    // between items within this nav cluster only.
+    <LayoutGroup id="playground-nav">
+      <div className="flex items-center gap-1" data-testid="nav-destinations">
+        {items.map((item) => {
+          const isActive = item.href ? pathname.startsWith(item.href) : false;
+          return (
+            <NavItem
+              key={item.label}
+              label={item.label}
+              href={item.href}
+              icon={item.icon}
+              dropdown={item.dropdown}
+              locked={item.locked}
+              active={isActive}
+            />
+          );
+        })}
+      </div>
+    </LayoutGroup>
   );
 }
 
@@ -114,25 +120,49 @@ function NavItem({
     return () => window.removeEventListener("mousedown", handler);
   }, [open]);
 
-  const base =
-    "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-pill text-nav transition-colors";
+  // Each pill is a relatively-positioned inline-flex shell. The active
+  // background lives in a sibling motion.span with a shared layoutId so
+  // it warps between items as the route changes (Warp Effect).
+  const baseShell =
+    "relative inline-flex items-center gap-1.5 px-3 py-1.5 rounded-pill text-nav transition-colors";
   const tone = locked
     ? "text-[#9ca3af] cursor-not-allowed"
     : active
-      ? "bg-[#f5f2ef] text-black"
-      : "text-[#4e4e4e] hover:text-black hover:bg-[#f5f5f5]";
+      ? "text-black"
+      : "text-[#4e4e4e] hover:text-black";
+
+  const activeHighlight = active ? (
+    <motion.span
+      layoutId="nav-active-bg"
+      transition={LAYOUT_SPRING}
+      className="absolute inset-0 rounded-pill bg-[#f5f2ef]"
+      aria-hidden
+    />
+  ) : null;
+
+  // Hover layer on inactive items — only animates color (not background)
+  // so it can't fight the Warp Effect.
+  const hoverHighlight =
+    !active && !locked ? (
+      <span
+        aria-hidden
+        className="absolute inset-0 rounded-pill bg-[#f5f5f5] opacity-0 hover:opacity-100 transition-opacity duration-150"
+      />
+    ) : null;
 
   if (locked) {
     return (
       <span
-        className={`${base} ${tone}`}
+        className={`${baseShell} ${tone}`}
         title="Generate the first Wiki to unlock"
         data-testid={`nav-${label.toLowerCase()}`}
         data-locked="true"
       >
-        {icon}
-        <span>{label}</span>
-        <Lock size={12} strokeWidth={1.5} />
+        <span className="relative z-[1] inline-flex items-center gap-1.5">
+          {icon}
+          <span>{label}</span>
+          <Lock size={12} strokeWidth={1.5} />
+        </span>
       </span>
     );
   }
@@ -142,14 +172,18 @@ function NavItem({
       <div ref={ref} className="relative">
         <button
           type="button"
-          className={`${base} ${tone}`}
+          className={`${baseShell} ${tone} group`}
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}
           data-testid={`nav-${label.toLowerCase()}`}
         >
-          {icon}
-          <span>{label}</span>
-          <ChevronDown size={12} strokeWidth={1.5} />
+          {activeHighlight}
+          {hoverHighlight}
+          <span className="relative z-[1] inline-flex items-center gap-1.5">
+            {icon}
+            <span>{label}</span>
+            <ChevronDown size={12} strokeWidth={1.5} />
+          </span>
         </button>
         {open ? (
           <div className="absolute top-full left-0 mt-1 min-w-[180px] bg-white rounded-card shadow-[var(--shadow-card)] border border-[rgba(0,0,0,0.05)] overflow-hidden">
@@ -170,9 +204,17 @@ function NavItem({
   }
 
   return (
-    <a href={href} className={`${base} ${tone}`} data-testid={`nav-${label.toLowerCase()}`}>
-      {icon}
-      <span>{label}</span>
+    <a
+      href={href}
+      className={`${baseShell} ${tone} group`}
+      data-testid={`nav-${label.toLowerCase()}`}
+    >
+      {activeHighlight}
+      {hoverHighlight}
+      <span className="relative z-[1] inline-flex items-center gap-1.5">
+        {icon}
+        <span>{label}</span>
+      </span>
     </a>
   );
 }

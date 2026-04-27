@@ -1,5 +1,5 @@
-import { FileText, GitBranch, MessageSquare } from "lucide-react";
 import type { Source } from "@context-layer/mocks";
+import { FileText, GitBranch, MessageSquare } from "lucide-react";
 
 interface Palette {
   bg: string;

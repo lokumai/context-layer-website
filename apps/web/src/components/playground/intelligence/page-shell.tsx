@@ -3,14 +3,15 @@
 import type { ReactNode } from "react";
 import { ChatbotSideDock } from "@/components/playground/chatbot/slide-over";
 import { useStore } from "@/stores";
-import { IntelligenceConfigHeader } from "./config-header";
 import { IntelligenceNeedsWikiState } from "./empty-state-needs-wiki";
 import { GenerateIntelligenceSurface } from "./generation";
 
 // Wraps every Intelligence dashboard page with:
 //   - hasWiki gate → "Generate Wiki first" empty state
 //   - hasWiki + !hasIntelligence → Generate/Progress surface
-//   - hasWiki + hasIntelligence → config header + children (the dashboard)
+//   - hasWiki + hasIntelligence → just renders the dashboard (each dashboard
+//     owns its own heading row + freshness controls — Phase 13 removed the
+//     standalone config-header strip).
 
 export function IntelligencePageShell({
   workspaceId,
@@ -36,7 +37,6 @@ export function IntelligencePageShell({
 
   return (
     <div className="w-full px-6 lg:px-10 py-8 space-y-6" data-testid="intelligence-page">
-      <IntelligenceConfigHeader workspaceId={workspaceId} />
       {children}
       <ChatbotSideDock workspaceId={workspaceId} contextLabel="Ask about these metrics…" />
     </div>

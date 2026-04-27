@@ -13,10 +13,7 @@ export function SourceStatusBadge({ status }: { status: IndexingStatus }) {
     <StatusPill tone={m.tone} dot={status !== "indexing"}>
       {status === "indexing" ? (
         <span className="inline-flex items-center gap-1">
-          <span
-            aria-hidden
-            className="w-1.5 h-1.5 rounded-full bg-current animate-pulse"
-          />
+          <span aria-hidden className="w-1.5 h-1.5 rounded-full bg-current animate-pulse" />
           {m.label}
         </span>
       ) : (

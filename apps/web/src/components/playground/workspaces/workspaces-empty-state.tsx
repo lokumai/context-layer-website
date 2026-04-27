@@ -13,7 +13,8 @@ export function WorkspacesEmptyState() {
       <div className="space-y-3">
         <h2 className="text-section-heading text-black">Create your first workspace</h2>
         <p className="text-body text-[#4e4e4e] max-w-[480px] mx-auto">
-          A workspace is your multi-repo knowledge container. Bring any repos, docs, and discussion tools you want indexed together.
+          A workspace is your multi-repo knowledge container. Bring any repos, docs, and discussion
+          tools you want indexed together.
         </p>
       </div>
       <button

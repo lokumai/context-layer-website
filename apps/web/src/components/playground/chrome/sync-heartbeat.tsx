@@ -17,9 +17,7 @@ export function SyncHeartbeat({ status }: { status: SyncStatus }) {
       style={{ backgroundColor: t.bg, color: t.fg }}
       title={`Workspace sync: ${t.label}`}
     >
-      <span
-        className={`w-1.5 h-1.5 rounded-full bg-current ${t.pulse ? "animate-pulse" : ""}`}
-      />
+      <span className={`w-1.5 h-1.5 rounded-full bg-current ${t.pulse ? "animate-pulse" : ""}`} />
       {t.label}
     </span>
   );

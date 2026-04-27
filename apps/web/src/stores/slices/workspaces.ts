@@ -7,7 +7,7 @@ export const createWorkspacesSlice: StateCreator<AppState, [], [], WorkspacesSli
   workspaces: [],
   activeWorkspaceId: null,
   setActiveWorkspace: (id) => set({ activeWorkspaceId: id }),
-  createWorkspace: (name) => {
+  createWorkspace: (name, description) => {
     const id = `ws-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 6)}`;
     const now = new Date().toISOString();
     const ws: RuntimeWorkspace = {
@@ -19,7 +19,7 @@ export const createWorkspacesSlice: StateCreator<AppState, [], [], WorkspacesSli
       sourceCount: 0,
       syncStatus: "outdated",
       syncStrategy: "per-pr-merge",
-      description: "",
+      description: description ?? "",
       hasWiki: false,
       graduated: false,
       hasIntelligence: false,

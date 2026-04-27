@@ -68,7 +68,8 @@ export interface WorkspacesSlice {
   activeWorkspaceId: string | null;
   setActiveWorkspace: (id: string | null) => void;
   /** Create a new workspace with a name; returns the new id. */
-  createWorkspace: (name: string) => string;
+  /** Create a new workspace; description is optional and surfaces on the workspace card. */
+  createWorkspace: (name: string, description?: string) => string;
   /** Rename an existing workspace. */
   renameWorkspace: (id: string, name: string) => void;
   /** Set graduation + hasWiki flags (called after the first Wiki generation). */

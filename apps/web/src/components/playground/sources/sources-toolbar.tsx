@@ -1,7 +1,7 @@
 "use client";
 
-import { LayoutGrid, List, Plus, Search } from "lucide-react";
 import type { SourceKind } from "@context-layer/mocks";
+import { LayoutGrid, List, Plus, Search } from "lucide-react";
 import { useStore } from "@/stores";
 
 export type SourceFilter = "all" | SourceKind;
@@ -45,27 +45,27 @@ export function SourcesToolbar({
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search your sources…"
-            className="w-full pl-11 pr-4 py-2.5 rounded-pill shadow-[var(--shadow-inset-border)] bg-white text-body-standard focus:outline-none focus:shadow-[var(--shadow-outline-ring)] transition-shadow"
+            className="w-full pl-11 pr-4 py-2.5 rounded-pill shadow-[var(--shadow-card)] bg-white text-body-standard focus:outline-none focus:shadow-[var(--shadow-outline-ring)] transition-shadow"
           />
         </div>
-        <div className="flex p-1 bg-[#f5f5f5] rounded-pill">
+        <div className="flex p-1 bg-white rounded-pill shadow-[var(--shadow-card)]">
           {FILTERS.map((f) => (
             <button
               key={f.id}
               type="button"
               onClick={() => setFilter(f.id)}
-              className={`px-4 py-1.5 rounded-pill text-caption font-medium transition-colors ${filter === f.id ? "bg-white text-black shadow-sm" : "text-[#777169] hover:text-black"}`}
+              className={`px-4 py-1.5 rounded-pill text-caption font-medium transition-colors ${filter === f.id ? "bg-[#f5f2ef] text-black" : "text-[#777169] hover:text-black hover:bg-[#f9f9f9]"}`}
               data-testid={`filter-${f.id}`}
             >
               {f.label}
             </button>
           ))}
         </div>
-        <div className="flex p-1 bg-[#f5f5f5] rounded-pill">
+        <div className="flex p-1 bg-white rounded-pill shadow-[var(--shadow-card)]">
           <button
             type="button"
             onClick={() => setView("grid")}
-            className={`p-1.5 rounded-pill transition-colors ${view === "grid" ? "bg-white text-black shadow-sm" : "text-[#777169] hover:text-black"}`}
+            className={`p-1.5 rounded-pill transition-colors ${view === "grid" ? "bg-[#f5f2ef] text-black" : "text-[#777169] hover:text-black hover:bg-[#f9f9f9]"}`}
             aria-label="Grid view"
           >
             <LayoutGrid size={16} strokeWidth={1.5} />
@@ -73,7 +73,7 @@ export function SourcesToolbar({
           <button
             type="button"
             onClick={() => setView("list")}
-            className={`p-1.5 rounded-pill transition-colors ${view === "list" ? "bg-white text-black shadow-sm" : "text-[#777169] hover:text-black"}`}
+            className={`p-1.5 rounded-pill transition-colors ${view === "list" ? "bg-[#f5f2ef] text-black" : "text-[#777169] hover:text-black hover:bg-[#f9f9f9]"}`}
             aria-label="List view"
           >
             <List size={16} strokeWidth={1.5} />
