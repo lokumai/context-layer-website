@@ -249,11 +249,17 @@ Production build: all 4 marketing routes statically prerendered; middleware 92 k
   * **Tests** — Vitest 118/118 unchanged (the view is presentational). Playwright 51/51: `omniboard.spec.ts` surgically updated (`omniboard-done` → `omniboard-exploration`); 4 new `phase17.spec.ts` cases (post-generation lands in exploration not Done, slides stub renders in viewer, suggested-prompt click streams an assistant reply, *Plan another* returns to landing). Build clean. Biome clean across every Phase 17 file.
 
 ## Phase 18: MCP Server Web Transport & Polish
-* **Status:** `[ ] Pending`
-* **Goal:** Prepare the `@context-layer/mcp` package for live, external demo consumption.
-* **Execution Details:**
-  * Extend the MCP server to support HTTP/SSE transport (in addition to stdio) so it can be exposed securely over the web.
-  * Refine the tools (`get_wiki_content`, `get_code_intelligence`) to ensure they handle the multi-repo mock data perfectly and output highly structured, agent-friendly text.
+* **Status:** `[x] Complete`
+* **Delivered (2026-04-24):**
+  * **HTTP / Streamable-HTTP transport** — new `packages/mcp/src/http.ts` exporting `createHttpServer(config)` that boots `createMcpServer()` onto the SDK's `StreamableHTTPServerTransport` (stateful — `sessionIdGenerator: randomUUID()`, the SDK client's `notifications/initialized` POST won't round-trip in stateless mode). Routes: `POST /mcp` + `GET /mcp` (single endpoint, both JSON + SSE), `GET /healthz` returning `{ ok, name, version, transport: "http" }`, `OPTIONS *` preflight with permissive CORS + `Mcp-Session-Id` exposed.
+  * **Optional bearer auth** — when `CONTEXT_LAYER_TOKEN` is set, every `/mcp` request requires `Authorization: Bearer <token>`; 401 with structured JSON error otherwise. Unset → open access for local dev.
+  * **New shebanged CLI** `src/bin-http.ts` — reads `PORT` (default 8765), `CONTEXT_LAYER_TOKEN`, `CONTEXT_LAYER_WORKSPACE` from env; logs the bind URL on stderr; SIGINT / SIGTERM trap → graceful close. Wired into `package.json` as a second bin (`context-layer-mcp-http`) + `start:http` / `start:stdio` scripts.
+  * **Tool output polish**:
+    * `get_wiki_content` `scope: "workspace"` now appends an **"Available repos"** section with each source id + name + a `Call get_wiki_content with scope:"repo" repoId:"…"` follow-up suggestion. `scope: "repo"` surfaces the llms.txt token count; `scope: "page"` adds a token-count footer.
+    * `get_code_intelligence` `topic: "overview"` payload extended with a `repos[]` triage array (`{ repoId, healthScore, openFindings, coverage }`).
+    * `ask_context_layer` citations grouped by `kind` (Wiki / Code / File) so an external agent can decide which references to fetch next.
+  * **Tests** — Vitest 13/13 in `packages/mcp` (existing 7 + 6 new across `http.test.ts` covering healthz, three-tools-over-HTTP, bearer-required 401, bearer-accepted, 404 on unknown paths, OPTIONS preflight). Web-app suite untouched (118 Vitest + 51 Playwright + build all green as a sanity pass).
+  * README — new "Running over HTTP" section with Claude Desktop / programmatic / Docker snippets.
 
 ## Phase 19: Client-Centric Demo Scenarios
 * **Status:** `[ ] Pending`

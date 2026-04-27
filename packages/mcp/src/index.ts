@@ -4,5 +4,7 @@
 // responsibility (stdio for Claude Desktop / Cursor, in-memory for tests,
 // HTTP for future deployments).
 
+export type { HttpServerConfig } from "./http";
+export { createHttpServer } from "./http";
 export type { McpServerConfig } from "./server";
 export { createMcpServer, resolveConfig } from "./server";

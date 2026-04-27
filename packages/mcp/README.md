@@ -41,14 +41,59 @@ Restart Claude Desktop; the three tools appear in the tool picker.
 
 Same JSON under the editor's MCP settings. Any client that speaks stdio-based MCP will work.
 
+### Running over HTTP (Phase 18)
+
+For remote demos / containerised deployments the package also ships a Streamable-HTTP entrypoint:
+
+```bash
+PORT=8765 CONTEXT_LAYER_TOKEN=demo bun --cwd packages/mcp run start:http
+# → http://localhost:8765/mcp  (auth: bearer required)
+# → http://localhost:8765/healthz
+```
+
+Once published, an MCP client config that targets the remote endpoint looks like:
+
+```json
+{
+  "mcpServers": {
+    "context-layer-remote": {
+      "url": "https://your-deployment.example.com/mcp",
+      "transport": "streamable-http",
+      "headers": {
+        "Authorization": "Bearer <CONTEXT_LAYER_TOKEN>"
+      }
+    }
+  }
+}
+```
+
+Docker-friendly snippet (Phase 20 wires this into the deployment):
+
+```bash
+docker run --rm -p 8765:8765 \
+  -e CONTEXT_LAYER_TOKEN=demo \
+  -e CONTEXT_LAYER_WORKSPACE=microservices-product-catalog \
+  ghcr.io/your-org/context-layer-mcp:latest
+```
+
+Endpoints:
+- `POST /mcp` and `GET /mcp` — the Streamable-HTTP transport (initialize + tool calls + SSE notifications all on one URL).
+- `GET /healthz` — `{ ok: true, name, version, transport: "http" }`.
+- Bearer auth: when `CONTEXT_LAYER_TOKEN` is set, every `/mcp` request must carry `Authorization: Bearer <token>`. When unset, the server accepts everything (local dev only).
+
 ### Programmatic (Node / Bun)
 
 ```ts
+// stdio
 import { createMcpServer } from "@context-layer/mcp";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-
 const server = createMcpServer();
 await server.connect(new StdioServerTransport());
+
+// HTTP
+import { createHttpServer } from "@context-layer/mcp";
+const httpServer = await createHttpServer({ token: process.env.CONTEXT_LAYER_TOKEN });
+httpServer.listen(8765);
 ```
 
 ---

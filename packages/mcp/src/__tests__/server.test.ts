@@ -26,7 +26,7 @@ describe("createMcpServer", () => {
     expect(names).toEqual(["ask_context_layer", "get_code_intelligence", "get_wiki_content"]);
   });
 
-  it("get_wiki_content (scope: workspace) returns narrative + saga flows markdown", async () => {
+  it("get_wiki_content (scope: workspace) returns narrative + saga flows + Available repos index", async () => {
     const result = await client.callTool({
       name: "get_wiki_content",
       arguments: { scope: "workspace" },
@@ -34,6 +34,9 @@ describe("createMcpServer", () => {
     const text = textOf(result as never);
     expect(text).toContain("Workspace narrative");
     expect(text).toContain("Saga flows");
+    // Phase 18: "Available repos" section with a per-repo follow-up suggestion.
+    expect(text).toContain("Available repos");
+    expect(text).toMatch(/Call `get_wiki_content` with `scope:"repo"/);
     expect(text.length).toBeGreaterThan(500);
   });
 
@@ -61,7 +64,7 @@ describe("createMcpServer", () => {
     for (const f of parsed.findings) expect(f.repoId).toBe("offering-service");
   });
 
-  it("get_code_intelligence (topic: overview) returns compact summary shape", async () => {
+  it("get_code_intelligence (topic: overview) returns compact summary + per-repo triage rows", async () => {
     const result = await client.callTool({
       name: "get_code_intelligence",
       arguments: { topic: "overview" },
@@ -70,19 +73,34 @@ describe("createMcpServer", () => {
     const parsed = JSON.parse(text) as {
       health: { overallScore: number };
       security: { findingCount: number };
+      repos: Array<{
+        repoId: string;
+        healthScore: number | null;
+        openFindings: number;
+        coverage: number | null;
+      }>;
     };
     expect(typeof parsed.health.overallScore).toBe("number");
     expect(parsed.security.findingCount).toBeGreaterThan(0);
+    // Phase 18: per-repo triage row.
+    expect(Array.isArray(parsed.repos)).toBe(true);
+    expect(parsed.repos.length).toBeGreaterThan(0);
+    for (const r of parsed.repos) {
+      expect(typeof r.repoId).toBe("string");
+      expect(typeof r.openFindings).toBe("number");
+    }
   });
 
-  it("ask_context_layer matches a canned question and includes citations", async () => {
+  it("ask_context_layer matches a canned question and includes citations grouped by kind", async () => {
     const result = await client.callTool({
       name: "ask_context_layer",
       arguments: { question: "How does the Transactional Outbox pattern work in this codebase?" },
     });
     const text = textOf(result as never);
     expect(text.toLowerCase()).toContain("outbox");
-    expect(text).toContain("Citations:");
+    // Phase 18: citations are grouped by kind (Wiki / Code / File).
+    expect(text).toContain("Citations");
+    expect(text).toMatch(/Wiki references:|Code references:|File references:/);
   });
 
   it("ask_context_layer returns a graceful fallback with suggested prompts", async () => {

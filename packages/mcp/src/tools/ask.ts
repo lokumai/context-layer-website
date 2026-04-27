@@ -31,15 +31,49 @@ export async function askContextLayer(input: AskToolInput): Promise<ToolTextResp
     };
   }
 
-  const citationsText =
-    match.citations.length > 0
-      ? match.citations.map((c, i) => `[${i + 1}] ${c.kind} · ${c.label} · ${c.anchor}`).join("\n")
-      : "(no citations)";
+  const citationsText = formatCitationsByKind(match.citations);
 
   return {
     content: [
       { type: "text", text: match.content },
-      { type: "text", text: `Citations:\n${citationsText}` },
+      { type: "text", text: citationsText },
     ],
   };
+}
+
+// Phase 18: group citations by kind so an external agent can decide which
+// references to pull next. Order: wiki → code → file (most readable first).
+function formatCitationsByKind(
+  citations: ReadonlyArray<{
+    id: string;
+    kind: "wiki" | "code" | "file";
+    anchor: string;
+    label: string;
+    repoId?: string;
+    path?: string;
+    lineRange?: [number, number];
+  }>,
+): string {
+  if (citations.length === 0) return "Citations: (none)";
+  const order: Array<"wiki" | "code" | "file"> = ["wiki", "code", "file"];
+  const titleByKind: Record<"wiki" | "code" | "file", string> = {
+    wiki: "Wiki references",
+    code: "Code references",
+    file: "File references",
+  };
+  let counter = 1;
+  const sections: string[] = [];
+  for (const kind of order) {
+    const subset = citations.filter((c) => c.kind === kind);
+    if (subset.length === 0) continue;
+    const lines = subset.map((c) => {
+      const where =
+        c.kind === "code" && c.repoId && c.path
+          ? `${c.repoId}/${c.path}${c.lineRange ? `:${c.lineRange[0]}-${c.lineRange[1]}` : ""}`
+          : c.anchor;
+      return `[${counter++}] ${c.label} — ${where}`;
+    });
+    sections.push(`${titleByKind[kind]}:\n${lines.join("\n")}`);
+  }
+  return `Citations\n\n${sections.join("\n\n")}`;
 }

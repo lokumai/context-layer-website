@@ -43,6 +43,21 @@ async function buildPayload(topic: IntelligenceTopic, repoId?: string) {
         getDependencies(),
         getKnowledgeGraph(),
       ]);
+      // Phase 18: per-repo triage row so an agent can drill in straight away.
+      const repoIds = new Set<string>();
+      for (const r of health.perRepo) repoIds.add(r.repoId);
+      for (const r of coverage.perRepo) repoIds.add(r.repoId);
+      const repos = [...repoIds].sort().map((id) => {
+        const h = health.perRepo.find((x) => x.repoId === id);
+        const c = coverage.perRepo.find((x) => x.repoId === id);
+        const findings = security.findings.filter((f) => f.repoId === id).length;
+        return {
+          repoId: id,
+          healthScore: h?.score ?? null,
+          openFindings: findings,
+          coverage: c?.lineCoverage ?? null,
+        };
+      });
       return {
         health: { overallScore: health.overallScore, summary: health.summary },
         security: { summary: security.summary, findingCount: security.findings.length },
@@ -53,6 +68,7 @@ async function buildPayload(topic: IntelligenceTopic, repoId?: string) {
           summary: dependencies.summary,
         },
         graph: { nodes: graph.nodes.length, edges: graph.edges.length },
+        repos,
       };
     }
 

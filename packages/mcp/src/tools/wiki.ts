@@ -4,6 +4,7 @@ import {
   getWikiPage,
   getWikiTree,
   getWorkspaceNarrative,
+  listSources,
 } from "@context-layer/mocks";
 
 export type WikiScope = "workspace" | "repo" | "page" | "llms";
@@ -31,13 +32,29 @@ export interface ToolTextResponse {
 export async function getWikiContent(input: WikiToolInput): Promise<ToolTextResponse> {
   switch (input.scope) {
     case "workspace": {
-      const [narrative, saga] = await Promise.all([getWorkspaceNarrative(), getSagaFlows()]);
+      const [narrative, saga, sources] = await Promise.all([
+        getWorkspaceNarrative(),
+        getSagaFlows(),
+        listSources(),
+      ]);
+      // Phase 18: append a structured "Available repos" index so an
+      // external agent immediately knows what to call next.
+      const repoIndex = sources
+        .map(
+          (s) =>
+            `- **${s.id}** — ${s.name}\n  Call \`get_wiki_content\` with \`scope:"repo" repoId:"${s.id}"\` for that repo's tree + llms.txt.`,
+        )
+        .join("\n");
       const body = [
         "# Workspace narrative",
         narrative.markdown,
         "",
         "# Saga flows",
         saga.markdown,
+        "",
+        "# Available repos",
+        `${sources.length} indexed repos:`,
+        repoIndex,
       ].join("\n\n");
       return textBlock(body);
     }
@@ -47,13 +64,14 @@ export async function getWikiContent(input: WikiToolInput): Promise<ToolTextResp
         return errorBlock('`scope: "repo"` requires `repoId`.');
       }
       const [tree, llms] = await Promise.all([getWikiTree(input.repoId), getLlmsTxt(input.repoId)]);
+      const llmsTokens = approxTokens(llms.markdown);
       const body = [
         `# ${input.repoId} — wiki tree`,
         "```json",
         JSON.stringify(tree, null, 2),
         "```",
         "",
-        `# ${input.repoId} — llms.txt`,
+        `# ${input.repoId} — llms.txt (~${llmsTokens} tokens)`,
         llms.markdown,
       ].join("\n\n");
       return textBlock(body);
@@ -65,7 +83,8 @@ export async function getWikiContent(input: WikiToolInput): Promise<ToolTextResp
       }
       try {
         const page = await getWikiPage(input.repoId, input.slug);
-        return textBlock(page.markdown);
+        const footer = `\n\n---\n_Page footer: ${input.repoId}/${input.slug} · ~${page.tokenCount} tokens._`;
+        return textBlock(page.markdown + footer);
       } catch (err) {
         return errorBlock(
           `Could not load page ${input.repoId}/${input.slug}: ${(err as Error).message}`,
@@ -90,4 +109,11 @@ function textBlock(text: string): ToolTextResponse {
 
 function errorBlock(text: string): ToolTextResponse {
   return { content: [{ type: "text", text }], isError: true };
+}
+
+// Same heuristic the mocks loader uses internally — words / 0.75 ≈ tokens.
+// Re-implemented here so we don't reach into the mocks package's private fs helper.
+function approxTokens(text: string): number {
+  const words = text.split(/\s+/).filter(Boolean).length;
+  return Math.round(words / 0.75);
 }

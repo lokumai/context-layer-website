@@ -6,15 +6,19 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
-    "./server": "./src/server.ts"
+    "./server": "./src/server.ts",
+    "./http": "./src/http.ts"
   },
   "bin": {
-    "context-layer-mcp": "./src/bin.ts"
+    "context-layer-mcp": "./src/bin.ts",
+    "context-layer-mcp-http": "./src/bin-http.ts"
   },
   "scripts": {
     "test": "vitest run",
     "smoke": "bun src/scripts/smoke.ts",
-    "start": "bun src/bin.ts"
+    "start": "bun src/bin.ts",
+    "start:stdio": "bun src/bin.ts",
+    "start:http": "bun src/bin-http.ts"
   },
   "dependencies": {
     "@context-layer/mocks": "workspace:*",
