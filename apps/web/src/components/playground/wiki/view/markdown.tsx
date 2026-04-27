@@ -1,8 +1,10 @@
 "use client";
 
 import ReactMarkdown from "react-markdown";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import remarkGfm from "remark-gfm";
-import { StatusPill } from "@/components/marketing/status-pill";
+import { MermaidDiagram } from "./mermaid-diagram";
 
 export function WikiMarkdown({ markdown }: { markdown: string }) {
   return (
@@ -11,29 +13,19 @@ export function WikiMarkdown({ markdown }: { markdown: string }) {
         remarkPlugins={[remarkGfm]}
         components={{
           h1: ({ children }) => (
-            <h1 className="text-section-heading text-black mb-4 mt-0">
-              {children}
-            </h1>
+            <h1 className="text-section-heading text-black mb-4 mt-0">{children}</h1>
           ),
           h2: ({ children }) => (
-            <h2 className="text-card-heading text-black mb-3 mt-8">
-              {children}
-            </h2>
+            <h2 className="text-card-heading text-black mb-3 mt-8">{children}</h2>
           ),
           h3: ({ children }) => (
-            <h3 className="text-body-large text-black font-medium mb-2 mt-6">
-              {children}
-            </h3>
+            <h3 className="text-body-large text-black font-medium mb-2 mt-6">{children}</h3>
           ),
           h4: ({ children }) => (
-            <h4 className="text-body-medium text-black mb-2 mt-4">
-              {children}
-            </h4>
+            <h4 className="text-body-medium text-black mb-2 mt-4">{children}</h4>
           ),
           p: ({ children }) => (
-            <div className="text-body text-[#4e4e4e] mb-4 leading-relaxed">
-              {children}
-            </div>
+            <div className="text-body text-[#4e4e4e] mb-4 leading-relaxed">{children}</div>
           ),
           a: ({ children, href }) => (
             <a href={href} className="text-[#1d4ed8] hover:underline">
@@ -41,18 +33,14 @@ export function WikiMarkdown({ markdown }: { markdown: string }) {
             </a>
           ),
           ul: ({ children }) => (
-            <ul className="list-disc pl-6 space-y-1 text-body text-[#4e4e4e] mb-4">
-              {children}
-            </ul>
+            <ul className="list-disc pl-6 space-y-1 text-body text-[#4e4e4e] mb-4">{children}</ul>
           ),
           ol: ({ children }) => (
             <ol className="list-decimal pl-6 space-y-1 text-body text-[#4e4e4e] mb-4">
               {children}
             </ol>
           ),
-          li: ({ children }) => (
-            <li className="text-body text-[#4e4e4e]">{children}</li>
-          ),
+          li: ({ children }) => <li className="text-body text-[#4e4e4e]">{children}</li>,
           blockquote: ({ children }) => (
             <blockquote className="border-l-2 border-[#b45309] bg-[#fffbeb] px-4 py-2 my-4 text-body-standard text-[#4e4e4e] italic">
               {children}
@@ -60,9 +48,7 @@ export function WikiMarkdown({ markdown }: { markdown: string }) {
           ),
           hr: () => <hr className="my-8 border-t border-[rgba(0,0,0,0.08)]" />,
           table: ({ children }) => (
-            <table className="w-full my-4 text-caption border-collapse">
-              {children}
-            </table>
+            <table className="w-full my-4 text-caption border-collapse">{children}</table>
           ),
           th: ({ children }) => (
             <th className="text-left font-semibold text-black bg-[#f5f5f5] px-3 py-2 border-b border-[rgba(0,0,0,0.08)]">
@@ -78,16 +64,32 @@ export function WikiMarkdown({ markdown }: { markdown: string }) {
           code: ({ node: _node, inline, className, children, ...props }: any) => {
             const match = /language-(\w+)/.exec(className || "");
             const language = match ? match[1] : "";
+            const codeText = String(children).replace(/\n$/, "");
 
+            // Phase 15: real mermaid render
             if (!inline && language === "mermaid") {
+              return <MermaidDiagram code={codeText} />;
+            }
+
+            // Phase 15: dark-theme syntax highlighting (Prism / oneDark) for
+            // language-tagged blocks; fenced blocks without a language fall
+            // back to the existing flat dark panel.
+            if (!inline && language) {
               return (
-                <div className="rounded-card bg-[#0a0a0a]/95 text-white px-4 py-3 my-4">
-                  <div className="mb-2">
-                    <StatusPill tone="warn">MERMAID DIAGRAM</StatusPill>
-                  </div>
-                  <pre className="whitespace-pre-wrap font-mono text-caption">
-                    {String(children).replace(/\n$/, "")}
-                  </pre>
+                <div className="rounded-card overflow-hidden my-4 shadow-[var(--shadow-inset-border)]">
+                  <SyntaxHighlighter
+                    language={language}
+                    style={oneDark}
+                    customStyle={{
+                      margin: 0,
+                      padding: "12px 16px",
+                      fontSize: "0.85rem",
+                      background: "#0a0a0a",
+                    }}
+                    PreTag="pre"
+                  >
+                    {codeText}
+                  </SyntaxHighlighter>
                 </div>
               );
             }

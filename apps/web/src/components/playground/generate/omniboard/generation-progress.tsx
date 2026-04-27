@@ -1,7 +1,8 @@
 "use client";
 
-import { Sparkles } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { TriangleLoader } from "@/components/playground/loaders/triangle-loader";
+import { TrickleLogs } from "@/components/playground/loaders/trickle-logs";
 import { simulateJob } from "@/lib/simulate-latency";
 import type { ModalityPick } from "./landing";
 
@@ -54,8 +55,8 @@ export function OmniBoardGenerationProgress({
   return (
     <div className="max-w-xl mx-auto py-16 px-6" data-testid="omniboard-generation-progress">
       <div className="bg-white rounded-card shadow-[var(--shadow-card)] p-10 text-center">
-        <div className="mx-auto w-14 h-14 rounded-[16px] bg-[#fdf6ec] text-[#b45309] flex items-center justify-center mb-5">
-          <Sparkles size={26} strokeWidth={1.5} />
+        <div className="flex justify-center mb-5">
+          <TriangleLoader size={64} />
         </div>
         <h2 className="text-section-heading text-black mb-2">Generating {pick.option}</h2>
         <p className="text-body text-[#4e4e4e] mb-6">
@@ -70,9 +71,13 @@ export function OmniBoardGenerationProgress({
           />
         </div>
         <p className="text-body-medium text-black">{current.label}…</p>
-        <p className="text-caption text-[#777169] mt-1">
+        <p className="text-caption text-[#777169] mt-1 mb-6">
           Step {current.i + 1} of {STEPS.length}
         </p>
+
+        <div className="text-left">
+          <TrickleLogs topic="omniboard" />
+        </div>
       </div>
     </div>
   );

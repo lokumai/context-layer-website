@@ -3,6 +3,8 @@
 import { CheckCircle2, ChevronDown, ChevronRight, CircleDashed, Loader2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { StatusPill } from "@/components/marketing/status-pill";
+import { TriangleLoader } from "@/components/playground/loaders/triangle-loader";
+import { TrickleLogs } from "@/components/playground/loaders/trickle-logs";
 import { simulateJob } from "@/lib/simulate-latency";
 
 const STEPS = [
@@ -84,13 +86,16 @@ export function GenerationInProgress({
       data-testid="wiki-generating"
     >
       <header className="flex items-start justify-between gap-4">
-        <div className="space-y-1">
-          <p className="text-button-upper text-[#1d4ed8]">Generation in progress</p>
-          <h2 className="text-card-heading text-black">Generating your first Wiki…</h2>
-          <p className="text-caption text-[#4e4e4e]">
-            {Math.min(currentStep + 1, STEPS.length)} / {STEPS.length} steps running · background
-            job
-          </p>
+        <div className="flex items-center gap-5">
+          <TriangleLoader size={56} />
+          <div className="space-y-1">
+            <p className="text-button-upper text-[#1d4ed8]">Generation in progress</p>
+            <h2 className="text-card-heading text-black">Generating your first Wiki…</h2>
+            <p className="text-caption text-[#4e4e4e]">
+              {Math.min(currentStep + 1, STEPS.length)} / {STEPS.length} steps running · background
+              job
+            </p>
+          </div>
         </div>
         <button
           type="button"
@@ -100,6 +105,8 @@ export function GenerationInProgress({
           Cancel
         </button>
       </header>
+
+      <TrickleLogs topic="wiki" />
 
       <div className="h-1.5 w-full bg-[#f5f5f5] rounded-pill overflow-hidden">
         <div

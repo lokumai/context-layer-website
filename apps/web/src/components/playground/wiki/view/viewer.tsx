@@ -5,11 +5,17 @@
 import { ChevronDown, ChevronRight, FileText } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ChatbotSideDock } from "@/components/playground/chatbot/slide-over";
+import { TriangleLoader } from "@/components/playground/loaders/triangle-loader";
 import { cn } from "@/lib/utils";
 import { useStore } from "@/stores";
 import { WikiMarkdown } from "./markdown";
+
+// Phase 15: per-repo wiki pages now load real content from the mocks
+// loader through /api/mocks/wiki-page. Cache by `${repoId}/${slug}` key
+// so navigating around the tree never re-fetches a viewed page.
+type PageCache = Map<string, { title: string; markdown: string }>;
 
 export function WikiViewer({
   workspaceId,
@@ -29,6 +35,60 @@ export function WikiViewer({
     [repoId || ""]: true,
   });
   const [exportOpen, setExportOpen] = useState(false);
+
+  const cacheRef = useRef<PageCache>(new Map());
+  const [pageBody, setPageBody] = useState<{
+    key: string;
+    title: string;
+    markdown: string;
+  } | null>(null);
+  const [pageLoading, setPageLoading] = useState(false);
+  const [pageError, setPageError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!repoId || !slug) {
+      setPageBody(null);
+      setPageError(null);
+      return;
+    }
+    const key = `${repoId}/${slug}`;
+    const hit = cacheRef.current.get(key);
+    if (hit) {
+      setPageBody({ key, title: hit.title, markdown: hit.markdown });
+      setPageError(null);
+      return;
+    }
+    let cancelled = false;
+    setPageLoading(true);
+    setPageError(null);
+    fetch(
+      `/api/mocks/wiki-page?repoId=${encodeURIComponent(repoId)}&slug=${encodeURIComponent(slug)}`,
+      {
+        credentials: "same-origin",
+      },
+    )
+      .then(async (res) => {
+        if (!res.ok) {
+          const body = (await res.json().catch(() => ({}))) as { error?: string };
+          throw new Error(body.error ?? `Failed to load wiki page (${res.status})`);
+        }
+        return (await res.json()) as { title: string; markdown: string };
+      })
+      .then((payload) => {
+        if (cancelled) return;
+        cacheRef.current.set(key, payload);
+        setPageBody({ key, title: payload.title, markdown: payload.markdown });
+      })
+      .catch((err: Error) => {
+        if (!cancelled) setPageError(err.message);
+      })
+      .finally(() => {
+        if (!cancelled) setPageLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [repoId, slug]);
 
   const toggleRepo = (id: string) => {
     setExpandedRepos((prev) => ({ ...prev, [id]: !prev[id] }));
@@ -56,8 +116,8 @@ export function WikiViewer({
   } else if (repoId && slug) {
     const tree = wikiTrees[repoId];
     const node = tree?.nodes.find((n) => n.slug === slug);
-    title = node?.title || slug;
-    content = `Page preview for ${title} (full markdown loads Phase 9+).`;
+    title = pageBody?.title ?? node?.title ?? slug;
+    content = pageBody?.markdown ?? "";
   } else if (repoId) {
     content = llms[repoId]?.markdown || "Repository summary not found.";
     title = sources.find((s) => s.id === repoId)?.name || repoId;
@@ -227,7 +287,18 @@ export function WikiViewer({
 
           {/* Content */}
           <div className="flex-1">
-            {content ? (
+            {pageLoading && repoId && slug ? (
+              <div className="flex flex-col items-center justify-center py-20">
+                <TriangleLoader size={64} label="Loading wiki page…" />
+              </div>
+            ) : pageError && repoId && slug ? (
+              <div
+                className="rounded-card bg-[#fef2f2] text-[#b91c1c] px-4 py-3 my-4"
+                data-testid="wiki-page-error"
+              >
+                {pageError}
+              </div>
+            ) : content ? (
               <WikiMarkdown markdown={content} />
             ) : (
               <div className="flex flex-col items-center justify-center py-20 text-[#777169]">

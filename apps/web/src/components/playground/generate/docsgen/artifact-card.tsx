@@ -13,6 +13,8 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { StatusPill } from "@/components/marketing/status-pill";
+import { TriangleLoader } from "@/components/playground/loaders/triangle-loader";
+import { TrickleLogs } from "@/components/playground/loaders/trickle-logs";
 import { simulateJob } from "@/lib/simulate-latency";
 import { useStore } from "@/stores";
 import type { DocsGenCard, DocsGenOutputFormat } from "./catalog";
@@ -119,14 +121,14 @@ export function ArtifactCard({
       <div className="mt-6 pt-5 border-t border-[#f5f5f5]">
         {isRunning ? (
           <div className="space-y-3">
-            <div className="flex items-center justify-between text-nav">
-              <span className="flex items-center gap-2 text-black">
-                <RefreshCw size={14} className="animate-spin" />
-                {step.label}
-              </span>
-              <span className="text-[#888]">
-                {step.i + 1}/{step.total}
-              </span>
+            <div className="flex items-center gap-3">
+              <TriangleLoader size={36} />
+              <div className="flex-1 min-w-0">
+                <p className="text-body-medium text-black truncate">{step.label}</p>
+                <p className="text-caption text-[#777169]">
+                  Step {step.i + 1} of {step.total}
+                </p>
+              </div>
             </div>
             <div className="h-1 w-full bg-[#f0f0f0] rounded-full overflow-hidden">
               <div
@@ -134,6 +136,7 @@ export function ArtifactCard({
                 style={{ width: `${((step.i + 1) / step.total) * 100}%` }}
               />
             </div>
+            <TrickleLogs topic="docsgen" />
           </div>
         ) : artifact ? (
           <div className="flex items-center justify-between">

@@ -217,13 +217,16 @@ Production build: all 4 marketing routes statically prerendered; middleware 92 k
   * 102 / 102 Vitest (+5 new `sources-store` tests covering `markSynced` / `markOutdated` / `addSource` defaults / orthogonal pipeline) · 41 / 41 Playwright (+4 new `phase14.spec.ts`: `Indexed + Synced` on every full-persona card, vertical chooser layout with primary/more split, on-strip Connect spinner + new source ends up `Indexed + Outdated`, slide-over expand toggle + real `preview-code` content + drag handle reachable). Build clean. Biome lint clean on every Phase 14 file.
 
 ## Phase 15: Content Rendering & The "Illusion of Processing"
-* **Status:** `[ ] Pending`
-* **Goal:** Ensure the mock data feels real, both during generation and while reading.
-* **Execution Details:**
-  * Implement the "Triangle Loading State" geometric morph for fake latency.
-  * Introduce proper syntax highlighting (dark theme) for `typescript` and other code blocks in the Wiki View.
-  * Integrate a Mermaid renderer for architecture diagrams in the Wiki and DocsGen.
-  * Ensure "Generating" states across the app show trickling, realistic fake agent logs rather than a simple spinner.
+* **Status:** `[x] Complete`
+* **Delivered (2026-04-24):**
+  * **`<TriangleLoader>`** brand-grounded loader (continuous SVG triangle rotation + per-vertex scale pulse via `motion/react`, three warm-stone / info / success vertex tones) at `components/playground/loaders/triangle-loader.tsx`.
+  * **`<TrickleLogs>`** companion stream — per-topic deterministic rotation of fake agent log lines (`wiki / intelligence / docsgen / omniboard`), max 5 visible at once, fades in via `AnimatePresence`. Pure `pickLine(topic, tick)` helper exposed for unit tests.
+  * **Applied to 4 long-running surfaces**: Wiki Configure generation-in-progress, IntelliGen `generation.tsx`, DocsGen `<ArtifactCard>` running state, OmniBoard `generation-progress.tsx`. Add-Source chooser keeps its compact in-strip spinner — TriangleLoader is reserved for long-running surfaces, not modal CTAs.
+  * **Real syntax highlighting** via `react-syntax-highlighter` (Prism + `oneDark` theme) wired into `WikiMarkdown.code` for all language-tagged fenced blocks. Inherits across DocsGen preview, OmniBoard preview, and Library artifact preview through the shared renderer.
+  * **Real mermaid rendering** via lazy-imported `mermaid@11` in `<MermaidDiagram>` (`useId`-keyed render, fallback to styled `<pre>` on parse error). `WikiMarkdown` renders `language=mermaid` blocks via the new component instead of the old "MERMAID DIAGRAM" StatusPill stub.
+  * **Real wiki page bodies** — new `/api/mocks/wiki-page?repoId=…&slug=…` route + `useEffect`-driven fetch in `wiki/view/viewer.tsx` (per-component `Map` cache, so navigation around the tree never re-fetches). Loading state uses the new `<TriangleLoader>`; error state shows an inset card. The legacy `Page preview for ${title} (full markdown loads Phase 9+).` placeholder is gone.
+  * **Tests** — Vitest 105/105 (+3 new `trickle-logs` tests covering deterministic rotation + per-topic distinctness). Playwright 44/44 (+3 new `phase15.spec.ts`: real wiki body loads on `/wiki/view/api-gateway/overview`, syntax-highlighted spans visible on `/wiki/view/api-gateway/architecture`, DocsGen Regenerate shows `triangle-loader` + `trickle-logs` testids inside the running card).
+  * Build clean — wiki-view / library / docsgen routes ~454 kB First Load JS (Prism core); mermaid is dynamic-imported so the static chunk stays lean. Biome clean across every Phase 15 file.
 
 ## Phase 16: Wiki Logs Audit & Graph Depth
 * **Status:** `[ ] Pending`
