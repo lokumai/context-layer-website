@@ -5,9 +5,10 @@
 "use client";
 
 import type { KnowledgeGraph } from "@context-layer/mocks";
-import { ArrowRight, Boxes, HeartPulse, ShieldCheck, Target } from "lucide-react";
-import { useState } from "react";
+import { ArrowRight, Boxes, HeartPulse, Search, ShieldCheck, Target, X } from "lucide-react";
+import { useMemo, useState } from "react";
 import { StatusPill } from "@/components/marketing/status-pill";
+import { filterKnowledgeGraph } from "@/lib/intelligence/kg-filter";
 import { useStore } from "@/stores";
 import { IntelligenceFreshnessControls } from "../config-header";
 
@@ -18,6 +19,13 @@ export function IntelligenceOverview({ workspaceId }: { workspaceId: string }) {
   const dependencies = useStore((state) => state.dependencies);
   const knowledgeGraph = useStore((state) => state.knowledgeGraph);
   const [isGraphModalOpen, setIsGraphModalOpen] = useState(false);
+  const [graphQuery, setGraphQuery] = useState("");
+
+  const filteredGraph = useMemo<KnowledgeGraph>(
+    () =>
+      knowledgeGraph ? filterKnowledgeGraph(knowledgeGraph, graphQuery) : { nodes: [], edges: [] },
+    [knowledgeGraph, graphQuery],
+  );
 
   if (!health || !security || !coverage || !dependencies || !knowledgeGraph) {
     return <div className="p-8 text-body text-[#777169]">Loading intelligence...</div>;
@@ -235,23 +243,67 @@ export function IntelligenceOverview({ workspaceId }: { workspaceId: string }) {
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm p-8"
           onClick={() => setIsGraphModalOpen(false)}
+          data-testid="kg-modal"
         >
           <div
             className="bg-white rounded-section shadow-2xl w-full max-w-5xl h-[80vh] flex flex-col overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="p-6 border-b border-[rgba(0,0,0,0.05)] flex justify-between items-center">
-              <h2 className="text-section-heading">Knowledge Graph</h2>
-              <button
-                type="button"
-                onClick={() => setIsGraphModalOpen(false)}
-                className="text-button uppercase tracking-widest font-bold"
-              >
-                Close
-              </button>
+            <div className="p-6 border-b border-[rgba(0,0,0,0.05)] flex flex-wrap justify-between items-center gap-4">
+              <div className="flex items-center gap-3">
+                <h2 className="text-section-heading">Knowledge Graph</h2>
+                <span className="text-caption text-[#777169]" data-testid="kg-node-count">
+                  {filteredGraph.nodes.length}/{knowledgeGraph.nodes.length} nodes ·{" "}
+                  {filteredGraph.edges.length}/{knowledgeGraph.edges.length} edges
+                </span>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <div className="relative flex items-center bg-white rounded-pill shadow-[var(--shadow-card)] focus-within:shadow-[var(--shadow-outline-ring)] transition-shadow w-[280px]">
+                  <Search
+                    size={14}
+                    strokeWidth={1.5}
+                    className="absolute left-3.5 text-[#9ca3af] pointer-events-none"
+                  />
+                  <input
+                    type="search"
+                    value={graphQuery}
+                    onChange={(e) => setGraphQuery(e.target.value)}
+                    placeholder="Filter nodes…"
+                    className="w-full bg-transparent pl-9 pr-9 py-1.5 text-caption text-black placeholder:text-[#9ca3af] outline-none rounded-pill"
+                    data-testid="kg-search-input"
+                  />
+                  {graphQuery ? (
+                    <button
+                      type="button"
+                      onClick={() => setGraphQuery("")}
+                      aria-label="Clear search"
+                      className="absolute right-2.5 p-1 rounded-full text-[#9ca3af] hover:text-black hover:bg-[#f5f2ef] transition-colors"
+                    >
+                      <X size={12} strokeWidth={1.5} />
+                    </button>
+                  ) : null}
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setIsGraphModalOpen(false)}
+                  className="text-button uppercase tracking-widest font-bold"
+                >
+                  Close
+                </button>
+              </div>
             </div>
             <div className="flex-1 overflow-auto bg-[#fbfbfb] p-8">
-              <KnowledgeGraphSVG graph={knowledgeGraph} viewBox="0 0 1000 600" />
+              {filteredGraph.nodes.length === 0 ? (
+                <div
+                  className="flex items-center justify-center h-full text-body text-[#777169]"
+                  data-testid="kg-no-results"
+                >
+                  No nodes match "{graphQuery}".
+                </div>
+              ) : (
+                <KnowledgeGraphSVG graph={filteredGraph} viewBox="0 0 1000 600" />
+              )}
             </div>
           </div>
         </div>

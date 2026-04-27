@@ -229,12 +229,13 @@ Production build: all 4 marketing routes statically prerendered; middleware 92 k
   * Build clean — wiki-view / library / docsgen routes ~454 kB First Load JS (Prism core); mermaid is dynamic-imported so the static chunk stays lean. Biome clean across every Phase 15 file.
 
 ## Phase 16: Wiki Logs Audit & Graph Depth
-* **Status:** `[ ] Pending`
-* **Goal:** Fix the non-compliant UI elements that promise deep data but currently deliver stubs.
-* **Execution Details:**
-  * Rebuild the Wiki Logs split view to actually render a "native git diff" of what changed in the mock data, side-by-side with agent logs.
-  * Wire up the Knowledge Graph search bar in the modal so it actually filters nodes/edges.
-  * Fix the First-Time Workspace Wizard so it properly guides users through steps 3, 4, and 5 (Wiki Configure and Intelligence) instead of acting as a stale placeholder.
+* **Status:** `[x] Complete`
+* **Delivered (2026-04-24):**
+  * **Wiki Logs rebuild** (`components/playground/wiki/logs/{view,log-row,log-step,diff-renderer}.tsx`) — single timeline list of expandable rows. Each `<LogRow>` shows the commit-style summary, short SHA, type/trigger, repoId chips, +/~/- delta, and status pill. Expanded body reveals per-step `<LogStep>` accordions (with synthesised execution log lines) plus an inline **"View diff"** toggle that renders a coloured unified-diff `<pre>` directly in the row — no more right-hand split-card detail view.
+  * `synthesiseDiff(job)` — deterministic 50-line-capped diff body templated from `diffStats + repoIds` via a small xmur3+mulberry32 PRNG. `+` lines tinted green, `-` red, `@@` headers purple.
+  * **Knowledge Graph search** — new pure `lib/intelligence/kg-filter.ts` exporting `filterKnowledgeGraph(graph, query)` (case-insensitive substring match across `id`, `label`, `repoId`; edges narrow to surviving nodes). The Intelligence Overview's KG modal now has a real `<input type="search">` with the Phase 13 search-pill shell + a node-count chip and an inline "No nodes match …" empty state. SVG re-renders against the filtered graph through `useMemo`.
+  * **First-Time Wizard** — steps 3-5 are no longer `phase7` neutral stubs. Done-criteria pulled from runtime store flags: step 3 `hasWiki`, step 4 every source's `knowledgeSync === "synced"`, step 5 `hasIntelligence`. Each step renders a `<Link>` deep into Wiki Configure / Intelligence Overview when not done. New "All set — hide this wizard" link appears once all five flip to Done. Wizard auto-hides on `graduated && hasIntelligence` (the full persona's bootstrap stamps both, so existing `playground.spec.ts` persona-visibility tests stay intact).
+  * **Tests** — Vitest 118/118 (+13 new: 7 `kg-filter` tests covering empty/casing/substring/edge-narrowing/no-results, 6 `diff-renderer` tests covering determinism, repo-paths, `+`/`-` proportion, 50-line cap, and empty-repoIds fallback). Playwright 47/47 (+3 new `phase16.spec.ts`: row expand-with-diff, KG search filters node count + no-results, partial wizard steps 3-5 interactive + step-3 link routes to `/wiki/configure`). Build clean. Biome clean on every Phase 16 file.
 
 ## Phase 17: OmniBoard "NotebookLM" Exploration
 * **Status:** `[ ] Pending`

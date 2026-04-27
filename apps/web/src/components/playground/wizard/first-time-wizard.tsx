@@ -1,17 +1,12 @@
 "use client";
 
-import { CheckCircle2, Circle, ChevronRight, X } from "lucide-react";
+import { CheckCircle2, ChevronRight, Circle, X } from "lucide-react";
+import Link from "next/link";
 import { useMemo, useState } from "react";
-import { useStore } from "@/stores";
 import { StatusPill } from "@/components/marketing/status-pill";
+import { useStore } from "@/stores";
 
-type SyncStrategy =
-  | "per-commit"
-  | "per-pr-merge"
-  | "hourly"
-  | "daily"
-  | "weekly"
-  | "manual";
+type SyncStrategy = "per-commit" | "per-pr-merge" | "hourly" | "daily" | "weekly" | "manual";
 
 const STRATEGIES: Array<{ id: SyncStrategy; label: string }> = [
   { id: "per-pr-merge", label: "Per PR merge (balanced default)" },
@@ -32,15 +27,28 @@ export function FirstTimeWizard() {
 
   const step1Done = sources.length > 0;
   const step2Done = strategy !== "";
+  const step3Done = active?.hasWiki === true;
+  const step4Done = sources.length > 0 && sources.every((s) => s.knowledgeSync === "synced");
+  const step5Done = active?.hasIntelligence === true;
+  const allDone = step1Done && step2Done && step3Done && step4Done && step5Done;
 
   const currentStep = useMemo(() => {
     if (!step1Done) return 1;
     if (!step2Done) return 2;
-    return 3;
-  }, [step1Done, step2Done]);
+    if (!step3Done) return 3;
+    if (!step4Done) return 4;
+    if (!step5Done) return 5;
+    return 6;
+  }, [step1Done, step2Done, step3Done, step4Done, step5Done]);
 
-  if (!active || active.graduated) return null;
+  if (!active) return null;
   if (dismissed.includes(active.id)) return null;
+  // Auto-hide once the workspace is fully bootstrapped (full persona is born
+  // with `graduated: true` + `hasIntelligence: true` — no wizard).
+  if (active.graduated && active.hasIntelligence) return null;
+
+  const wikiConfigureHref = `/workspace/${active.id}/wiki/configure`;
+  const intelligenceHref = `/workspace/${active.id}/intelligence/overview`;
 
   return (
     <section
@@ -60,21 +68,22 @@ export function FirstTimeWizard() {
         <p className="text-button-upper text-[#1d4ed8]">Getting Started</p>
         <h2 className="text-card-heading text-black">First-time workspace setup</h2>
         <p className="text-caption text-[#4e4e4e]">
-          Five steps to a living Wiki. Complete them in order — you can always come back.
+          Five steps to a fully-grounded workspace. Complete them in order — you can always come
+          back.
         </p>
       </header>
 
       <ol className="space-y-2">
         <WizardRow
           step={1}
-          state={step1Done ? "done" : currentStep === 1 ? "active" : "pending"}
+          state={rowState(step1Done, currentStep === 1)}
           title="Add a source"
           hint="Connect an integration or upload manually."
           cta={!step1Done ? { label: "Add source", onClick: () => openChooser(true) } : undefined}
         />
         <WizardRow
           step={2}
-          state={step2Done ? "done" : currentStep === 2 ? "active" : "pending"}
+          state={rowState(step2Done, currentStep === 2)}
           title="Choose a sync strategy"
           hint="How often the Wiki should refresh."
           interactive={
@@ -96,25 +105,66 @@ export function FirstTimeWizard() {
             ) : null
           }
         />
-        <WizardRow step={3} state="phase7" title="Configure the Wiki" hint="Pick which sources feed the Wiki and any instructions." />
-        <WizardRow step={4} state="phase7" title="Generate the first Wiki" hint="The only inherently manual generation step." />
-        <WizardRow step={5} state="phase7" title="(Optional) Generate Intelligence" hint="Light up the live dashboards." />
+        <WizardRow
+          step={3}
+          state={rowState(step3Done, currentStep === 3)}
+          title="Configure & generate the first Wiki"
+          hint="Pick which sources feed the Wiki and any custom instructions."
+          link={!step3Done ? { label: "Open Wiki Configure", href: wikiConfigureHref } : undefined}
+        />
+        <WizardRow
+          step={4}
+          state={rowState(step4Done, currentStep === 4)}
+          title="Sync sources with the Wiki"
+          hint={
+            step4Done
+              ? "Every source is in lock-step with the Wiki."
+              : "Some sources are still outdated — run Force Sync from Wiki Configure."
+          }
+          link={!step4Done ? { label: "Sync now", href: wikiConfigureHref } : undefined}
+        />
+        <WizardRow
+          step={5}
+          state={rowState(step5Done, currentStep === 5)}
+          title="Generate Intelligence"
+          hint="Light up the live health, security, coverage, and dependency dashboards."
+          link={!step5Done ? { label: "Open Intelligence", href: intelligenceHref } : undefined}
+        />
       </ol>
 
-      <p className="mt-4 text-caption text-[#4e4e4e]">
-        <button
-          type="button"
-          onClick={() => dismiss(active.id)}
-          className="underline underline-offset-2 hover:text-black"
-        >
-          Continue exploring Sources
-        </button>
-      </p>
+      {allDone ? (
+        <p className="mt-4 text-caption text-[#4e4e4e]">
+          <button
+            type="button"
+            onClick={() => dismiss(active.id)}
+            className="underline underline-offset-2 hover:text-black"
+            data-testid="wizard-hide"
+          >
+            All set — hide this wizard
+          </button>
+        </p>
+      ) : (
+        <p className="mt-4 text-caption text-[#4e4e4e]">
+          <button
+            type="button"
+            onClick={() => dismiss(active.id)}
+            className="underline underline-offset-2 hover:text-black"
+          >
+            Hide for now (you can re-open from settings)
+          </button>
+        </p>
+      )}
     </section>
   );
 }
 
-type RowState = "active" | "done" | "pending" | "phase7";
+type RowState = "active" | "done" | "pending";
+
+function rowState(done: boolean, isActive: boolean): RowState {
+  if (done) return "done";
+  if (isActive) return "active";
+  return "pending";
+}
 
 function WizardRow({
   step,
@@ -122,6 +172,7 @@ function WizardRow({
   title,
   hint,
   cta,
+  link,
   interactive,
 }: {
   step: number;
@@ -129,10 +180,15 @@ function WizardRow({
   title: string;
   hint: string;
   cta?: { label: string; onClick: () => void };
+  link?: { label: string; href: string };
   interactive?: React.ReactNode;
 }) {
   return (
-    <li className="flex items-start gap-3 bg-white rounded-card px-4 py-3 shadow-[var(--shadow-inset-border)]">
+    <li
+      className="flex items-start gap-3 bg-white rounded-card px-4 py-3 shadow-[var(--shadow-inset-border)]"
+      data-testid={`wizard-step-${step}`}
+      data-state={state}
+    >
       <span className="mt-0.5 shrink-0">
         {state === "done" ? (
           <CheckCircle2 size={20} strokeWidth={1.5} className="text-[#047857]" />
@@ -144,10 +200,12 @@ function WizardRow({
       </span>
       <div className="flex-1">
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-caption text-[#777169] font-semibold">0{step}</span>
+          <span className="text-caption text-[#777169] font-semibold">
+            {step.toString().padStart(2, "0")}
+          </span>
           <span className="text-body-medium text-black">{title}</span>
-          {state === "phase7" ? <StatusPill tone="neutral">Phase 7+</StatusPill> : null}
           {state === "done" ? <StatusPill tone="indexed">Done</StatusPill> : null}
+          {state === "active" ? <StatusPill tone="info">In progress</StatusPill> : null}
         </div>
         <p className="text-caption text-[#4e4e4e] mt-0.5">{hint}</p>
         {interactive}
@@ -159,6 +217,15 @@ function WizardRow({
           >
             {cta.label} →
           </button>
+        ) : null}
+        {link ? (
+          <Link
+            href={link.href}
+            className="mt-2 inline-flex items-center gap-1 text-caption text-[#1d4ed8] hover:text-[#1e40af] underline underline-offset-2"
+            data-testid={`wizard-step-${step}-link`}
+          >
+            {link.label} →
+          </Link>
         ) : null}
       </div>
     </li>
