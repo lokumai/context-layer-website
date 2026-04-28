@@ -167,6 +167,27 @@
         { "id": "c-017-2", "kind": "code", "repoId": "identity-service", "path": "services/identity-service/src/config.py", "lineRange": [36, 52], "anchor": "@identity-service/services/identity-service/src/config.py:36-52", "label": "private key loader" },
         { "id": "c-017-3", "kind": "code", "repoId": "offering-service", "path": "services/offering-service/src/infrastructure/camunda_client.py", "lineRange": [20, 44], "anchor": "@offering-service/services/offering-service/src/infrastructure/camunda_client.py:20-44", "label": "camunda client" }
       ]
+    },
+    {
+      "id": "qa-018",
+      "question": "How do I use SagaManager from shared-chassis?",
+      "answer": "`SagaManager` is the entry point for orchestrating Camunda-backed sagas from any write service [1]. Call `SagaManager.execute(saga_id, payload, idempotency_key)` — **not** `start()` (the latter was renamed in 0.4.0 because it shadowed Camunda's own SDK). `saga_id` is the BPMN process key (e.g. `\"offering-publication-saga\"`); `payload` is the JSON-serializable variable dict that becomes Camunda process variables; `idempotency_key` MUST be a `StrictIdempotencyKey` instance (see qa-019) — passing a raw string raises `TypeError` at construction time [2]. The call returns a `SagaHandle` with `.process_instance_id`, `.completed()` (awaitable), and `.cancel()` for compensation. Internally, `execute()` is wrapped by the outbox so the saga-start event and the business row commit atomically [3]. Retry semantics: transient Camunda failures auto-retry up to 3× with exponential backoff (250ms / 1s / 4s); persistent failures bubble as `SagaStartError` and the wrapping outbox transaction rolls back. Do not call `execute()` outside a Unit of Work — there's a runtime assertion that fails the request with HTTP 500 if you try.",
+      "citations": [
+        { "id": "c-018-1", "kind": "wiki", "anchor": "wiki://shared-chassis/overview#sagamanager", "label": "shared-chassis — SagaManager module" },
+        { "id": "c-018-2", "kind": "code", "repoId": "shared-chassis", "path": "libs/common-python/src/common/saga/manager.py", "lineRange": [1, 120], "anchor": "@shared-chassis/libs/common-python/src/common/saga/manager.py:1-120", "label": "SagaManager.execute()" },
+        { "id": "c-018-3", "kind": "code", "repoId": "offering-service", "path": "services/offering-service/src/application/service.py", "lineRange": [180, 240], "anchor": "@offering-service/services/offering-service/src/application/service.py:180-240", "label": "Reference call site (offering-service)" },
+        { "id": "c-018-4", "kind": "wiki", "anchor": "wiki://workspace/saga-flows#orchestration-pattern-common-to-all-sagas", "label": "Saga orchestration pattern" }
+      ]
+    },
+    {
+      "id": "qa-019",
+      "question": "What's the IdempotencyKey contract in shared-chassis?",
+      "answer": "`StrictIdempotencyKey` is a frozen dataclass enforcing four invariants at construction time [1]: (a) the `value` is a 26-char base32-Crockford string (deterministic — derive it via `StrictIdempotencyKey.derive(scope, *parts)` rather than guessing), (b) `scope` is one of the registered `IdempotencyScope` enum values (`SAGA`, `OUTBOX`, `PROJECTION`), (c) `ttl_seconds` is non-negative and ≤ 7 days (the dedup table TTL), and (d) `tenant_id` is required and validated as UUIDv7. The deterministic-hash requirement matters: re-running the same logical request must produce the same key, otherwise idempotency degrades to at-most-once. Consumers (the OutboxListener, store-query-service projections) reject duplicates by upserting into a `processed_keys` table keyed on `(scope, value)` — second insert raises a unique-constraint error which the chassis catches as `DuplicateKeyError` and converts to a no-op return [2]. Common gotcha: `derive(SAGA, offering_id)` is not enough — include the saga step name too, otherwise compensations collide with forward steps.",
+      "citations": [
+        { "id": "c-019-1", "kind": "code", "repoId": "shared-chassis", "path": "libs/common-python/src/common/saga/idempotency.py", "lineRange": [1, 90], "anchor": "@shared-chassis/libs/common-python/src/common/saga/idempotency.py:1-90", "label": "StrictIdempotencyKey dataclass" },
+        { "id": "c-019-2", "kind": "code", "repoId": "shared-chassis", "path": "libs/common-python/src/common/database/outbox.py", "lineRange": [80, 160], "anchor": "@shared-chassis/libs/common-python/src/common/database/outbox.py:80-160", "label": "Dedup ledger in OutboxListener" },
+        { "id": "c-019-3", "kind": "wiki", "anchor": "wiki://shared-chassis/overview#idempotency-contract", "label": "shared-chassis — idempotency contract" }
+      ]
     }
   ]
 }

@@ -1,0 +1,58 @@
+# Dockerignore — keep the build context lean (target < 50 MB).
+
+# Version control & local environment
+.git
+.gitignore
+.gitattributes
+.github
+.vscode
+.idea
+*.swp
+.DS_Store
+
+# Secrets — never copy any .env file into a layer
+.env
+.env.*
+!.env.example
+
+# Node / Bun installs (re-installed inside the image)
+node_modules
+**/node_modules
+.npm
+.bun
+
+# Build outputs (re-built inside the image)
+.next
+**/.next
+.turbo
+**/.turbo
+dist
+**/dist
+out
+**/out
+
+# Tests / coverage / playwright artifacts
+coverage
+**/coverage
+test-results
+**/test-results
+playwright-report
+**/playwright-report
+playwright/.cache
+**/playwright/.cache
+
+# Local Next.js standalone output (re-emitted in the build stage)
+**/.next/standalone
+
+# Editor + tooling caches
+*.log
+*.tmp
+.eslintcache
+.vitest-cache
+
+# Docs / screenshots not needed for runtime
+docs/screenshots
+docs/sample_pages
+
+# Local plan files / scratch
+.claude

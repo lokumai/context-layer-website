@@ -37,6 +37,13 @@ Built on the "Vercel Meta" 2026 stack:
 
 ---
 
+## 🚢 Deployment
+- [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) — Docker + GitHub Actions + DigitalOcean App Platform pipeline. Connect Claude Desktop to a remote MCP endpoint.
+
+## 🎬 Client demos
+- [AGENTS.md](AGENTS.md) — Project briefing for AI coding agents + the portable Siloed Agent Persona block.
+- [docs/DEMO_STORIES.md](docs/DEMO_STORIES.md) — Three "Without vs With" Claude Code demo scripts (Saga Trace, Multi-Repo Audit, Black-Box SDK).
+
 ## 📚 Documentation
 - [docs/DESIGN.md](docs/DESIGN.md) — ElevenLabs × Engineering Dashboard visual identity.
 - [docs/UI_UX.md](docs/UI_UX.md) — Core information architecture and user flows.

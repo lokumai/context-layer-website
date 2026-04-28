@@ -262,20 +262,28 @@ Production build: all 4 marketing routes statically prerendered; middleware 92 k
   * README — new "Running over HTTP" section with Claude Desktop / programmatic / Docker snippets.
 
 ## Phase 19: Client-Centric Demo Scenarios
-* **Status:** `[ ] Pending`
-* **Goal:** Create bulletproof, repeatable demo scenarios to impress clients.
-* **Execution Details:**
-  * **Siloed Agent Persona**: Populate `AGENTS.md` and `CLAUDE.md` with instructions to simulate enterprise friction (repo-siloing, cross-repo blindness).
-  * **Step-by-Step Scripting**: Populate `DEMO_STORIES.md` with exact prompts and expected outcomes for the 3 Story arcs.
-  * **Story 1: The "Blind" Saga Trace** — Demonstrate cross-repo knowledge discovery through the Workspace Narrative.
-  * **Story 2: The "Multi-Repo Minefield"** — Identify 3 "Deadly Critical" security flaws in a shared dependency via Code Intelligence.
-  * **Story 3: The "Black Box" Library** — Query the MCP server for up-to-date documentation on an internal shared SDK without indexing its source.
+* **Status:** `[x] Complete`
+* **Delivered (2026-04-28):**
+  * **Siloed Agent Persona** — new `AGENTS.md` + `CLAUDE.md` at the repo root. AGENTS.md contains a project briefing + a portable `--- BEGIN/END SILOED-AGENT-PERSONA ---` block operators paste into the **demo target repo** (canonically `amirkiarafiei/microservices-product-catalog`). The persona enforces three rules — repo silos, monorepo denial, friction mode — plus an explicit list of trigger phrases that flip the agent into "With Context Layer" mode. CLAUDE.md is a 10-line shim pointing back at AGENTS.md and adds Claude Code-specific narration guidance for demos.
+  * **MCP tool reference card** in `AGENTS.md §3` — exact parameter shapes for `get_wiki_content`, `get_code_intelligence`, `ask_context_layer`, copied from `packages/mcp/src/tools/*.ts` so any agent connected to the MCP knows the surface.
+  * **`docs/DEMO_STORIES.md`** — three scripted "Without vs With" stories with copy-paste prompts:
+    * **Story 1 — The "Blind" Saga Trace** — anchored on the Product Offering Publication Saga in `packages/mocks/data/workspace/saga-flows.md`. Without: Claude stuck at the api-gateway boundary. With: `get_wiki_content({ scope: "workspace" })` reveals offering-service orchestrating pricing/specification/store-query.
+    * **Story 2 — The "Multi-Repo Minefield"** — anchored on the actual two high-severity findings (`sec-001` in identity-service, `sec-002` in offering-service). Truthful copy ("two high-severity") instead of fabricating "3 critical". Without: per-repo review misses dependency risks. With: `get_code_intelligence({ topic: "overview" })` surfaces the cross-repo blast radius via the Phase 18 `repos[]` triage array.
+    * **Story 3 — The "Black Box" Library** — anchored on the existing `shared-chassis` source plus **two new canned Q&A pairs** (`qa-018` + `qa-019`) in `packages/mocks/data/chatbot/canned-qa.json` covering `SagaManager.execute()` semantics and the `StrictIdempotencyKey` contract. Without: Claude guesses `.start()` (wrong). With: `ask_context_layer({ question: "How do I use SagaManager from shared-chassis?" })` returns the canonical signature.
+  * **Mock data extension** — `packages/mocks/data/chatbot/canned-qa.json` grew from 17 to 19 pairs; `packages/mocks/data/metadata.json` `cannedQA` count bumped to match. The existing `cannedQA === qa.length` integrity test in `packages/mocks/src/__tests__/loaders.test.ts:212` continues to assert the count.
+  * **Setup runbook** in DEMO_STORIES.md — Claude Desktop config snippet for the remote MCP, target-repo cloning, persona-paste flow, troubleshooting (tokenizer hits on "SagaManager" / "shared-chassis", config restart, etc.).
+  * **Verification** — Vitest 22/22 (mocks) + 118/118 (web) + 13/13 (mcp) all green. Bun smoke proved `matchAnswer` lands `qa-018`, `qa-019`, and `qa-017` on their demo phrasings (deterministic bag-of-words match per `apps/web/src/lib/chatbot/match.ts`).
 
 ## Phase 20: Monorepo Dockerization & DigitalOcean Deployment
-* **Status:** `[ ] Pending`
-* **Goal:** Take the entire simulated playground and MCP server live.
-* **Execution Details:**
-  * Create robust `Dockerfile`s for the Next.js frontend and the MCP server.
-  * Set up GitHub Actions to push images to the GitHub Container Registry.
-  * Configure for DigitalOcean deployment, ensuring all `.env` gates (Auth personas, MCP tokens) are securely injected.
-  * Verify the live URLs work flawlessly for marketing, playground login, and remote MCP connections.
+* **Status:** `[x] Complete`
+* **Delivered (2026-04-28):**
+  * **Next.js standalone output** — `apps/web/next.config.ts` adds `output: "standalone"`, `outputFileTracingRoot` pointing at the monorepo root, and `outputFileTracingIncludes` for `/api/mocks/**` + `/workspace/**` so the tracer pulls `packages/mocks/data/**` (markdown + JSON the loaders read via `fs.readFile`). Verified via `bun run build`: `.next/standalone/packages/mocks/data/{workspace,sources,artifacts,...}` all present.
+  * **`apps/web/Dockerfile`** — three-stage Bun + Node hybrid: (1) `oven/bun:1.2-alpine` deps stage with `--frozen-lockfile`; (2) Bun build stage running `bun --cwd apps/web run build`; (3) `node:22-alpine` runner stage that copies `.next/standalone` + `.next/static` + `public/` + `packages/mocks/data` (belt-and-braces alongside the tracer), runs as non-root `nextjs` (UID 1001), `EXPOSE 3000`, `CMD ["node", "apps/web/server.js"]`.
+  * **`packages/mcp/Dockerfile`** — single-stage `oven/bun:1.2-alpine`. Workspace-filtered install (`bun install --frozen-lockfile --filter "@context-layer/mcp"`) keeps the image small. `EXPOSE 8765`, `CMD ["bun", "packages/mcp/src/bin-http.ts"]`.
+  * **`.dockerignore`** — strips `.git`, `node_modules`, `.next`, `.turbo`, all `.env*` (allows `.env.example`), test artifacts, playwright reports, docs/screenshots, and `.claude` to keep the build context lean.
+  * **`.github/workflows/deploy.yaml`** — three-job pipeline: parallel `build-web` + `build-mcp` (each with `docker/build-push-action@v6` + GHA layer caching scoped per-image; PRs build without push, `main` pushes both `:latest` and `:<sha>` tags to `ghcr.io/<owner>/...`); a follow-up `deploy` job that calls `doctl apps update $DO_APP_ID --spec .do/app.yaml --wait` only on `push` to `main`. Uses the built-in `GITHUB_TOKEN` for GHCR (via `permissions: packages: write`); requires `DIGITALOCEAN_ACCESS_TOKEN` + `DIGITALOCEAN_APP_ID` repo secrets — workflow gracefully warns and skips rollout if the app id isn't set yet.
+  * **`.do/app.yaml`** — DigitalOcean App Platform spec declaring two `basic-xxs` services on a single domain: web (`/`, port 3000, health `/`) and mcp (`/mcp-api`, port 8765 with `preserve_path_prefix: false`, health `/healthz`). Auth.js secrets (`AUTH_SECRET` + 3 persona passwords) and `CONTEXT_LAYER_TOKEN` declared as `RUN_TIME` `SECRET`s; `CONTEXT_LAYER_WORKSPACE` and `PORT` as plain values.
+  * **Env-example refresh** — `apps/web/.env.example` gained a DO comment block; new `packages/mcp/.env.example` documents `PORT`, `CONTEXT_LAYER_WORKSPACE`, `CONTEXT_LAYER_TOKEN` with generation hints.
+  * **`docs/DEPLOYMENT.md`** — operator runbook covering: first-time `doctl apps create`, GitHub repo-secret setup, DO env-var injection (per-component table), local Docker test (build + run + healthz curl), Claude Desktop remote-MCP config snippet, demo URL list, and operational notes (image sizes, cold start, log streaming, rollback, custom domain, cost).
+  * **README** — new "Deployment" + "Client demos" sections linking to the new docs.
+  * **Verification** — `bun run build` clean with standalone output; `.next/standalone/apps/web/server.js` produced; `packages/mocks/data/**` traced into the standalone tree; web 118/118 Vitest, mcp 13/13 Vitest, mocks 22/22 Vitest all green; existing 51/51 Playwright suite untouched (Phase 20 changes are infra-only).

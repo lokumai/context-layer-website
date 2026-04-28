@@ -1,0 +1,81 @@
+# DigitalOcean App Platform spec — Phase 20.
+#
+# Two services on a single domain:
+#   /          → web (Next.js standalone, port 3000)
+#   /mcp-api/* → mcp (Streamable-HTTP MCP server, port 8765, path-stripped)
+#
+# Deployment flow:
+#   1. First time: `doctl apps create --spec .do/app.yaml`. Save the returned app id.
+#   2. Add the app id + secrets to GitHub repo secrets (see docs/DEPLOYMENT.md).
+#   3. Subsequent rollouts happen via .github/workflows/deploy.yaml on push to main.
+
+name: context-layer
+region: nyc
+
+services:
+  - name: web
+    image:
+      registry_type: GHCR
+      registry: ghcr.io
+      repository: amirkiarafiei/context-layer-web
+      tag: latest
+      deploy_on_push: false
+    instance_size_slug: basic-xxs
+    instance_count: 1
+    http_port: 3000
+    health_check:
+      http_path: /
+      initial_delay_seconds: 15
+      period_seconds: 30
+      timeout_seconds: 5
+      success_threshold: 1
+      failure_threshold: 3
+    routes:
+      - path: /
+    envs:
+      - key: NODE_ENV
+        scope: RUN_TIME
+        value: production
+      - key: AUTH_SECRET
+        scope: RUN_TIME
+        type: SECRET
+      - key: AUTH_EMPTY_PASSWORD
+        scope: RUN_TIME
+        type: SECRET
+      - key: AUTH_PARTIAL_PASSWORD
+        scope: RUN_TIME
+        type: SECRET
+      - key: AUTH_FULL_PASSWORD
+        scope: RUN_TIME
+        type: SECRET
+
+  - name: mcp
+    image:
+      registry_type: GHCR
+      registry: ghcr.io
+      repository: amirkiarafiei/context-layer-mcp
+      tag: latest
+      deploy_on_push: false
+    instance_size_slug: basic-xxs
+    instance_count: 1
+    http_port: 8765
+    health_check:
+      http_path: /healthz
+      initial_delay_seconds: 5
+      period_seconds: 30
+      timeout_seconds: 5
+      success_threshold: 1
+      failure_threshold: 3
+    routes:
+      - path: /mcp-api
+        preserve_path_prefix: false
+    envs:
+      - key: PORT
+        scope: RUN_TIME
+        value: "8765"
+      - key: CONTEXT_LAYER_WORKSPACE
+        scope: RUN_TIME
+        value: microservices-product-catalog
+      - key: CONTEXT_LAYER_TOKEN
+        scope: RUN_TIME
+        type: SECRET
