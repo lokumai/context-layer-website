@@ -44,3 +44,5 @@ Thumbs.db
 
 # Agent / tooling — extra Git clones in-repo
 .worktrees/
+context-layer-website.code-workspace
+context-layer-website.code-workspace
