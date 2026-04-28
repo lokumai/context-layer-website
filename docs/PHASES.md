@@ -265,10 +265,11 @@ Production build: all 4 marketing routes statically prerendered; middleware 92 k
 * **Status:** `[ ] Pending`
 * **Goal:** Create bulletproof, repeatable demo scenarios to impress clients.
 * **Execution Details:**
-  * Define and script exactly how to run 3 "Wow Factor" scenarios using an external tool like Claude Code connected to our MCP.
-  * Scenario 1: Multi-repository Knowledge (Claude fixing a cross-repo saga flow).
-  * Scenario 2: Multi-repo Code Intelligence (Claude analyzing tech debt across 7 services).
-  * Scenario 3: External Library API checks (Claude querying the chatbot for up-to-date specs).
+  * **Siloed Agent Persona**: Populate `AGENTS.md` and `CLAUDE.md` with instructions to simulate enterprise friction (repo-siloing, cross-repo blindness).
+  * **Step-by-Step Scripting**: Populate `DEMO_STORIES.md` with exact prompts and expected outcomes for the 3 Story arcs.
+  * **Story 1: The "Blind" Saga Trace** — Demonstrate cross-repo knowledge discovery through the Workspace Narrative.
+  * **Story 2: The "Multi-Repo Minefield"** — Identify 3 "Deadly Critical" security flaws in a shared dependency via Code Intelligence.
+  * **Story 3: The "Black Box" Library** — Query the MCP server for up-to-date documentation on an internal shared SDK without indexing its source.
 
 ## Phase 20: Monorepo Dockerization & DigitalOcean Deployment
 * **Status:** `[ ] Pending`

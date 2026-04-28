@@ -136,6 +136,40 @@ Put yourself in the position of a client: what makes you say "Wow" ? what makes 
 --- OUR FINAL GOAL OF MCP AND DOCKERIZATION ---
 We will then implement them in a way that they are easily demonstrable to clients, update our MCP server so it can be used in docker container and expose its tools to the web. WHY? Because we will dockerize the project (this monorepo), put the image in github container registry, and deploy it to digital ocean. Then the users/clients/ceos can enter our URL and see the website (for marketing purposes) and even login with user-pass and use our system or we demo the system to them.  
 
+================================================================
+=========== Phase 19: High-Impact Demo Stories =================
+================================================================
+
+To effectively sell the "Context Layer," we must demonstrate a clear **"Without vs. With"** outcome. If Claude is too smart out-of-the-box, the client won't see the value. We will solve this by using a **Siloed Agent Persona** to simulate the friction of a real enterprise environment. (Long story short, we will ask claude to act stupid and give wrong answers when NOT using our system, and act smart and give right answers when using our system. This way, the client will see the "Before" and "After" clearly)
+
+### 🎭 The "Siloed Agent" Persona (`AGENTS.md` / `CLAUDE.md`)
+We will provide instructions that "cripple" Claude's default cross-repo intelligence:
+1. **Repo Silos:** Instructions to treat every service folder as a strictly isolated Git repository. Claude must "refuse" to guess cross-repo links without using Context Layer tools.
+2. **Monorepo Denial:** Even if running on a monorepo, Claude must act as if it's blind to sibling folders.
+3. **Friction Mode:** In "Without" mode, Claude should explicitly complain about stale documentation and the difficulty of microservice tracing.
+
+### 📖 Story 1: The "Blind" Saga Trace (Multi-Repo Visibility)
+* **Goal:** Show how Context Layer links "invisible" logic across repos.
+* **Without:** Claude traces an event in `api-gateway` but has no idea who consumes it. It concludes: *"I see the event emitted, but I'd need to index all 50 repos in the company to find the subscriber. I'm stuck."*
+* **With:** User says *"Check the Workspace Narrative."* Claude calls `get_wiki_content(scope: "workspace")`.
+* **Outcome:** Claude discovers the `ORDER_CREATED` → `inventory-service` link via the Narrative. It instantly identifies a missing handler in the Inventory service.
+
+### 🛡️ Story 2: The "Multi-Repo Minefield" (Security & Health)
+* **Goal:** Show strategic governance that a per-repo AI cannot see.
+* **Without:** Claude reviews `catalog-service` and says: *"The code looks clean. No issues found."*
+* **With:** User says *"Run a cross-repo intelligence audit."* Claude calls `get_code_intelligence(topic: "overview")`.
+* **Outcome:** Claude identifies **3 Deadly Critical** vulnerabilities in the `auth-service` (the common dependency). It warns the user: *"Your 'clean' code is actually exposing user data because the underlying auth layer is compromised. Patch auth-service first."*
+
+### 🧪 Story 3: The "Black Box" Library (External Shared SDK)
+* **Goal:** Show "Intelligence without Indexing" for internal frameworks or large SDKs.
+* **Without:** Claude tries to use `AmirkiaSDK.SagaManager` but lacks the documentation. It makes wrong assumptions about method signatures (e.g., calling `.start()` instead of `.execute()`), risking a build failure.
+* **With:** User says *"Ask the Context Layer about the SDK."* Claude calls `ask_context_layer(question: "How to use SagaManager in AmirkiaSDK?")`.
+* **Outcome:** Claude gets the exact, up-to-date signature and requirements (e.g., `StrictIdempotencyKey`) from the MCP server without ever needing to see the millions of lines of SDK source code.
+
+### 🛠️ Execution Artifacts
+- **`AGENTS.md` / `CLAUDE.md`**: The siloed persona instructions.
+- **`DEMO_STORIES.md`**: Step-by-step copy-paste scripts for the "Without" and "With" phases of each story.
+
 =============================================
 ======= AI Design Report ====================
 =============================================
