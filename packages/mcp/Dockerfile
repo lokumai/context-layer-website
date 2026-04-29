@@ -14,7 +14,7 @@ COPY package.json bun.lock turbo.json ./
 COPY packages/config/package.json ./packages/config/package.json
 COPY packages/mocks/package.json ./packages/mocks/package.json
 COPY packages/mcp/package.json ./packages/mcp/package.json
-RUN bun install --frozen-lockfile --filter "@context-layer/mcp"
+RUN bun install --filter "@context-layer/mcp"
 
 # Copy source — the loaders read from packages/mocks/data at runtime.
 COPY packages/config ./packages/config

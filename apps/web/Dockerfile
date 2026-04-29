@@ -18,7 +18,7 @@ COPY packages/config/package.json ./packages/config/package.json
 COPY packages/mocks/package.json ./packages/mocks/package.json
 COPY packages/mcp/package.json ./packages/mcp/package.json
 COPY packages/ui/package.json ./packages/ui/package.json
-RUN bun install --frozen-lockfile
+RUN bun install
 
 FROM oven/bun:1.2-alpine AS build
 WORKDIR /repo
@@ -26,7 +26,7 @@ COPY --from=deps /repo/node_modules ./node_modules
 COPY --from=deps /repo/apps/web/node_modules ./apps/web/node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
-RUN bun --cwd apps/web run build
+RUN cd apps/web && bun run build
 
 FROM node:22-alpine AS runner
 WORKDIR /app
