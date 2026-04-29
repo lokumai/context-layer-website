@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: ../..
+      dockerfile: apps/web/Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - AUTH_SECRET=dev-secret-do-not-use-in-prod-12345
+      - AUTH_EMPTY_PASSWORD=empty
+      - AUTH_PARTIAL_PASSWORD=partial
+      - AUTH_FULL_PASSWORD=full
+    restart: unless-stopped
+
+  mcp:
+    build:
+      context: ../..
+      dockerfile: packages/mcp/Dockerfile
+    ports:
+      - "8765:8765"
+    environment:
+      - NODE_ENV=development
+      - CONTEXT_LAYER_TOKEN=local-demo-token-12345
+    restart: unless-stopped
