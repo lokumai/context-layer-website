@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  web:
+    # In production, DO can just pull these images directly from GHCR
+    # Replace amirkia with your actual github repository owner if different
+    image: ghcr.io/amirkia/context-layer-web:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      # Ensure you pass these from your CI/CD or host environment in production
+      # - AUTH_SECRET=your-secure-production-secret
+      # - AUTH_EMPTY_PASSWORD=secure-empty
+      # - AUTH_PARTIAL_PASSWORD=secure-partial
+      # - AUTH_FULL_PASSWORD=secure-full
+    restart: always
+
+  mcp:
+    image: ghcr.io/amirkia/context-layer-mcp:latest
+    ports:
+      - "8765:8765"
+    environment:
+      - NODE_ENV=production
+      # - CONTEXT_LAYER_TOKEN=your-production-token
+    restart: always
