@@ -41,7 +41,9 @@ test.describe("playground per-persona", () => {
 
       // Empty persona → empty state; partial/full → 1 workspace card visible.
       if (p.expectedWorkspaces === 0) {
-        await expect(page.getByRole("heading", { name: /create your first workspace/i })).toBeVisible();
+        await expect(
+          page.getByRole("heading", { name: /create your first workspace/i }),
+        ).toBeVisible();
       } else {
         await expect(page.getByTestId("workspace-card").first()).toBeVisible();
       }

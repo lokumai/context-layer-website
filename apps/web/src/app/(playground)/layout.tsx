@@ -2,11 +2,7 @@ import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { PlaygroundNavbar } from "@/components/playground/chrome/navbar";
 
-export default async function PlaygroundLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default async function PlaygroundLayout({ children }: { children: React.ReactNode }) {
   const session = await auth();
   if (!session?.user?.personaId) {
     redirect("/login?callbackUrl=/workspaces");

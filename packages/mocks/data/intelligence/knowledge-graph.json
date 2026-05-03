@@ -1,41 +1,146 @@
 {
   "nodes": [
     { "id": "api-gateway", "label": "API Gateway", "repoId": "api-gateway", "type": "service" },
-    { "id": "identity-service", "label": "Identity Service", "repoId": "identity-service", "type": "service" },
-    { "id": "characteristic-service", "label": "Characteristic Service", "repoId": "characteristic-service", "type": "service" },
-    { "id": "specification-service", "label": "Specification Service", "repoId": "specification-service", "type": "service" },
-    { "id": "pricing-service", "label": "Pricing Service", "repoId": "pricing-service", "type": "service" },
-    { "id": "offering-service", "label": "Offering Service", "repoId": "offering-service", "type": "service" },
-    { "id": "store-query-service", "label": "Store Query Service", "repoId": "store-query-service", "type": "service" },
+    {
+      "id": "identity-service",
+      "label": "Identity Service",
+      "repoId": "identity-service",
+      "type": "service"
+    },
+    {
+      "id": "characteristic-service",
+      "label": "Characteristic Service",
+      "repoId": "characteristic-service",
+      "type": "service"
+    },
+    {
+      "id": "specification-service",
+      "label": "Specification Service",
+      "repoId": "specification-service",
+      "type": "service"
+    },
+    {
+      "id": "pricing-service",
+      "label": "Pricing Service",
+      "repoId": "pricing-service",
+      "type": "service"
+    },
+    {
+      "id": "offering-service",
+      "label": "Offering Service",
+      "repoId": "offering-service",
+      "type": "service"
+    },
+    {
+      "id": "store-query-service",
+      "label": "Store Query Service",
+      "repoId": "store-query-service",
+      "type": "service"
+    },
     { "id": "frontend", "label": "Frontend", "repoId": "frontend", "type": "service" },
-    { "id": "shared-chassis", "label": "Shared Chassis", "repoId": "shared-chassis", "type": "module" },
+    {
+      "id": "shared-chassis",
+      "label": "Shared Chassis",
+      "repoId": "shared-chassis",
+      "type": "module"
+    },
 
-    { "id": "postgres-identity", "label": "Postgres (users)", "repoId": "identity-service", "type": "datastore" },
-    { "id": "postgres-characteristic", "label": "Postgres (characteristics + outbox)", "repoId": "characteristic-service", "type": "datastore" },
-    { "id": "postgres-specification", "label": "Postgres (specs + cached_characteristics + outbox)", "repoId": "specification-service", "type": "datastore" },
-    { "id": "postgres-pricing", "label": "Postgres (prices + outbox)", "repoId": "pricing-service", "type": "datastore" },
-    { "id": "postgres-offering", "label": "Postgres (offerings + outbox)", "repoId": "offering-service", "type": "datastore" },
-    { "id": "mongodb", "label": "MongoDB (published_offerings)", "repoId": "store-query-service", "type": "datastore" },
-    { "id": "elasticsearch", "label": "Elasticsearch (offering index)", "repoId": "store-query-service", "type": "datastore" },
+    {
+      "id": "postgres-identity",
+      "label": "Postgres (users)",
+      "repoId": "identity-service",
+      "type": "datastore"
+    },
+    {
+      "id": "postgres-characteristic",
+      "label": "Postgres (characteristics + outbox)",
+      "repoId": "characteristic-service",
+      "type": "datastore"
+    },
+    {
+      "id": "postgres-specification",
+      "label": "Postgres (specs + cached_characteristics + outbox)",
+      "repoId": "specification-service",
+      "type": "datastore"
+    },
+    {
+      "id": "postgres-pricing",
+      "label": "Postgres (prices + outbox)",
+      "repoId": "pricing-service",
+      "type": "datastore"
+    },
+    {
+      "id": "postgres-offering",
+      "label": "Postgres (offerings + outbox)",
+      "repoId": "offering-service",
+      "type": "datastore"
+    },
+    {
+      "id": "mongodb",
+      "label": "MongoDB (published_offerings)",
+      "repoId": "store-query-service",
+      "type": "datastore"
+    },
+    {
+      "id": "elasticsearch",
+      "label": "Elasticsearch (offering index)",
+      "repoId": "store-query-service",
+      "type": "datastore"
+    },
 
     { "id": "rabbitmq", "label": "RabbitMQ", "repoId": "", "type": "external" },
     { "id": "camunda", "label": "Camunda BPMN Engine", "repoId": "", "type": "external" },
     { "id": "zipkin", "label": "Zipkin", "repoId": "", "type": "external" },
     { "id": "kibana", "label": "Kibana", "repoId": "", "type": "external" },
 
-    { "id": "topic-char", "label": "resource.characteristics.events", "repoId": "", "type": "external" },
-    { "id": "topic-spec", "label": "resource.specifications.events", "repoId": "", "type": "external" },
+    {
+      "id": "topic-char",
+      "label": "resource.characteristics.events",
+      "repoId": "",
+      "type": "external"
+    },
+    {
+      "id": "topic-spec",
+      "label": "resource.specifications.events",
+      "repoId": "",
+      "type": "external"
+    },
     { "id": "topic-price", "label": "commercial.pricing.events", "repoId": "", "type": "external" },
-    { "id": "topic-offering", "label": "product.offerings.events", "repoId": "", "type": "external" }
+    {
+      "id": "topic-offering",
+      "label": "product.offerings.events",
+      "repoId": "",
+      "type": "external"
+    }
   ],
   "edges": [
     { "source": "frontend", "target": "api-gateway", "kind": "calls", "label": "HTTPS" },
     { "source": "api-gateway", "target": "identity-service", "kind": "calls", "label": "/auth/*" },
-    { "source": "api-gateway", "target": "characteristic-service", "kind": "calls", "label": "/characteristics/*" },
-    { "source": "api-gateway", "target": "specification-service", "kind": "calls", "label": "/specifications/*" },
+    {
+      "source": "api-gateway",
+      "target": "characteristic-service",
+      "kind": "calls",
+      "label": "/characteristics/*"
+    },
+    {
+      "source": "api-gateway",
+      "target": "specification-service",
+      "kind": "calls",
+      "label": "/specifications/*"
+    },
     { "source": "api-gateway", "target": "pricing-service", "kind": "calls", "label": "/prices/*" },
-    { "source": "api-gateway", "target": "offering-service", "kind": "calls", "label": "/offerings/*" },
-    { "source": "api-gateway", "target": "store-query-service", "kind": "calls", "label": "/store/*" },
+    {
+      "source": "api-gateway",
+      "target": "offering-service",
+      "kind": "calls",
+      "label": "/offerings/*"
+    },
+    {
+      "source": "api-gateway",
+      "target": "store-query-service",
+      "kind": "calls",
+      "label": "/store/*"
+    },
 
     { "source": "identity-service", "target": "postgres-identity", "kind": "reads" },
     { "source": "identity-service", "target": "postgres-identity", "kind": "writes" },
@@ -45,17 +150,42 @@
 
     { "source": "specification-service", "target": "postgres-specification", "kind": "writes" },
     { "source": "specification-service", "target": "topic-spec", "kind": "publishes" },
-    { "source": "specification-service", "target": "topic-char", "kind": "subscribes", "label": "cache sync" },
+    {
+      "source": "specification-service",
+      "target": "topic-char",
+      "kind": "subscribes",
+      "label": "cache sync"
+    },
 
     { "source": "pricing-service", "target": "postgres-pricing", "kind": "writes" },
     { "source": "pricing-service", "target": "topic-price", "kind": "publishes" },
-    { "source": "pricing-service", "target": "camunda", "kind": "calls", "label": "lock-prices worker" },
+    {
+      "source": "pricing-service",
+      "target": "camunda",
+      "kind": "calls",
+      "label": "lock-prices worker"
+    },
 
     { "source": "offering-service", "target": "postgres-offering", "kind": "writes" },
     { "source": "offering-service", "target": "topic-offering", "kind": "publishes" },
-    { "source": "offering-service", "target": "camunda", "kind": "calls", "label": "start saga + confirm worker" },
-    { "source": "offering-service", "target": "specification-service", "kind": "calls", "label": "pre-flight validate" },
-    { "source": "offering-service", "target": "pricing-service", "kind": "calls", "label": "pre-flight validate" },
+    {
+      "source": "offering-service",
+      "target": "camunda",
+      "kind": "calls",
+      "label": "start saga + confirm worker"
+    },
+    {
+      "source": "offering-service",
+      "target": "specification-service",
+      "kind": "calls",
+      "label": "pre-flight validate"
+    },
+    {
+      "source": "offering-service",
+      "target": "pricing-service",
+      "kind": "calls",
+      "label": "pre-flight validate"
+    },
 
     { "source": "store-query-service", "target": "mongodb", "kind": "writes" },
     { "source": "store-query-service", "target": "elasticsearch", "kind": "writes" },
@@ -65,11 +195,36 @@
     { "source": "store-query-service", "target": "topic-spec", "kind": "subscribes" },
     { "source": "store-query-service", "target": "topic-price", "kind": "subscribes" },
     { "source": "store-query-service", "target": "topic-offering", "kind": "subscribes" },
-    { "source": "store-query-service", "target": "characteristic-service", "kind": "calls", "label": "hydrate on event" },
-    { "source": "store-query-service", "target": "specification-service", "kind": "calls", "label": "hydrate on event" },
-    { "source": "store-query-service", "target": "pricing-service", "kind": "calls", "label": "hydrate on event" },
-    { "source": "store-query-service", "target": "offering-service", "kind": "calls", "label": "hydrate on event" },
-    { "source": "store-query-service", "target": "camunda", "kind": "calls", "label": "create-store-entry worker" },
+    {
+      "source": "store-query-service",
+      "target": "characteristic-service",
+      "kind": "calls",
+      "label": "hydrate on event"
+    },
+    {
+      "source": "store-query-service",
+      "target": "specification-service",
+      "kind": "calls",
+      "label": "hydrate on event"
+    },
+    {
+      "source": "store-query-service",
+      "target": "pricing-service",
+      "kind": "calls",
+      "label": "hydrate on event"
+    },
+    {
+      "source": "store-query-service",
+      "target": "offering-service",
+      "kind": "calls",
+      "label": "hydrate on event"
+    },
+    {
+      "source": "store-query-service",
+      "target": "camunda",
+      "kind": "calls",
+      "label": "create-store-entry worker"
+    },
 
     { "source": "topic-char", "target": "rabbitmq", "kind": "depends" },
     { "source": "topic-spec", "target": "rabbitmq", "kind": "depends" },

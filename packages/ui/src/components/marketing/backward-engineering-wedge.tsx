@@ -11,7 +11,8 @@ export function BackwardEngineeringWedge() {
         </div>
         <h3 className="text-card-heading text-black mb-3">Write new code.</h3>
         <p className="text-body-standard text-[#4e4e4e] mb-6">
-          Assistants that generate, refactor, and complete code. Great when the project is already understood.
+          Assistants that generate, refactor, and complete code. Great when the project is already
+          understood.
         </p>
         <div className="flex flex-wrap gap-2">
           {["Cursor", "Claude Code", "Copilot", "Windsurf"].map((label) => (
@@ -33,7 +34,8 @@ export function BackwardEngineeringWedge() {
         </div>
         <h3 className="text-card-heading text-black mb-3">Understand existing code.</h3>
         <p className="text-body-standard text-[#4e4e4e] mb-6">
-          Reverse-engineer a legacy codebase into a persistent, versioned knowledge base. The layer that makes everything else trustworthy.
+          Reverse-engineer a legacy codebase into a persistent, versioned knowledge base. The layer
+          that makes everything else trustworthy.
         </p>
         <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-pill bg-black text-white text-[12px] font-semibold">
           <span className="w-1.5 h-1.5 rounded-full bg-[#10b981]" />

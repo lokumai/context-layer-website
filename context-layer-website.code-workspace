@@ -1,14 +1,14 @@
 {
-	"folders": [
-		{
-			"path": "."
-		},
-		{
-			"path": "../context-layer-info"
-		},
-		{
-			"path": "../microservices-product-catalog"
-		}
-	],
-	"settings": {}
+  "folders": [
+    {
+      "path": "."
+    },
+    {
+      "path": "../context-layer-info"
+    },
+    {
+      "path": "../microservices-product-catalog"
+    }
+  ],
+  "settings": {}
 }

@@ -15,18 +15,12 @@ export async function getWikiPage(repoId: string, slug: string): Promise<WikiPag
 }
 
 export async function getLlmsTxt(repoId: string | null): Promise<LlmsTxt> {
-  const rel =
-    repoId === null
-      ? join("llms-txt", "index.md")
-      : join("repos", repoId, "llms.txt");
+  const rel = repoId === null ? join("llms-txt", "index.md") : join("repos", repoId, "llms.txt");
   const md = await readText(rel);
   return { repoId, markdown: md };
 }
 
-function findNode(
-  nodes: WikiTree["nodes"],
-  slug: string,
-): WikiTree["nodes"][number] | null {
+function findNode(nodes: WikiTree["nodes"], slug: string): WikiTree["nodes"][number] | null {
   for (const n of nodes) {
     if (n.slug === slug) return n;
     if (n.children) {

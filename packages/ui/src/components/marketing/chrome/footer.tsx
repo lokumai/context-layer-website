@@ -11,7 +11,10 @@ const COLUMNS = [
     heading: "Resources",
     items: [
       { href: "/design-system", label: "Design System" },
-      { href: "https://github.com/amirkiarafiei/microservices-product-catalog", label: "Demo workspace" },
+      {
+        href: "https://github.com/amirkiarafiei/microservices-product-catalog",
+        label: "Demo workspace",
+      },
     ],
   },
   {
@@ -32,7 +35,13 @@ export function Footer() {
           <div className="col-span-2 md:col-span-1 space-y-3">
             <a href="/" aria-label="Context Layer home" className="inline-flex items-center">
               {/* biome-ignore lint/performance/noImgElement: logo doesn't need next/image optimization */}
-              <img src="/logo-landscape.svg" alt="Context Layer" className="h-7 w-auto" width={140} height={28} />
+              <img
+                src="/logo-landscape.svg"
+                alt="Context Layer"
+                className="h-7 w-auto"
+                width={140}
+                height={28}
+              />
             </a>
             <p className="text-caption text-[#777169] max-w-[240px]">
               Turn your codebase into living knowledge.
@@ -40,11 +49,16 @@ export function Footer() {
           </div>
           {COLUMNS.map((col) => (
             <div key={col.heading} className="space-y-3">
-              <h4 className="text-micro uppercase text-[#777169] tracking-[0.08em]">{col.heading}</h4>
+              <h4 className="text-micro uppercase text-[#777169] tracking-[0.08em]">
+                {col.heading}
+              </h4>
               <ul className="space-y-2">
                 {col.items.map((it) => (
                   <li key={it.label}>
-                    <a href={it.href} className="text-caption text-[#4e4e4e] hover:text-black transition-colors">
+                    <a
+                      href={it.href}
+                      className="text-caption text-[#4e4e4e] hover:text-black transition-colors"
+                    >
                       {it.label}
                     </a>
                   </li>
@@ -54,7 +68,9 @@ export function Footer() {
           ))}
         </div>
         <div className="mt-14 pt-6 border-t border-border-subtle flex flex-col md:flex-row items-start md:items-center justify-between gap-2">
-          <p className="text-tiny text-[#777169]">&copy; {year} Context Layer. All rights reserved.</p>
+          <p className="text-tiny text-[#777169]">
+            &copy; {year} Context Layer. All rights reserved.
+          </p>
           <p className="text-tiny text-[#777169]">Built for the Context Layer Ecosystem.</p>
         </div>
       </div>

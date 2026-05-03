@@ -15,7 +15,7 @@ export function PlaygroundNavbar() {
   const sourceCount = useStore((s) => s.sources.length);
   const workspaceIdFromPath = pathname.match(/^\/workspace\/([^/]+)/)?.[1] ?? null;
   const routeWorkspace = workspaceIdFromPath
-    ? workspaces.find((w) => w.id === workspaceIdFromPath) ?? null
+    ? (workspaces.find((w) => w.id === workspaceIdFromPath) ?? null)
     : null;
   const workspace = routeWorkspace ?? activeWorkspace;
   const workspaceId = workspace?.id ?? workspaceIdFromPath;

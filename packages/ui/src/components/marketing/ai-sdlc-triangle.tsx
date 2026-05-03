@@ -9,13 +9,39 @@ export function AISdlcTriangle() {
   const right = { x: W - 60, y: H - 40 };
 
   return (
-    <svg viewBox={`0 0 ${W} ${H}`} className="w-full max-w-[520px] h-auto" role="img" aria-label="AI-SDLC Triangle">
+    <svg
+      viewBox={`0 0 ${W} ${H}`}
+      className="w-full max-w-[520px] h-auto"
+      role="img"
+      aria-label="AI-SDLC Triangle"
+    >
       <title>Human · Agent · Codebase — Context is the channel</title>
 
       {/* Edges (colored) */}
-      <line x1={apex.x} y1={apex.y + 24} x2={left.x + 40} y2={left.y} stroke="#3b82f6" strokeWidth="2" />
-      <line x1={apex.x} y1={apex.y + 24} x2={right.x - 40} y2={right.y} stroke="#10b981" strokeWidth="2" />
-      <line x1={left.x + 40} y1={left.y} x2={right.x - 40} y2={right.y} stroke="#b45309" strokeWidth="2" />
+      <line
+        x1={apex.x}
+        y1={apex.y + 24}
+        x2={left.x + 40}
+        y2={left.y}
+        stroke="#3b82f6"
+        strokeWidth="2"
+      />
+      <line
+        x1={apex.x}
+        y1={apex.y + 24}
+        x2={right.x - 40}
+        y2={right.y}
+        stroke="#10b981"
+        strokeWidth="2"
+      />
+      <line
+        x1={left.x + 40}
+        y1={left.y}
+        x2={right.x - 40}
+        y2={right.y}
+        stroke="#b45309"
+        strokeWidth="2"
+      />
 
       {/* Edge labels */}
       <text
@@ -77,7 +103,15 @@ function Vertex({
 }) {
   return (
     <g>
-      <rect x={pos.x - 60} y={pos.y} width="120" height="48" rx="10" fill="#ffffff" stroke="rgba(0,0,0,0.08)" />
+      <rect
+        x={pos.x - 60}
+        y={pos.y}
+        width="120"
+        height="48"
+        rx="10"
+        fill="#ffffff"
+        stroke="rgba(0,0,0,0.08)"
+      />
       <rect x={pos.x - 54} y={pos.y + 6} width="30" height="36" rx="6" fill={bg} />
       <text
         x={pos.x - 19}
@@ -89,13 +123,7 @@ function Vertex({
       >
         {label}
       </text>
-      <text
-        x={pos.x - 19}
-        y={pos.y + 36}
-        fontSize="9"
-        fontFamily="var(--font-sans)"
-        fill="#777169"
-      >
+      <text x={pos.x - 19} y={pos.y + 36} fontSize="9" fontFamily="var(--font-sans)" fill="#777169">
         {sub}
       </text>
     </g>

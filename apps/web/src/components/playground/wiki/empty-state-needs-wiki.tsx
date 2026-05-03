@@ -20,7 +20,8 @@ export function EmptyStateNeedsWiki({
           Generate the Wiki to unlock {tabLabel.toLowerCase()}.
         </h2>
         <p className="text-body text-[#4e4e4e] max-w-[460px] mx-auto">
-          The Configure tab is where you choose which sources feed the Wiki and launch the first generation. Once the Wiki exists, this tab lights up.
+          The Configure tab is where you choose which sources feed the Wiki and launch the first
+          generation. Once the Wiki exists, this tab lights up.
         </p>
       </div>
       <a

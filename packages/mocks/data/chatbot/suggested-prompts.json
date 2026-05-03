@@ -1,14 +1,50 @@
 {
   "prompts": [
-    { "id": "sp-001", "text": "Walk me through a product-offering publication from click to customer visibility.", "groundedIn": "all" },
-    { "id": "sp-002", "text": "Which services depend on the pricing-service, and how?", "groundedIn": "all" },
-    { "id": "sp-003", "text": "How does the Transactional Outbox pattern work in this codebase?", "groundedIn": "codebase" },
-    { "id": "sp-004", "text": "Why is store-query-service CQRS-only and never writes back?", "groundedIn": "wiki" },
-    { "id": "sp-005", "text": "What happens if the Camunda engine crashes mid-saga?", "groundedIn": "all" },
-    { "id": "sp-006", "text": "Summarize the zero-trust enforcement across the workspace.", "groundedIn": "wiki" },
+    {
+      "id": "sp-001",
+      "text": "Walk me through a product-offering publication from click to customer visibility.",
+      "groundedIn": "all"
+    },
+    {
+      "id": "sp-002",
+      "text": "Which services depend on the pricing-service, and how?",
+      "groundedIn": "all"
+    },
+    {
+      "id": "sp-003",
+      "text": "How does the Transactional Outbox pattern work in this codebase?",
+      "groundedIn": "codebase"
+    },
+    {
+      "id": "sp-004",
+      "text": "Why is store-query-service CQRS-only and never writes back?",
+      "groundedIn": "wiki"
+    },
+    {
+      "id": "sp-005",
+      "text": "What happens if the Camunda engine crashes mid-saga?",
+      "groundedIn": "all"
+    },
+    {
+      "id": "sp-006",
+      "text": "Summarize the zero-trust enforcement across the workspace.",
+      "groundedIn": "wiki"
+    },
     { "id": "sp-007", "text": "Where is JWT validation implemented?", "groundedIn": "codebase" },
-    { "id": "sp-008", "text": "What test coverage gaps should I address first?", "groundedIn": "all" },
-    { "id": "sp-009", "text": "Show me the lifecycle state machine for an Offering.", "groundedIn": "wiki" },
-    { "id": "sp-010", "text": "How does the specification-service validate characteristic references without calling characteristic-service?", "groundedIn": "all" }
+    {
+      "id": "sp-008",
+      "text": "What test coverage gaps should I address first?",
+      "groundedIn": "all"
+    },
+    {
+      "id": "sp-009",
+      "text": "Show me the lifecycle state machine for an Offering.",
+      "groundedIn": "wiki"
+    },
+    {
+      "id": "sp-010",
+      "text": "How does the specification-service validate characteristic references without calling characteristic-service?",
+      "groundedIn": "all"
+    }
   ]
 }

@@ -11,12 +11,7 @@ interface MagneticButtonProps {
   href?: string;
 }
 
-export function MagneticButton({
-  children,
-  strength = 18,
-  className,
-  href,
-}: MagneticButtonProps) {
+export function MagneticButton({ children, strength = 18, className, href }: MagneticButtonProps) {
   const ref = useRef<HTMLAnchorElement | HTMLDivElement | null>(null);
   const reduceMotion = useReducedMotion();
   const rawX = useMotionValue(0);

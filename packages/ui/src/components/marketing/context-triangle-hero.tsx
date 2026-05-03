@@ -116,12 +116,7 @@ export function ContextTriangleHero() {
 
         {/* Source → Context tendrils */}
         {SOURCES.map((s, i) => (
-          <SourceTendril
-            key={s.id}
-            source={s}
-            index={i}
-            reduce={reduce}
-          />
+          <SourceTendril key={s.id} source={s} index={i} reduce={reduce} />
         ))}
 
         {/* Sources (bottom stack) */}
@@ -206,12 +201,7 @@ function SourceCard({
         {truncate(source.label, 32)}
       </text>
       {/* Status dot */}
-      <circle
-        cx={cx + cardW / 2 - 12}
-        cy={source.y + cardH / 2}
-        r="3"
-        fill="#10b981"
-      />
+      <circle cx={cx + cardW / 2 - 12} cy={source.y + cardH / 2} r="3" fill="#10b981" />
     </motion.g>
   );
 }
@@ -286,14 +276,7 @@ function ContextNode({ reduce }: { reduce: boolean | null }) {
       {/* 3 layer pills */}
       {["Workspace narrative", "Repo wikis", "llms.txt"].map((label, i) => (
         <g key={label}>
-          <rect
-            x={x + 14}
-            y={y + 55 + i * 18}
-            width={w - 28}
-            height="14"
-            rx="7"
-            fill="#ecfdf5"
-          />
+          <rect x={x + 14} y={y + 55 + i * 18} width={w - 28} height="14" rx="7" fill="#ecfdf5" />
           <circle cx={x + 24} cy={y + 62 + i * 18} r="3" fill="#10b981" />
           <text
             x={x + 34}
@@ -563,15 +546,21 @@ function SideLabels() {
     <g fontFamily="var(--font-sans)" fontSize="9" fontWeight="600" letterSpacing="1" fill="#777169">
       <g>
         <circle cx="22" cy="224" r="3" fill="#10b981" />
-        <text x="30" y="227">KNOWLEDGE · 3 LAYERS</text>
+        <text x="30" y="227">
+          KNOWLEDGE · 3 LAYERS
+        </text>
       </g>
       <g>
         <circle cx="22" cy="356" r="3" fill="#b45309" />
-        <text x="30" y="359">CONTEXT LAYER · PROCESSING</text>
+        <text x="30" y="359">
+          CONTEXT LAYER · PROCESSING
+        </text>
       </g>
       <g>
         <circle cx="22" cy="488" r="3" fill="#3b82f6" />
-        <text x="30" y="491">SOURCES · 5 INDEXED</text>
+        <text x="30" y="491">
+          SOURCES · 5 INDEXED
+        </text>
       </g>
     </g>
   );

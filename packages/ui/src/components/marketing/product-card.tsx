@@ -53,7 +53,10 @@ export function ProductCard({ href, eyebrow, title, description, available }: Pr
         <h3 className="text-card-heading text-black">{title}</h3>
         <p className="text-body-standard text-[#4e4e4e]">{description}</p>
         <p className="text-button text-black inline-flex items-center gap-1 pt-2">
-          Learn more <span aria-hidden className="transition-transform group-hover:translate-x-1">→</span>
+          Learn more{" "}
+          <span aria-hidden className="transition-transform group-hover:translate-x-1">
+            →
+          </span>
         </p>
       </div>
     </a>

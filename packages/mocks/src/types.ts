@@ -62,13 +62,7 @@ export interface Workspace {
   lastActivity: string;
   sourceCount: number;
   syncStatus: SyncStatus;
-  syncStrategy:
-    | "per-commit"
-    | "per-pr-merge"
-    | "hourly"
-    | "daily"
-    | "weekly"
-    | "manual";
+  syncStrategy: "per-commit" | "per-pr-merge" | "hourly" | "daily" | "weekly" | "manual";
   description: string;
 }
 

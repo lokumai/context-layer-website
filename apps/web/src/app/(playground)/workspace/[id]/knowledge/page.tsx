@@ -13,7 +13,8 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
       <p className="text-button-upper text-[#777169] mb-2">Coming Soon</p>
       <h1 className="text-section-heading text-black mb-4">Knowledge</h1>
       <p className="text-body text-[#777169] mb-6">
-        Living Wiki and Intelligence dashboards land here. Grounded in your indexed sources, updated on every commit.
+        Living Wiki and Intelligence dashboards land here. Grounded in your indexed sources, updated
+        on every commit.
       </p>
       <div className="flex justify-center mb-10">
         <StatusPill tone="neutral">Phase 7+</StatusPill>

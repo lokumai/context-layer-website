@@ -4,11 +4,7 @@ import { notFound, useParams } from "next/navigation";
 import { useEffect } from "react";
 import { useStore } from "@/stores";
 
-export default function WorkspaceScopeLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function WorkspaceScopeLayout({ children }: { children: React.ReactNode }) {
   const params = useParams();
   const id = Array.isArray(params?.id) ? params.id[0] : (params?.id as string | undefined);
   const workspaces = useStore((s) => s.workspaces);

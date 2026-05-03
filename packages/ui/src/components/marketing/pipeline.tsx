@@ -8,22 +8,19 @@ const STAGES = [
   {
     eyebrow: "01 · Input",
     title: "Sources",
-    body:
-      "Connect GitHub, Drive, Notion, Slack. Every file becomes searchable, every commit becomes context.",
+    body: "Connect GitHub, Drive, Notion, Slack. Every file becomes searchable, every commit becomes context.",
     illustration: <SourcesIllustration />,
   },
   {
     eyebrow: "02 · Understanding",
     title: "Knowledge",
-    body:
-      "Always-fresh Wiki and Intelligence dashboards. Cross-repo sagas. Health and security at a glance.",
+    body: "Always-fresh Wiki and Intelligence dashboards. Cross-repo sagas. Health and security at a glance.",
     illustration: <KnowledgeIllustration />,
   },
   {
     eyebrow: "03 · Output",
     title: "Generate",
-    body:
-      "DocsGen bundles, OmniBoard onboarding packs, MCP descriptors. Ship artifacts your stakeholders can actually read.",
+    body: "DocsGen bundles, OmniBoard onboarding packs, MCP descriptors. Ship artifacts your stakeholders can actually read.",
     illustration: <GenerateIllustration />,
   },
 ];

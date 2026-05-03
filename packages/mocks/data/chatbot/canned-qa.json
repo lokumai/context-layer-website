@@ -5,10 +5,33 @@
       "question": "Walk me through a product-offering publication from click to customer visibility.",
       "answer": "When an admin clicks Publish on a draft Offering in the Builder UI, the frontend posts to `/api/v1/offerings/{id}/publish` through the gateway [1]. The offering-service runs pre-flight validation (offering in DRAFT, has ≥1 spec / ≥1 price / ≥1 channel), validates each referenced spec and price via HTTP calls, and then starts the `offering-publication-saga` Camunda process [2]. The lifecycle transitions DRAFT → PUBLISHING and an `OfferingPublicationInitiated` event is written to the outbox in the same transaction [3]. Camunda then dispatches four external tasks: `lock-prices` (pricing-service), `validate-specifications` (specification-service), `create-store-entry` (store-query-service), and `confirm-publication` (offering-service). Each service's external-task worker polls Camunda, executes, and completes. The store-query consumer builds the denormalized `PublishedOffering` document in MongoDB and indexes it in Elasticsearch, so the customer can see it on the Store [4]. Final step confirms DRAFT → PUBLISHED, emits `OfferingPublished`, and the frontend's saga polling surfaces a success toast.",
       "citations": [
-        { "id": "c-001-1", "kind": "wiki", "anchor": "wiki://offering-service/overview#publication-orchestration-endpoint", "label": "offering-service — publish endpoint" },
-        { "id": "c-001-2", "kind": "code", "repoId": "offering-service", "path": "services/offering-service/src/application/service.py", "lineRange": [180, 240], "anchor": "@offering-service/services/offering-service/src/application/service.py:180-240", "label": "initiate_publication()" },
-        { "id": "c-001-3", "kind": "wiki", "anchor": "wiki://workspace/saga-flows#1-product-offering-publication-saga", "label": "Saga flows — publication" },
-        { "id": "c-001-4", "kind": "wiki", "anchor": "wiki://store-query-service/overview#event-consumers-and-synchronization", "label": "store-query — event consumers" }
+        {
+          "id": "c-001-1",
+          "kind": "wiki",
+          "anchor": "wiki://offering-service/overview#publication-orchestration-endpoint",
+          "label": "offering-service — publish endpoint"
+        },
+        {
+          "id": "c-001-2",
+          "kind": "code",
+          "repoId": "offering-service",
+          "path": "services/offering-service/src/application/service.py",
+          "lineRange": [180, 240],
+          "anchor": "@offering-service/services/offering-service/src/application/service.py:180-240",
+          "label": "initiate_publication()"
+        },
+        {
+          "id": "c-001-3",
+          "kind": "wiki",
+          "anchor": "wiki://workspace/saga-flows#1-product-offering-publication-saga",
+          "label": "Saga flows — publication"
+        },
+        {
+          "id": "c-001-4",
+          "kind": "wiki",
+          "anchor": "wiki://store-query-service/overview#event-consumers-and-synchronization",
+          "label": "store-query — event consumers"
+        }
       ]
     },
     {
@@ -16,10 +39,33 @@
       "question": "Which services depend on the pricing-service, and how?",
       "answer": "Three consumers: offering-service calls pricing-service synchronously during publication pre-flight to verify each referenced price exists [1], and Camunda's `lock-prices` external task (hosted by pricing-service itself) runs the actual locking; store-query-service subscribes to `commercial.pricing.events` on RabbitMQ to update the denormalized storefront doc when a price changes [2]; and api-gateway proxies `/api/v1/prices/*` from the frontend [3]. Pricing-service publishes five events: `PriceCreated`, `PriceUpdated`, `PriceDeleted`, `PriceLocked`, `PriceUnlocked` [4].",
       "citations": [
-        { "id": "c-002-1", "kind": "wiki", "anchor": "wiki://offering-service/overview#saga-orchestration-entry-point", "label": "offering pre-flight" },
-        { "id": "c-002-2", "kind": "wiki", "anchor": "wiki://store-query-service/overview#event-consumers-and-synchronization", "label": "store-query consumers" },
-        { "id": "c-002-3", "kind": "code", "repoId": "api-gateway", "path": "services/api-gateway/gateway/main.py", "lineRange": [120, 140], "anchor": "@api-gateway/services/api-gateway/gateway/main.py:120-140", "label": "prices route" },
-        { "id": "c-002-4", "kind": "wiki", "anchor": "wiki://pricing-service/overview#outbox-and-events", "label": "pricing events" }
+        {
+          "id": "c-002-1",
+          "kind": "wiki",
+          "anchor": "wiki://offering-service/overview#saga-orchestration-entry-point",
+          "label": "offering pre-flight"
+        },
+        {
+          "id": "c-002-2",
+          "kind": "wiki",
+          "anchor": "wiki://store-query-service/overview#event-consumers-and-synchronization",
+          "label": "store-query consumers"
+        },
+        {
+          "id": "c-002-3",
+          "kind": "code",
+          "repoId": "api-gateway",
+          "path": "services/api-gateway/gateway/main.py",
+          "lineRange": [120, 140],
+          "anchor": "@api-gateway/services/api-gateway/gateway/main.py:120-140",
+          "label": "prices route"
+        },
+        {
+          "id": "c-002-4",
+          "kind": "wiki",
+          "anchor": "wiki://pricing-service/overview#outbox-and-events",
+          "label": "pricing events"
+        }
       ]
     },
     {
@@ -27,9 +73,27 @@
       "question": "How does the Transactional Outbox pattern work in this codebase?",
       "answer": "Each write service writes the business row **and** an outbox row inside a single PostgreSQL transaction [1]. A trigger on the outbox table fires `pg_notify('outbox_events', row_id)` on INSERT. A background `OutboxListener` running in the FastAPI lifespan receives the notification, selects the pending row, publishes its payload to the correct RabbitMQ topic exchange, and on ack updates the row to `status = 'SENT'` [2]. If the listener crashes after COMMIT but before publishing, the row sits as PENDING and gets picked up on restart — at-least-once delivery. Consumers are responsible for idempotency; store-query-service uses a `processed_events` collection for this [3].",
       "citations": [
-        { "id": "c-003-1", "kind": "wiki", "anchor": "wiki://characteristic-service/overview#transactional-outbox", "label": "outbox implementation" },
-        { "id": "c-003-2", "kind": "code", "repoId": "shared-chassis", "path": "libs/common-python/src/common/database/outbox.py", "lineRange": [1, 120], "anchor": "@shared-chassis/libs/common-python/src/common/database/outbox.py:1-120", "label": "OutboxListener" },
-        { "id": "c-003-3", "kind": "wiki", "anchor": "wiki://store-query-service/overview#event-consumers-and-synchronization", "label": "idempotency ledger" }
+        {
+          "id": "c-003-1",
+          "kind": "wiki",
+          "anchor": "wiki://characteristic-service/overview#transactional-outbox",
+          "label": "outbox implementation"
+        },
+        {
+          "id": "c-003-2",
+          "kind": "code",
+          "repoId": "shared-chassis",
+          "path": "libs/common-python/src/common/database/outbox.py",
+          "lineRange": [1, 120],
+          "anchor": "@shared-chassis/libs/common-python/src/common/database/outbox.py:1-120",
+          "label": "OutboxListener"
+        },
+        {
+          "id": "c-003-3",
+          "kind": "wiki",
+          "anchor": "wiki://store-query-service/overview#event-consumers-and-synchronization",
+          "label": "idempotency ledger"
+        }
       ]
     },
     {
@@ -37,8 +101,21 @@
       "question": "Why is store-query-service CQRS-only and never writes back?",
       "answer": "By design: store-query-service is the read side of CQRS and participates only as a consumer [1]. It never writes to any command-side database and never issues POST/PUT/DELETE against another service. Its writes are confined to MongoDB (denormalized docs) and Elasticsearch (search index). This keeps the read side horizontally scalable and failure-isolated — a bug in the read projection can't corrupt the write side. When events referring to it arrive, it re-fetches the canonical data from the write services via HTTP rather than trusting the event payload — the 'trigger-then-fetch' pattern [2], which avoids staleness under out-of-order delivery.",
       "citations": [
-        { "id": "c-004-1", "kind": "wiki", "anchor": "wiki://store-query-service/overview", "label": "store-query overview" },
-        { "id": "c-004-2", "kind": "code", "repoId": "store-query-service", "path": "services/store-query-service/src/application/projections/offering_projection.py", "lineRange": [1, 80], "anchor": "@store-query-service/services/store-query-service/src/application/projections/offering_projection.py:1-80", "label": "OfferingProjection" }
+        {
+          "id": "c-004-1",
+          "kind": "wiki",
+          "anchor": "wiki://store-query-service/overview",
+          "label": "store-query overview"
+        },
+        {
+          "id": "c-004-2",
+          "kind": "code",
+          "repoId": "store-query-service",
+          "path": "services/store-query-service/src/application/projections/offering_projection.py",
+          "lineRange": [1, 80],
+          "anchor": "@store-query-service/services/store-query-service/src/application/projections/offering_projection.py:1-80",
+          "label": "OfferingProjection"
+        }
       ]
     },
     {
@@ -46,8 +123,21 @@
       "question": "What happens if the Camunda engine crashes mid-saga?",
       "answer": "Camunda's workflow state is persisted inside its own database, so a crash recovers the in-flight process on restart — workers resume polling and pick up the task from where the engine left off [1]. However, there are edge cases: if offering-service has transitioned to PUBLISHING but Camunda never came back, the offering stays stuck in PUBLISHING. A saga watchdog (currently a known tech-debt item) would reap orphan PUBLISHING offerings and kick compensation [2]. Today, operators use Camunda Cockpit to manually intervene.",
       "citations": [
-        { "id": "c-005-1", "kind": "wiki", "anchor": "wiki://workspace/saga-flows#orchestration-pattern-common-to-all-sagas", "label": "saga orchestration pattern" },
-        { "id": "c-005-2", "kind": "code", "repoId": "offering-service", "path": "services/offering-service/src/application/service.py", "lineRange": [260, 310], "anchor": "@offering-service/services/offering-service/src/application/service.py:260-310", "label": "publish state transition" }
+        {
+          "id": "c-005-1",
+          "kind": "wiki",
+          "anchor": "wiki://workspace/saga-flows#orchestration-pattern-common-to-all-sagas",
+          "label": "saga orchestration pattern"
+        },
+        {
+          "id": "c-005-2",
+          "kind": "code",
+          "repoId": "offering-service",
+          "path": "services/offering-service/src/application/service.py",
+          "lineRange": [260, 310],
+          "anchor": "@offering-service/services/offering-service/src/application/service.py:260-310",
+          "label": "publish state transition"
+        }
       ]
     },
     {
@@ -55,9 +145,27 @@
       "question": "Summarize the zero-trust enforcement across the workspace.",
       "answer": "identity-service issues RS256 JWTs and exposes its public key at `/auth/public-key` [1]. At startup, every other backend service fetches this key once via `shared-chassis.common.security` and caches it in memory. All subsequent request-time JWT validation happens locally against the cached key [2]. Api-gateway forwards the `Authorization` header; it does NOT itself validate the token. This means every service refuses unauthenticated requests even from inside the cluster — there is no 'trusted network' — and identity-service is a cold-path dependency (uptime matters at deploy-time, not at request-time) [3].",
       "citations": [
-        { "id": "c-006-1", "kind": "wiki", "anchor": "wiki://identity-service/overview#asymmetric-key-signing", "label": "identity-service JWT issuance" },
-        { "id": "c-006-2", "kind": "code", "repoId": "shared-chassis", "path": "libs/common-python/src/common/security.py", "lineRange": [1, 80], "anchor": "@shared-chassis/libs/common-python/src/common/security.py:1-80", "label": "JWT verify + cache" },
-        { "id": "c-006-3", "kind": "wiki", "anchor": "wiki://workspace/saga-flows#3-zero-trust-authorization-across-services", "label": "zero-trust saga flow" }
+        {
+          "id": "c-006-1",
+          "kind": "wiki",
+          "anchor": "wiki://identity-service/overview#asymmetric-key-signing",
+          "label": "identity-service JWT issuance"
+        },
+        {
+          "id": "c-006-2",
+          "kind": "code",
+          "repoId": "shared-chassis",
+          "path": "libs/common-python/src/common/security.py",
+          "lineRange": [1, 80],
+          "anchor": "@shared-chassis/libs/common-python/src/common/security.py:1-80",
+          "label": "JWT verify + cache"
+        },
+        {
+          "id": "c-006-3",
+          "kind": "wiki",
+          "anchor": "wiki://workspace/saga-flows#3-zero-trust-authorization-across-services",
+          "label": "zero-trust saga flow"
+        }
       ]
     },
     {
@@ -65,9 +173,30 @@
       "question": "Where is JWT validation implemented?",
       "answer": "In `libs/common-python/src/common/security.py`. The function `verify_jwt(token)` validates signature, expiry, and required claims against the cached public key [1]. FastAPI dependencies `get_current_user()` and `admin_required()` use it; every service imports those dependencies and attaches them to protected routes [2]. The public key itself is loaded once at service startup via `fetch_identity_public_key()` which calls `GET /auth/public-key` on identity-service [3].",
       "citations": [
-        { "id": "c-007-1", "kind": "code", "repoId": "shared-chassis", "path": "libs/common-python/src/common/security.py", "lineRange": [30, 90], "anchor": "@shared-chassis/libs/common-python/src/common/security.py:30-90", "label": "verify_jwt" },
-        { "id": "c-007-2", "kind": "code", "repoId": "characteristic-service", "path": "services/characteristic-service/src/main.py", "lineRange": [48, 70], "anchor": "@characteristic-service/services/characteristic-service/src/main.py:48-70", "label": "route deps usage" },
-        { "id": "c-007-3", "kind": "wiki", "anchor": "wiki://shared-chassis/overview#commonsecurity", "label": "common.security module" }
+        {
+          "id": "c-007-1",
+          "kind": "code",
+          "repoId": "shared-chassis",
+          "path": "libs/common-python/src/common/security.py",
+          "lineRange": [30, 90],
+          "anchor": "@shared-chassis/libs/common-python/src/common/security.py:30-90",
+          "label": "verify_jwt"
+        },
+        {
+          "id": "c-007-2",
+          "kind": "code",
+          "repoId": "characteristic-service",
+          "path": "services/characteristic-service/src/main.py",
+          "lineRange": [48, 70],
+          "anchor": "@characteristic-service/services/characteristic-service/src/main.py:48-70",
+          "label": "route deps usage"
+        },
+        {
+          "id": "c-007-3",
+          "kind": "wiki",
+          "anchor": "wiki://shared-chassis/overview#commonsecurity",
+          "label": "common.security module"
+        }
       ]
     },
     {
@@ -75,10 +204,39 @@
       "question": "What test coverage gaps should I address first?",
       "answer": "Three hotspots in order of impact [1]: (a) frontend at 58.4% line coverage — backfill `web-ui/src/lib/` and `web-ui/src/contexts/` to ≥80%, especially the saga-polling hook [2]; (b) api-gateway at 72.1% — cover the circuit-breaker half-open re-entry and CORS pre-flight on unknown origin [3]; (c) offering-service branch coverage at 76.8% — add a component test for saga compensation when Camunda is unreachable mid-flight [4]. These address both the highest-risk paths and the largest delta to the workspace's 80% target.",
       "citations": [
-        { "id": "c-008-1", "kind": "wiki", "anchor": "wiki://workspace/narrative#8-testing-posture", "label": "workspace testing posture" },
-        { "id": "c-008-2", "kind": "code", "repoId": "frontend", "path": "web-ui/src/lib/hooks.ts", "lineRange": [1, 80], "anchor": "@frontend/web-ui/src/lib/hooks.ts:1-80", "label": "useSagaPolling" },
-        { "id": "c-008-3", "kind": "code", "repoId": "api-gateway", "path": "services/api-gateway/gateway/circuit_breaker.py", "lineRange": [1, 60], "anchor": "@api-gateway/services/api-gateway/gateway/circuit_breaker.py:1-60", "label": "AsyncCircuitBreaker" },
-        { "id": "c-008-4", "kind": "code", "repoId": "offering-service", "path": "services/offering-service/src/saga_worker.py", "lineRange": [40, 120], "anchor": "@offering-service/services/offering-service/src/saga_worker.py:40-120", "label": "saga worker compensation" }
+        {
+          "id": "c-008-1",
+          "kind": "wiki",
+          "anchor": "wiki://workspace/narrative#8-testing-posture",
+          "label": "workspace testing posture"
+        },
+        {
+          "id": "c-008-2",
+          "kind": "code",
+          "repoId": "frontend",
+          "path": "web-ui/src/lib/hooks.ts",
+          "lineRange": [1, 80],
+          "anchor": "@frontend/web-ui/src/lib/hooks.ts:1-80",
+          "label": "useSagaPolling"
+        },
+        {
+          "id": "c-008-3",
+          "kind": "code",
+          "repoId": "api-gateway",
+          "path": "services/api-gateway/gateway/circuit_breaker.py",
+          "lineRange": [1, 60],
+          "anchor": "@api-gateway/services/api-gateway/gateway/circuit_breaker.py:1-60",
+          "label": "AsyncCircuitBreaker"
+        },
+        {
+          "id": "c-008-4",
+          "kind": "code",
+          "repoId": "offering-service",
+          "path": "services/offering-service/src/saga_worker.py",
+          "lineRange": [40, 120],
+          "anchor": "@offering-service/services/offering-service/src/saga_worker.py:40-120",
+          "label": "saga worker compensation"
+        }
       ]
     },
     {
@@ -86,8 +244,21 @@
       "question": "Show me the lifecycle state machine for an Offering.",
       "answer": "Four states with strict transitions: DRAFT → PUBLISHING → PUBLISHED → RETIRED [1]. On saga failure, PUBLISHING falls back to DRAFT. Key rules: only DRAFT can be edited or hard-deleted; only DRAFT offerings with ≥1 spec, ≥1 price, and ≥1 channel can publish (`canPublish()`); PUBLISHED offerings are immutable; RETIRED is a soft-delete terminal state hidden from the Store. The state lives in `lifecycle_status` on the `offerings` table and is always mutated inside the same transaction as the corresponding outbox event [2].",
       "citations": [
-        { "id": "c-009-1", "kind": "wiki", "anchor": "wiki://offering-service/overview#lifecycle-state-machine", "label": "offering state machine" },
-        { "id": "c-009-2", "kind": "code", "repoId": "offering-service", "path": "services/offering-service/src/domain/models.py", "lineRange": [40, 140], "anchor": "@offering-service/services/offering-service/src/domain/models.py:40-140", "label": "ProductOffering domain model" }
+        {
+          "id": "c-009-1",
+          "kind": "wiki",
+          "anchor": "wiki://offering-service/overview#lifecycle-state-machine",
+          "label": "offering state machine"
+        },
+        {
+          "id": "c-009-2",
+          "kind": "code",
+          "repoId": "offering-service",
+          "path": "services/offering-service/src/domain/models.py",
+          "lineRange": [40, 140],
+          "anchor": "@offering-service/services/offering-service/src/domain/models.py:40-140",
+          "label": "ProductOffering domain model"
+        }
       ]
     },
     {
@@ -95,9 +266,27 @@
       "question": "How does the specification-service validate characteristic references without calling characteristic-service?",
       "answer": "It maintains a local table `cached_characteristics` that mirrors the IDs (and names) of every characteristic in the system [1]. The cache is kept up-to-date by a background consumer subscribed to the `resource.characteristics.events` RabbitMQ topic, handling `CharacteristicCreated` / `CharacteristicUpdated` / `CharacteristicDeleted` events [2]. When someone creates or updates a specification, the service validates `characteristic_ids` against this cache in a single indexed lookup — no HTTP, no remote dependency. Eventual-consistency window is typically <1 second; a brief test-retry loop in component tests papers over that window [3].",
       "citations": [
-        { "id": "c-010-1", "kind": "wiki", "anchor": "wiki://specification-service/overview#local-cache-of-characteristics", "label": "local cache" },
-        { "id": "c-010-2", "kind": "code", "repoId": "specification-service", "path": "services/specification-service/src/infrastructure/characteristic_consumer.py", "lineRange": [1, 100], "anchor": "@specification-service/services/specification-service/src/infrastructure/characteristic_consumer.py:1-100", "label": "characteristic consumer" },
-        { "id": "c-010-3", "kind": "wiki", "anchor": "wiki://specification-service/overview#unit-test-scenarios", "label": "specification tests" }
+        {
+          "id": "c-010-1",
+          "kind": "wiki",
+          "anchor": "wiki://specification-service/overview#local-cache-of-characteristics",
+          "label": "local cache"
+        },
+        {
+          "id": "c-010-2",
+          "kind": "code",
+          "repoId": "specification-service",
+          "path": "services/specification-service/src/infrastructure/characteristic_consumer.py",
+          "lineRange": [1, 100],
+          "anchor": "@specification-service/services/specification-service/src/infrastructure/characteristic_consumer.py:1-100",
+          "label": "characteristic consumer"
+        },
+        {
+          "id": "c-010-3",
+          "kind": "wiki",
+          "anchor": "wiki://specification-service/overview#unit-test-scenarios",
+          "label": "specification tests"
+        }
       ]
     },
     {
@@ -105,9 +294,30 @@
       "question": "How do correlation IDs propagate across services?",
       "answer": "Api-gateway's middleware generates `X-Correlation-ID` on inbound requests if absent, then forwards the header to every downstream call [1]. Each service's chassis-provided middleware binds the header into the structlog context and the OpenTelemetry span, so every log line and every Zipkin span carry the same ID [2]. Outbox rows persist it, and the OutboxListener propagates it on published events so consumers can continue the same correlation when processing downstream [3].",
       "citations": [
-        { "id": "c-011-1", "kind": "code", "repoId": "api-gateway", "path": "services/api-gateway/gateway/middleware.py", "lineRange": [40, 90], "anchor": "@api-gateway/services/api-gateway/gateway/middleware.py:40-90", "label": "correlation middleware" },
-        { "id": "c-011-2", "kind": "code", "repoId": "shared-chassis", "path": "libs/common-python/src/common/logging.py", "lineRange": [1, 70], "anchor": "@shared-chassis/libs/common-python/src/common/logging.py:1-70", "label": "structlog bind" },
-        { "id": "c-011-3", "kind": "wiki", "anchor": "wiki://workspace/narrative#7-developer-operations-story", "label": "observability" }
+        {
+          "id": "c-011-1",
+          "kind": "code",
+          "repoId": "api-gateway",
+          "path": "services/api-gateway/gateway/middleware.py",
+          "lineRange": [40, 90],
+          "anchor": "@api-gateway/services/api-gateway/gateway/middleware.py:40-90",
+          "label": "correlation middleware"
+        },
+        {
+          "id": "c-011-2",
+          "kind": "code",
+          "repoId": "shared-chassis",
+          "path": "libs/common-python/src/common/logging.py",
+          "lineRange": [1, 70],
+          "anchor": "@shared-chassis/libs/common-python/src/common/logging.py:1-70",
+          "label": "structlog bind"
+        },
+        {
+          "id": "c-011-3",
+          "kind": "wiki",
+          "anchor": "wiki://workspace/narrative#7-developer-operations-story",
+          "label": "observability"
+        }
       ]
     },
     {
@@ -115,8 +325,18 @@
       "question": "Why is there a `cached_characteristics` table instead of a foreign-key join?",
       "answer": "Because the two services own separate databases — each has its own PostgreSQL instance, there's no cross-service FK to point at [1]. The cache is the database-per-service answer to referential integrity: specification-service keeps its own view of valid characteristic IDs, synced via events. Trade-off: eventual consistency (typically <1s), duplicated data, and stale-cache risk during long partitions [2].",
       "citations": [
-        { "id": "c-012-1", "kind": "wiki", "anchor": "wiki://specification-service/overview#architecture", "label": "spec architecture" },
-        { "id": "c-012-2", "kind": "wiki", "anchor": "wiki://specification-service/overview#local-cache-of-characteristics", "label": "trade-offs" }
+        {
+          "id": "c-012-1",
+          "kind": "wiki",
+          "anchor": "wiki://specification-service/overview#architecture",
+          "label": "spec architecture"
+        },
+        {
+          "id": "c-012-2",
+          "kind": "wiki",
+          "anchor": "wiki://specification-service/overview#local-cache-of-characteristics",
+          "label": "trade-offs"
+        }
       ]
     },
     {
@@ -124,9 +344,30 @@
       "question": "Where do I add a new DocsGen bundle?",
       "answer": "DocsGen bundles are declared in `packages/mocks/data/artifacts/index.json` with a `bundle` id; the six canonical bundles are `structure-architecture`, `specification-knowledge`, `health-risk`, `agentify`, `institutional-memory`, and `research-docs` [1]. To add a new bundle you extend the `ArtifactBundle` type union in `packages/mocks/src/types.ts`, add the card metadata in `index.json`, and create a content file under `data/artifacts/<bundle>/<id>/content.md` [2]. The UI reads everything through the `listArtifacts(bundle?)` loader [3].",
       "citations": [
-        { "id": "c-013-1", "kind": "wiki", "anchor": "wiki://workspace/narrative#2-logical-repository-split", "label": "workspace mocks layout" },
-        { "id": "c-013-2", "kind": "code", "repoId": "shared-chassis", "path": "packages/mocks/src/types.ts", "lineRange": [120, 140], "anchor": "@shared-chassis/packages/mocks/src/types.ts:120-140", "label": "ArtifactBundle type" },
-        { "id": "c-013-3", "kind": "code", "repoId": "shared-chassis", "path": "packages/mocks/src/loaders/artifacts.ts", "lineRange": [1, 40], "anchor": "@shared-chassis/packages/mocks/src/loaders/artifacts.ts:1-40", "label": "artifacts loader" }
+        {
+          "id": "c-013-1",
+          "kind": "wiki",
+          "anchor": "wiki://workspace/narrative#2-logical-repository-split",
+          "label": "workspace mocks layout"
+        },
+        {
+          "id": "c-013-2",
+          "kind": "code",
+          "repoId": "shared-chassis",
+          "path": "packages/mocks/src/types.ts",
+          "lineRange": [120, 140],
+          "anchor": "@shared-chassis/packages/mocks/src/types.ts:120-140",
+          "label": "ArtifactBundle type"
+        },
+        {
+          "id": "c-013-3",
+          "kind": "code",
+          "repoId": "shared-chassis",
+          "path": "packages/mocks/src/loaders/artifacts.ts",
+          "lineRange": [1, 40],
+          "anchor": "@shared-chassis/packages/mocks/src/loaders/artifacts.ts:1-40",
+          "label": "artifacts loader"
+        }
       ]
     },
     {
@@ -134,8 +375,21 @@
       "question": "What's the current overall health score and why?",
       "answer": "84 out of 100 [1]. The write services are healthy (88–92); api-gateway and shared-chassis are high; offering-service (78) and frontend (79) drag the number down. Root causes: offering-service carries unusual saga-orchestration complexity with two architecture-boundary exceptions (pre-flight validation calling peer services), and frontend has thin unit coverage and a couple of SSR-lifecycle quirks [2]. Trend: up from 79 last quarter.",
       "citations": [
-        { "id": "c-014-1", "kind": "wiki", "anchor": "wiki://workspace/narrative#8-testing-posture", "label": "workspace health" },
-        { "id": "c-014-2", "kind": "code", "repoId": "offering-service", "path": "services/offering-service/src/application/service.py", "lineRange": [180, 240], "anchor": "@offering-service/services/offering-service/src/application/service.py:180-240", "label": "pre-flight + saga start" }
+        {
+          "id": "c-014-1",
+          "kind": "wiki",
+          "anchor": "wiki://workspace/narrative#8-testing-posture",
+          "label": "workspace health"
+        },
+        {
+          "id": "c-014-2",
+          "kind": "code",
+          "repoId": "offering-service",
+          "path": "services/offering-service/src/application/service.py",
+          "lineRange": [180, 240],
+          "anchor": "@offering-service/services/offering-service/src/application/service.py:180-240",
+          "label": "pre-flight + saga start"
+        }
       ]
     },
     {
@@ -143,9 +397,27 @@
       "question": "How does the Store search endpoint work?",
       "answer": "`GET /api/v1/store/search` accepts `q`, `min_price`, `max_price`, `channel`, repeatable `characteristic=name:value`, and `skip`/`limit` [1]. The service constructs an Elasticsearch bool query: `must` holds the multi-match on name (boost 3x), description, and spec names; `filter` holds nested range queries on `pricing.value`, keyword filters on `sales_channels`, and nested queries on `specifications.characteristics` [2]. Results come back as `{total, items}` where items are full denormalized PublishedOffering docs. Elasticsearch is populated from the same Motor upsert that writes to MongoDB [3].",
       "citations": [
-        { "id": "c-015-1", "kind": "wiki", "anchor": "wiki://store-query-service/overview#search-endpoint", "label": "search endpoint" },
-        { "id": "c-015-2", "kind": "code", "repoId": "store-query-service", "path": "services/store-query-service/src/application/search.py", "lineRange": [1, 120], "anchor": "@store-query-service/services/store-query-service/src/application/search.py:1-120", "label": "search.py" },
-        { "id": "c-015-3", "kind": "wiki", "anchor": "wiki://store-query-service/overview#mongodb-storage-layer", "label": "MongoDB + ES sync" }
+        {
+          "id": "c-015-1",
+          "kind": "wiki",
+          "anchor": "wiki://store-query-service/overview#search-endpoint",
+          "label": "search endpoint"
+        },
+        {
+          "id": "c-015-2",
+          "kind": "code",
+          "repoId": "store-query-service",
+          "path": "services/store-query-service/src/application/search.py",
+          "lineRange": [1, 120],
+          "anchor": "@store-query-service/services/store-query-service/src/application/search.py:1-120",
+          "label": "search.py"
+        },
+        {
+          "id": "c-015-3",
+          "kind": "wiki",
+          "anchor": "wiki://store-query-service/overview#mongodb-storage-layer",
+          "label": "MongoDB + ES sync"
+        }
       ]
     },
     {
@@ -153,9 +425,27 @@
       "question": "Which services are event publishers and which are consumers?",
       "answer": "Publishers: characteristic-service, specification-service, pricing-service, and offering-service each emit to their own topic [1]. Consumers: store-query-service subscribes to all four topics and projects the read model; specification-service additionally subscribes to `resource.characteristics.events` to maintain its local cache [2]. identity-service, api-gateway, and frontend do not participate in the event plane [3].",
       "citations": [
-        { "id": "c-016-1", "kind": "wiki", "anchor": "wiki://workspace/narrative#5-inter-service-communication-over-events", "label": "event topology" },
-        { "id": "c-016-2", "kind": "wiki", "anchor": "wiki://specification-service/overview#event-subscription-characteristic-events", "label": "spec consumer" },
-        { "id": "c-016-3", "kind": "code", "repoId": "shared-chassis", "path": "libs/common-python/src/common/messaging.py", "lineRange": [1, 80], "anchor": "@shared-chassis/libs/common-python/src/common/messaging.py:1-80", "label": "messaging wrappers" }
+        {
+          "id": "c-016-1",
+          "kind": "wiki",
+          "anchor": "wiki://workspace/narrative#5-inter-service-communication-over-events",
+          "label": "event topology"
+        },
+        {
+          "id": "c-016-2",
+          "kind": "wiki",
+          "anchor": "wiki://specification-service/overview#event-subscription-characteristic-events",
+          "label": "spec consumer"
+        },
+        {
+          "id": "c-016-3",
+          "kind": "code",
+          "repoId": "shared-chassis",
+          "path": "libs/common-python/src/common/messaging.py",
+          "lineRange": [1, 80],
+          "anchor": "@shared-chassis/libs/common-python/src/common/messaging.py:1-80",
+          "label": "messaging wrappers"
+        }
       ]
     },
     {
@@ -163,9 +453,30 @@
       "question": "Are there any critical security findings I should fix today?",
       "answer": "No critical, two high [1]. SEC-001 — identity-service loads the RSA private key from a plain env var; migrate to a secret mount or KMS [2]. SEC-002 — offering-service accepts `CAMUNDA_URL` without scheme/host validation, creating an SSRF surface if the variable is ever user-controlled [3]. Both are configuration changes rather than architectural work.",
       "citations": [
-        { "id": "c-017-1", "kind": "wiki", "anchor": "wiki://workspace/narrative#9-what-makes-this-hard-for-single-repo-wiki-tools", "label": "workspace security view" },
-        { "id": "c-017-2", "kind": "code", "repoId": "identity-service", "path": "services/identity-service/src/config.py", "lineRange": [36, 52], "anchor": "@identity-service/services/identity-service/src/config.py:36-52", "label": "private key loader" },
-        { "id": "c-017-3", "kind": "code", "repoId": "offering-service", "path": "services/offering-service/src/infrastructure/camunda_client.py", "lineRange": [20, 44], "anchor": "@offering-service/services/offering-service/src/infrastructure/camunda_client.py:20-44", "label": "camunda client" }
+        {
+          "id": "c-017-1",
+          "kind": "wiki",
+          "anchor": "wiki://workspace/narrative#9-what-makes-this-hard-for-single-repo-wiki-tools",
+          "label": "workspace security view"
+        },
+        {
+          "id": "c-017-2",
+          "kind": "code",
+          "repoId": "identity-service",
+          "path": "services/identity-service/src/config.py",
+          "lineRange": [36, 52],
+          "anchor": "@identity-service/services/identity-service/src/config.py:36-52",
+          "label": "private key loader"
+        },
+        {
+          "id": "c-017-3",
+          "kind": "code",
+          "repoId": "offering-service",
+          "path": "services/offering-service/src/infrastructure/camunda_client.py",
+          "lineRange": [20, 44],
+          "anchor": "@offering-service/services/offering-service/src/infrastructure/camunda_client.py:20-44",
+          "label": "camunda client"
+        }
       ]
     },
     {
@@ -173,10 +484,36 @@
       "question": "How do I use SagaManager from shared-chassis?",
       "answer": "`SagaManager` is the entry point for orchestrating Camunda-backed sagas from any write service [1]. Call `SagaManager.execute(saga_id, payload, idempotency_key)` — **not** `start()` (the latter was renamed in 0.4.0 because it shadowed Camunda's own SDK). `saga_id` is the BPMN process key (e.g. `\"offering-publication-saga\"`); `payload` is the JSON-serializable variable dict that becomes Camunda process variables; `idempotency_key` MUST be a `StrictIdempotencyKey` instance (see qa-019) — passing a raw string raises `TypeError` at construction time [2]. The call returns a `SagaHandle` with `.process_instance_id`, `.completed()` (awaitable), and `.cancel()` for compensation. Internally, `execute()` is wrapped by the outbox so the saga-start event and the business row commit atomically [3]. Retry semantics: transient Camunda failures auto-retry up to 3× with exponential backoff (250ms / 1s / 4s); persistent failures bubble as `SagaStartError` and the wrapping outbox transaction rolls back. Do not call `execute()` outside a Unit of Work — there's a runtime assertion that fails the request with HTTP 500 if you try.",
       "citations": [
-        { "id": "c-018-1", "kind": "wiki", "anchor": "wiki://shared-chassis/overview#sagamanager", "label": "shared-chassis — SagaManager module" },
-        { "id": "c-018-2", "kind": "code", "repoId": "shared-chassis", "path": "libs/common-python/src/common/saga/manager.py", "lineRange": [1, 120], "anchor": "@shared-chassis/libs/common-python/src/common/saga/manager.py:1-120", "label": "SagaManager.execute()" },
-        { "id": "c-018-3", "kind": "code", "repoId": "offering-service", "path": "services/offering-service/src/application/service.py", "lineRange": [180, 240], "anchor": "@offering-service/services/offering-service/src/application/service.py:180-240", "label": "Reference call site (offering-service)" },
-        { "id": "c-018-4", "kind": "wiki", "anchor": "wiki://workspace/saga-flows#orchestration-pattern-common-to-all-sagas", "label": "Saga orchestration pattern" }
+        {
+          "id": "c-018-1",
+          "kind": "wiki",
+          "anchor": "wiki://shared-chassis/overview#sagamanager",
+          "label": "shared-chassis — SagaManager module"
+        },
+        {
+          "id": "c-018-2",
+          "kind": "code",
+          "repoId": "shared-chassis",
+          "path": "libs/common-python/src/common/saga/manager.py",
+          "lineRange": [1, 120],
+          "anchor": "@shared-chassis/libs/common-python/src/common/saga/manager.py:1-120",
+          "label": "SagaManager.execute()"
+        },
+        {
+          "id": "c-018-3",
+          "kind": "code",
+          "repoId": "offering-service",
+          "path": "services/offering-service/src/application/service.py",
+          "lineRange": [180, 240],
+          "anchor": "@offering-service/services/offering-service/src/application/service.py:180-240",
+          "label": "Reference call site (offering-service)"
+        },
+        {
+          "id": "c-018-4",
+          "kind": "wiki",
+          "anchor": "wiki://workspace/saga-flows#orchestration-pattern-common-to-all-sagas",
+          "label": "Saga orchestration pattern"
+        }
       ]
     },
     {
@@ -184,9 +521,30 @@
       "question": "What's the IdempotencyKey contract in shared-chassis?",
       "answer": "`StrictIdempotencyKey` is a frozen dataclass enforcing four invariants at construction time [1]: (a) the `value` is a 26-char base32-Crockford string (deterministic — derive it via `StrictIdempotencyKey.derive(scope, *parts)` rather than guessing), (b) `scope` is one of the registered `IdempotencyScope` enum values (`SAGA`, `OUTBOX`, `PROJECTION`), (c) `ttl_seconds` is non-negative and ≤ 7 days (the dedup table TTL), and (d) `tenant_id` is required and validated as UUIDv7. The deterministic-hash requirement matters: re-running the same logical request must produce the same key, otherwise idempotency degrades to at-most-once. Consumers (the OutboxListener, store-query-service projections) reject duplicates by upserting into a `processed_keys` table keyed on `(scope, value)` — second insert raises a unique-constraint error which the chassis catches as `DuplicateKeyError` and converts to a no-op return [2]. Common gotcha: `derive(SAGA, offering_id)` is not enough — include the saga step name too, otherwise compensations collide with forward steps.",
       "citations": [
-        { "id": "c-019-1", "kind": "code", "repoId": "shared-chassis", "path": "libs/common-python/src/common/saga/idempotency.py", "lineRange": [1, 90], "anchor": "@shared-chassis/libs/common-python/src/common/saga/idempotency.py:1-90", "label": "StrictIdempotencyKey dataclass" },
-        { "id": "c-019-2", "kind": "code", "repoId": "shared-chassis", "path": "libs/common-python/src/common/database/outbox.py", "lineRange": [80, 160], "anchor": "@shared-chassis/libs/common-python/src/common/database/outbox.py:80-160", "label": "Dedup ledger in OutboxListener" },
-        { "id": "c-019-3", "kind": "wiki", "anchor": "wiki://shared-chassis/overview#idempotency-contract", "label": "shared-chassis — idempotency contract" }
+        {
+          "id": "c-019-1",
+          "kind": "code",
+          "repoId": "shared-chassis",
+          "path": "libs/common-python/src/common/saga/idempotency.py",
+          "lineRange": [1, 90],
+          "anchor": "@shared-chassis/libs/common-python/src/common/saga/idempotency.py:1-90",
+          "label": "StrictIdempotencyKey dataclass"
+        },
+        {
+          "id": "c-019-2",
+          "kind": "code",
+          "repoId": "shared-chassis",
+          "path": "libs/common-python/src/common/database/outbox.py",
+          "lineRange": [80, 160],
+          "anchor": "@shared-chassis/libs/common-python/src/common/database/outbox.py:80-160",
+          "label": "Dedup ledger in OutboxListener"
+        },
+        {
+          "id": "c-019-3",
+          "kind": "wiki",
+          "anchor": "wiki://shared-chassis/overview#idempotency-contract",
+          "label": "shared-chassis — idempotency contract"
+        }
       ]
     }
   ]

@@ -51,10 +51,7 @@ function Step({
         >
           {icon}
         </div>
-        <span
-          className="text-button-upper"
-          style={{ color: accentFg }}
-        >
+        <span className="text-button-upper" style={{ color: accentFg }}>
           {num}
         </span>
       </div>

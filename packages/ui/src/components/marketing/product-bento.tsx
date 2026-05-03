@@ -47,9 +47,21 @@ export function ProductBento() {
           kicker="What you bring"
           body="Connect code, docs, and discussion. One indexed substrate feeds every downstream agent."
           items={[
-            { icon: <GitBranch size={14} strokeWidth={1.5} />, label: "Code", sub: "GitHub · GitLab · Bitbucket · Gitea" },
-            { icon: <FileText size={14} strokeWidth={1.5} />, label: "Files", sub: "Drive · Notion · Confluence · upload" },
-            { icon: <Upload size={14} strokeWidth={1.5} />, label: "Discussion", sub: "Slack · Linear · Jira · GitHub Discussions" },
+            {
+              icon: <GitBranch size={14} strokeWidth={1.5} />,
+              label: "Code",
+              sub: "GitHub · GitLab · Bitbucket · Gitea",
+            },
+            {
+              icon: <FileText size={14} strokeWidth={1.5} />,
+              label: "Files",
+              sub: "Drive · Notion · Confluence · upload",
+            },
+            {
+              icon: <Upload size={14} strokeWidth={1.5} />,
+              label: "Discussion",
+              sub: "Slack · Linear · Jira · GitHub Discussions",
+            },
           ]}
         />
         <GroupCard
@@ -60,8 +72,16 @@ export function ProductBento() {
           kicker="What we sync"
           body="Living wikis and live dashboards. Always fresh, always versioned, always multi-repo."
           items={[
-            { icon: <BookOpen size={14} strokeWidth={1.5} />, label: "Wiki", sub: "Workspace · Repo · llms.txt" },
-            { icon: <LayoutDashboard size={14} strokeWidth={1.5} />, label: "Intelligence", sub: "Health · Security · Coverage · Deps" },
+            {
+              icon: <BookOpen size={14} strokeWidth={1.5} />,
+              label: "Wiki",
+              sub: "Workspace · Repo · llms.txt",
+            },
+            {
+              icon: <LayoutDashboard size={14} strokeWidth={1.5} />,
+              label: "Intelligence",
+              sub: "Health · Security · Coverage · Deps",
+            },
           ]}
         />
         <GroupCard
@@ -72,7 +92,11 @@ export function ProductBento() {
           kicker="Ask anything, grounded"
           body="A conversational surface over every source and wiki. Every answer cites both a wiki anchor and an `@file:line` code location."
           items={[
-            { icon: <MessageSquare size={14} strokeWidth={1.5} />, label: "Grounded Q&A", sub: "Wiki + Code + Files citations" },
+            {
+              icon: <MessageSquare size={14} strokeWidth={1.5} />,
+              label: "Grounded Q&A",
+              sub: "Wiki + Code + Files citations",
+            },
           ]}
         />
         <GroupCard
@@ -83,9 +107,21 @@ export function ProductBento() {
           kicker="One-shot artifacts"
           body="Frozen, shareable outputs. Docs you can email, onboarding packs you can play, MCP descriptors your agents can consume."
           items={[
-            { icon: <FileText size={14} strokeWidth={1.5} />, label: "DocsGen", sub: "6 bundles of exportable docs" },
-            { icon: <Headphones size={14} strokeWidth={1.5} />, label: "OmniBoard", sub: "Text · Audio · Video onboarding" },
-            { icon: <Plug size={14} strokeWidth={1.5} />, label: "MCPGen", sub: "MCP descriptors (tentative)" },
+            {
+              icon: <FileText size={14} strokeWidth={1.5} />,
+              label: "DocsGen",
+              sub: "6 bundles of exportable docs",
+            },
+            {
+              icon: <Headphones size={14} strokeWidth={1.5} />,
+              label: "OmniBoard",
+              sub: "Text · Audio · Video onboarding",
+            },
+            {
+              icon: <Plug size={14} strokeWidth={1.5} />,
+              label: "MCPGen",
+              sub: "MCP descriptors (tentative)",
+            },
           ]}
         />
       </div>
@@ -97,13 +133,19 @@ export function ProductBento() {
           <p className="text-button-upper text-white/60">Foundation · The Moat</p>
         </div>
         <p className="text-body-standard text-white/90 max-w-[640px]">
-          Built on a <strong className="text-white">persistent · versioned · always-synced</strong> Wiki.
-          One canonical source of truth across every repo in the workspace.
+          Built on a <strong className="text-white">persistent · versioned · always-synced</strong>{" "}
+          Wiki. One canonical source of truth across every repo in the workspace.
         </p>
         <div className="flex gap-2">
-          <StatusPill tone="indexed" dot>Persistent</StatusPill>
-          <StatusPill tone="info" dot>Versioned</StatusPill>
-          <StatusPill tone="warn" dot>Synced</StatusPill>
+          <StatusPill tone="indexed" dot>
+            Persistent
+          </StatusPill>
+          <StatusPill tone="info" dot>
+            Versioned
+          </StatusPill>
+          <StatusPill tone="warn" dot>
+            Synced
+          </StatusPill>
         </div>
       </div>
 
@@ -213,10 +255,7 @@ function PremiumCard({ href, title, tagline }: { href: string; title: string; ta
         <h4 className="text-body-large text-black">{title}</h4>
         <p className="text-caption text-[#4e4e4e]">{tagline}</p>
       </div>
-      <span
-        aria-hidden
-        className="text-black transition-transform group-hover:translate-x-1"
-      >
+      <span aria-hidden className="text-black transition-transform group-hover:translate-x-1">
         →
       </span>
     </a>

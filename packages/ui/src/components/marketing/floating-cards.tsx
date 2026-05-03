@@ -16,11 +16,7 @@ export function FloatingCards() {
         <motion.div
           key={c.title}
           initial={{ opacity: 0, y: 16 }}
-          animate={
-            reduce
-              ? { opacity: 1, y: 0 }
-              : { opacity: 1, y: [0, -6, 0] }
-          }
+          animate={reduce ? { opacity: 1, y: 0 } : { opacity: 1, y: [0, -6, 0] }}
           transition={
             reduce
               ? { duration: 0.6 }

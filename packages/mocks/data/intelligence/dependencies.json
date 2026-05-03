@@ -3,51 +3,291 @@
   "crossRepoCount": 9,
   "outdatedCount": 13,
   "nodes": [
-    { "name": "common-python", "version": "1.4.0", "repoId": "characteristic-service", "outdated": false, "risk": "none" },
-    { "name": "common-python", "version": "1.4.0", "repoId": "specification-service", "outdated": false, "risk": "none" },
-    { "name": "common-python", "version": "1.4.0", "repoId": "pricing-service", "outdated": false, "risk": "none" },
-    { "name": "common-python", "version": "1.4.0", "repoId": "offering-service", "outdated": false, "risk": "none" },
-    { "name": "common-python", "version": "1.4.0", "repoId": "store-query-service", "outdated": false, "risk": "none" },
-    { "name": "common-python", "version": "1.4.0", "repoId": "identity-service", "outdated": false, "risk": "none" },
-    { "name": "common-python", "version": "1.3.8", "repoId": "api-gateway", "outdated": true, "risk": "low", "latestVersion": "1.4.0" },
+    {
+      "name": "common-python",
+      "version": "1.4.0",
+      "repoId": "characteristic-service",
+      "outdated": false,
+      "risk": "none"
+    },
+    {
+      "name": "common-python",
+      "version": "1.4.0",
+      "repoId": "specification-service",
+      "outdated": false,
+      "risk": "none"
+    },
+    {
+      "name": "common-python",
+      "version": "1.4.0",
+      "repoId": "pricing-service",
+      "outdated": false,
+      "risk": "none"
+    },
+    {
+      "name": "common-python",
+      "version": "1.4.0",
+      "repoId": "offering-service",
+      "outdated": false,
+      "risk": "none"
+    },
+    {
+      "name": "common-python",
+      "version": "1.4.0",
+      "repoId": "store-query-service",
+      "outdated": false,
+      "risk": "none"
+    },
+    {
+      "name": "common-python",
+      "version": "1.4.0",
+      "repoId": "identity-service",
+      "outdated": false,
+      "risk": "none"
+    },
+    {
+      "name": "common-python",
+      "version": "1.3.8",
+      "repoId": "api-gateway",
+      "outdated": true,
+      "risk": "low",
+      "latestVersion": "1.4.0"
+    },
 
-    { "name": "fastapi", "version": "0.115.0", "repoId": "api-gateway", "outdated": false, "risk": "none" },
-    { "name": "fastapi", "version": "0.115.0", "repoId": "identity-service", "outdated": false, "risk": "none" },
-    { "name": "fastapi", "version": "0.115.0", "repoId": "characteristic-service", "outdated": false, "risk": "none" },
-    { "name": "fastapi", "version": "0.112.4", "repoId": "specification-service", "outdated": true, "risk": "low", "latestVersion": "0.115.0" },
-    { "name": "fastapi", "version": "0.115.0", "repoId": "pricing-service", "outdated": false, "risk": "none" },
-    { "name": "fastapi", "version": "0.115.0", "repoId": "offering-service", "outdated": false, "risk": "none" },
-    { "name": "fastapi", "version": "0.115.0", "repoId": "store-query-service", "outdated": false, "risk": "none" },
+    {
+      "name": "fastapi",
+      "version": "0.115.0",
+      "repoId": "api-gateway",
+      "outdated": false,
+      "risk": "none"
+    },
+    {
+      "name": "fastapi",
+      "version": "0.115.0",
+      "repoId": "identity-service",
+      "outdated": false,
+      "risk": "none"
+    },
+    {
+      "name": "fastapi",
+      "version": "0.115.0",
+      "repoId": "characteristic-service",
+      "outdated": false,
+      "risk": "none"
+    },
+    {
+      "name": "fastapi",
+      "version": "0.112.4",
+      "repoId": "specification-service",
+      "outdated": true,
+      "risk": "low",
+      "latestVersion": "0.115.0"
+    },
+    {
+      "name": "fastapi",
+      "version": "0.115.0",
+      "repoId": "pricing-service",
+      "outdated": false,
+      "risk": "none"
+    },
+    {
+      "name": "fastapi",
+      "version": "0.115.0",
+      "repoId": "offering-service",
+      "outdated": false,
+      "risk": "none"
+    },
+    {
+      "name": "fastapi",
+      "version": "0.115.0",
+      "repoId": "store-query-service",
+      "outdated": false,
+      "risk": "none"
+    },
 
-    { "name": "httpx", "version": "0.27.2", "repoId": "api-gateway", "outdated": false, "risk": "none" },
-    { "name": "httpx", "version": "0.27.2", "repoId": "offering-service", "outdated": false, "risk": "none" },
-    { "name": "httpx", "version": "0.26.0", "repoId": "store-query-service", "outdated": true, "risk": "low", "latestVersion": "0.27.2" },
+    {
+      "name": "httpx",
+      "version": "0.27.2",
+      "repoId": "api-gateway",
+      "outdated": false,
+      "risk": "none"
+    },
+    {
+      "name": "httpx",
+      "version": "0.27.2",
+      "repoId": "offering-service",
+      "outdated": false,
+      "risk": "none"
+    },
+    {
+      "name": "httpx",
+      "version": "0.26.0",
+      "repoId": "store-query-service",
+      "outdated": true,
+      "risk": "low",
+      "latestVersion": "0.27.2"
+    },
 
-    { "name": "aio-pika", "version": "9.4.3", "repoId": "characteristic-service", "outdated": false, "risk": "none" },
-    { "name": "aio-pika", "version": "9.2.2", "repoId": "specification-service", "outdated": true, "risk": "low", "latestVersion": "9.4.3" },
-    { "name": "aio-pika", "version": "9.4.3", "repoId": "pricing-service", "outdated": false, "risk": "none" },
-    { "name": "aio-pika", "version": "9.4.3", "repoId": "offering-service", "outdated": false, "risk": "none" },
-    { "name": "aio-pika", "version": "9.4.3", "repoId": "store-query-service", "outdated": false, "risk": "none" },
+    {
+      "name": "aio-pika",
+      "version": "9.4.3",
+      "repoId": "characteristic-service",
+      "outdated": false,
+      "risk": "none"
+    },
+    {
+      "name": "aio-pika",
+      "version": "9.2.2",
+      "repoId": "specification-service",
+      "outdated": true,
+      "risk": "low",
+      "latestVersion": "9.4.3"
+    },
+    {
+      "name": "aio-pika",
+      "version": "9.4.3",
+      "repoId": "pricing-service",
+      "outdated": false,
+      "risk": "none"
+    },
+    {
+      "name": "aio-pika",
+      "version": "9.4.3",
+      "repoId": "offering-service",
+      "outdated": false,
+      "risk": "none"
+    },
+    {
+      "name": "aio-pika",
+      "version": "9.4.3",
+      "repoId": "store-query-service",
+      "outdated": false,
+      "risk": "none"
+    },
 
-    { "name": "asyncpg", "version": "0.29.0", "repoId": "identity-service", "outdated": false, "risk": "none" },
-    { "name": "asyncpg", "version": "0.29.0", "repoId": "characteristic-service", "outdated": false, "risk": "none" },
-    { "name": "asyncpg", "version": "0.29.0", "repoId": "specification-service", "outdated": false, "risk": "none" },
-    { "name": "asyncpg", "version": "0.29.0", "repoId": "pricing-service", "outdated": false, "risk": "none" },
-    { "name": "asyncpg", "version": "0.28.0", "repoId": "offering-service", "outdated": true, "risk": "medium", "latestVersion": "0.29.0" },
+    {
+      "name": "asyncpg",
+      "version": "0.29.0",
+      "repoId": "identity-service",
+      "outdated": false,
+      "risk": "none"
+    },
+    {
+      "name": "asyncpg",
+      "version": "0.29.0",
+      "repoId": "characteristic-service",
+      "outdated": false,
+      "risk": "none"
+    },
+    {
+      "name": "asyncpg",
+      "version": "0.29.0",
+      "repoId": "specification-service",
+      "outdated": false,
+      "risk": "none"
+    },
+    {
+      "name": "asyncpg",
+      "version": "0.29.0",
+      "repoId": "pricing-service",
+      "outdated": false,
+      "risk": "none"
+    },
+    {
+      "name": "asyncpg",
+      "version": "0.28.0",
+      "repoId": "offering-service",
+      "outdated": true,
+      "risk": "medium",
+      "latestVersion": "0.29.0"
+    },
 
-    { "name": "motor", "version": "3.6.0", "repoId": "store-query-service", "outdated": false, "risk": "none" },
-    { "name": "aiohttp", "version": "3.10.5", "repoId": "store-query-service", "outdated": false, "risk": "none" },
+    {
+      "name": "motor",
+      "version": "3.6.0",
+      "repoId": "store-query-service",
+      "outdated": false,
+      "risk": "none"
+    },
+    {
+      "name": "aiohttp",
+      "version": "3.10.5",
+      "repoId": "store-query-service",
+      "outdated": false,
+      "risk": "none"
+    },
 
-    { "name": "python-jose", "version": "3.3.0", "repoId": "identity-service", "outdated": false, "risk": "none" },
-    { "name": "bcrypt", "version": "4.2.0", "repoId": "identity-service", "outdated": false, "risk": "none" },
-    { "name": "opentelemetry-sdk", "version": "1.27.0", "repoId": "shared-chassis", "outdated": false, "risk": "none" },
-    { "name": "structlog", "version": "24.4.0", "repoId": "shared-chassis", "outdated": false, "risk": "none" },
+    {
+      "name": "python-jose",
+      "version": "3.3.0",
+      "repoId": "identity-service",
+      "outdated": false,
+      "risk": "none"
+    },
+    {
+      "name": "bcrypt",
+      "version": "4.2.0",
+      "repoId": "identity-service",
+      "outdated": false,
+      "risk": "none"
+    },
+    {
+      "name": "opentelemetry-sdk",
+      "version": "1.27.0",
+      "repoId": "shared-chassis",
+      "outdated": false,
+      "risk": "none"
+    },
+    {
+      "name": "structlog",
+      "version": "24.4.0",
+      "repoId": "shared-chassis",
+      "outdated": false,
+      "risk": "none"
+    },
 
-    { "name": "next", "version": "16.0.1", "repoId": "frontend", "outdated": false, "risk": "none" },
-    { "name": "react", "version": "19.0.0", "repoId": "frontend", "outdated": false, "risk": "none" },
-    { "name": "tailwindcss", "version": "4.1.0", "repoId": "frontend", "outdated": false, "risk": "none" },
-    { "name": "react-hook-form", "version": "7.53.1", "repoId": "frontend", "outdated": false, "risk": "none" },
-    { "name": "zod", "version": "3.23.0", "repoId": "frontend", "outdated": true, "risk": "low", "latestVersion": "3.24.0" },
-    { "name": "framer-motion", "version": "11.11.10", "repoId": "frontend", "outdated": false, "risk": "none" }
+    {
+      "name": "next",
+      "version": "16.0.1",
+      "repoId": "frontend",
+      "outdated": false,
+      "risk": "none"
+    },
+    {
+      "name": "react",
+      "version": "19.0.0",
+      "repoId": "frontend",
+      "outdated": false,
+      "risk": "none"
+    },
+    {
+      "name": "tailwindcss",
+      "version": "4.1.0",
+      "repoId": "frontend",
+      "outdated": false,
+      "risk": "none"
+    },
+    {
+      "name": "react-hook-form",
+      "version": "7.53.1",
+      "repoId": "frontend",
+      "outdated": false,
+      "risk": "none"
+    },
+    {
+      "name": "zod",
+      "version": "3.23.0",
+      "repoId": "frontend",
+      "outdated": true,
+      "risk": "low",
+      "latestVersion": "3.24.0"
+    },
+    {
+      "name": "framer-motion",
+      "version": "11.11.10",
+      "repoId": "frontend",
+      "outdated": false,
+      "risk": "none"
+    }
   ]
 }

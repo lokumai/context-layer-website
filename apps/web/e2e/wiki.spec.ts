@@ -1,10 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-async function signIn(
-  page: import("@playwright/test").Page,
-  persona: string,
-  password: string,
-) {
+async function signIn(page: import("@playwright/test").Page, persona: string, password: string) {
   await page.goto("/login");
   await page.getByLabel(/persona/i).fill(persona);
   await page.getByLabel(/password/i).fill(password);
@@ -13,9 +9,7 @@ async function signIn(
 }
 
 test.describe("wiki per-persona", () => {
-  test("partial: Wiki tabs show locked empty state; Configure opens", async ({
-    page,
-  }) => {
+  test("partial: Wiki tabs show locked empty state; Configure opens", async ({ page }) => {
     test.setTimeout(120_000);
     await signIn(page, "partial", "e2e-partial");
 

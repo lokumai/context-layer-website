@@ -13,12 +13,7 @@ interface TerminalTypeProps {
   className?: string;
 }
 
-export function TerminalType({
-  lines,
-  speed = 26,
-  linePause = 500,
-  className,
-}: TerminalTypeProps) {
+export function TerminalType({ lines, speed = 26, linePause = 500, className }: TerminalTypeProps) {
   const reduceMotion = useReducedMotion();
   const [display, setDisplay] = useState<string[]>([]);
   const [currentLine, setCurrentLine] = useState(0);

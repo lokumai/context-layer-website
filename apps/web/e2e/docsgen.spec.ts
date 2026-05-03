@@ -1,10 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-async function signIn(
-  page: import("@playwright/test").Page,
-  persona: string,
-  password: string,
-) {
+async function signIn(page: import("@playwright/test").Page, persona: string, password: string) {
   await page.goto("/login");
   await page.getByLabel(/persona/i).fill(persona);
   await page.getByLabel(/password/i).fill(password);
@@ -34,7 +30,9 @@ test.describe("DocsGen per-persona", () => {
     }
   });
 
-  test("full: clicking Regenerate flips a card through running and back to done", async ({ page }) => {
+  test("full: clicking Regenerate flips a card through running and back to done", async ({
+    page,
+  }) => {
     test.setTimeout(180_000);
     await signIn(page, "full", "e2e-full");
     await page.getByTestId("workspace-card").first().click();
@@ -50,7 +48,10 @@ test.describe("DocsGen per-persona", () => {
 
     // Modal opens — submit with defaults.
     await expect(page.getByTestId("generate-modal")).toBeVisible();
-    await page.getByTestId("generate-modal").getByRole("button", { name: /^regenerate$/i }).click();
+    await page
+      .getByTestId("generate-modal")
+      .getByRole("button", { name: /^regenerate$/i })
+      .click();
 
     // Running state.
     await expect(card).toHaveAttribute("data-state", "running", { timeout: 5_000 });

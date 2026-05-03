@@ -1,10 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-async function signIn(
-  page: import("@playwright/test").Page,
-  persona: string,
-  password: string,
-) {
+async function signIn(page: import("@playwright/test").Page, persona: string, password: string) {
   await page.goto("/login");
   await page.getByLabel(/persona/i).fill(persona);
   await page.getByLabel(/password/i).fill(password);
@@ -84,6 +80,10 @@ test.describe("Library per-persona", () => {
     await page.getByTestId("actions-item-view").click();
 
     // Preview modal opens for a markdown artifact.
-    await expect(page.locator('[data-testid="preview-modal"], [data-testid="artifact-preview-multimodal"]').first()).toBeVisible();
+    await expect(
+      page
+        .locator('[data-testid="preview-modal"], [data-testid="artifact-preview-multimodal"]')
+        .first(),
+    ).toBeVisible();
   });
 });

@@ -49,16 +49,47 @@ function Matrix({ title, xAxis, yAxis, markers }: MatrixProps) {
             strokeDasharray="3 3"
           />
           {/* Axis labels */}
-          <text x={pad + 4} y={H - 6} fontSize="9" fontFamily="var(--font-sans)" fontWeight="600" fill="#777169">
+          <text
+            x={pad + 4}
+            y={H - 6}
+            fontSize="9"
+            fontFamily="var(--font-sans)"
+            fontWeight="600"
+            fill="#777169"
+          >
             {xAxis[0]}
           </text>
-          <text x={W - 16} y={H - 6} textAnchor="end" fontSize="9" fontFamily="var(--font-sans)" fontWeight="600" fill="#777169">
+          <text
+            x={W - 16}
+            y={H - 6}
+            textAnchor="end"
+            fontSize="9"
+            fontFamily="var(--font-sans)"
+            fontWeight="600"
+            fill="#777169"
+          >
             {xAxis[1]}
           </text>
-          <text x={pad - 6} y={pad - 10} textAnchor="end" fontSize="9" fontFamily="var(--font-sans)" fontWeight="600" fill="#777169">
+          <text
+            x={pad - 6}
+            y={pad - 10}
+            textAnchor="end"
+            fontSize="9"
+            fontFamily="var(--font-sans)"
+            fontWeight="600"
+            fill="#777169"
+          >
             {yAxis[1]}
           </text>
-          <text x={pad - 6} y={H - 12} textAnchor="end" fontSize="9" fontFamily="var(--font-sans)" fontWeight="600" fill="#777169">
+          <text
+            x={pad - 6}
+            y={H - 12}
+            textAnchor="end"
+            fontSize="9"
+            fontFamily="var(--font-sans)"
+            fontWeight="600"
+            fill="#777169"
+          >
             {yAxis[0]}
           </text>
 

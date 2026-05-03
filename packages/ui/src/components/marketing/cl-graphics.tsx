@@ -41,9 +41,7 @@ export function DocsGenGraphic() {
           <p className={`text-micro uppercase ${i === 0 ? "text-white" : "text-[#777169]"}`}>
             Bundle
           </p>
-          <p
-            className={`text-caption mt-1 leading-tight ${i === 0 ? "text-white" : "text-black"}`}
-          >
+          <p className={`text-caption mt-1 leading-tight ${i === 0 ? "text-white" : "text-black"}`}>
             {b}
           </p>
         </div>

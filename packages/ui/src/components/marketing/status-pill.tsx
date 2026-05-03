@@ -31,7 +31,13 @@ export function StatusPill({
   );
 }
 
-export function AccentDot({ tone = "neutral", className = "" }: { tone?: StatusTone; className?: string }) {
+export function AccentDot({
+  tone = "neutral",
+  className = "",
+}: {
+  tone?: StatusTone;
+  className?: string;
+}) {
   const color: Record<StatusTone, string> = {
     indexed: "#10b981",
     info: "#3b82f6",
