@@ -49,5 +49,13 @@ export function HydrationProvider({ children }: { children: ReactNode }) {
       });
   }, [session, status, personaInStore, isHydrated, hydrate, reset]);
 
+  useEffect(() => {
+    if (isHydrated) {
+      document.body.dataset.hydrated = "true";
+    } else {
+      delete document.body.dataset.hydrated;
+    }
+  }, [isHydrated]);
+
   return <>{children}</>;
 }
