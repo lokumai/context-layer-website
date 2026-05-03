@@ -98,7 +98,7 @@ export default function HomePage() {
 
 
       {/* CLOSING CTA */}
-      <section className="mx-auto max-w-[1440px] px-6 lg:px-10 pb-24">
+      <section className="mx-auto max-w-[1440px] px-6 lg:px-10 pb-12">
         <FadeUp>
           <div className="bg-[rgba(245,242,239,0.8)] rounded-section shadow-[var(--shadow-warm)] px-10 py-16 text-center space-y-6">
             <h2 className="text-section-heading text-black">

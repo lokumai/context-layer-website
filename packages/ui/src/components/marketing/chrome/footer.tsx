@@ -33,7 +33,7 @@ const COLUMNS = [
 export function Footer() {
   const year = new Date().getFullYear();
   return (
-    <footer className="mt-32 border-t border-border-subtle bg-white" data-testid="marketing-footer">
+    <footer className="mt-12 border-t border-border-subtle bg-white" data-testid="marketing-footer">
       <div className="mx-auto max-w-[1440px] px-6 lg:px-10 py-16">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-10">
           <div className="col-span-2 md:col-span-1 space-y-3">
