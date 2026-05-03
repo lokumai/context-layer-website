@@ -25,32 +25,28 @@ const CAPABILITIES: Capability[] = [
     id: "sources",
     eyebrow: "01 · Sources",
     title: "Everything your codebase leaks into, indexed and searchable.",
-    body:
-      "Connect code, docs, and discussion through OAuth integrations — or upload zips and URLs when you can't. Every file becomes markdown, every commit becomes context.",
+    body: "Connect code, docs, and discussion through OAuth integrations — or upload zips and URLs when you can't. Every file becomes markdown, every commit becomes context.",
     graphic: <SourcesGraphic />,
   },
   {
     id: "knowledge",
     eyebrow: "02 · Knowledge",
     title: "Wiki and Intelligence — always-synced, always grounded.",
-    body:
-      "A living narrative Wiki (workspace → per-repo → llms.txt) sits next to live Intelligence dashboards — health, security, coverage, dependencies. Updated on every commit.",
+    body: "A living narrative Wiki (workspace → per-repo → llms.txt) sits next to live Intelligence dashboards — health, security, coverage, dependencies. Updated on every commit.",
     graphic: <KnowledgeGraphic />,
   },
   {
     id: "chatbot",
     eyebrow: "03 · Chatbot",
     title: "Ask anything. Every answer carries citations.",
-    body:
-      "Grounded Q&A over sources and knowledge. Answers cite both wiki sections AND @file:line-range code locations — the only way to make AI answers defensible.",
+    body: "Grounded Q&A over sources and knowledge. Answers cite both wiki sections AND @file:line-range code locations — the only way to make AI answers defensible.",
     graphic: <ChatbotGraphic />,
   },
   {
     id: "generate",
     eyebrow: "04 · Generate",
     title: "One-shot artifacts your stakeholders can read.",
-    body:
-      "DocsGen (6 bundles), OmniBoard (text · audio · video onboarding), and MCPGen (tentative — MCP descriptors for external agents). Outputs land in the Library.",
+    body: "DocsGen (6 bundles), OmniBoard (text · audio · video onboarding), and MCPGen (tentative — MCP descriptors for external agents). Outputs land in the Library.",
     graphic: <GenerateGraphic />,
   },
 ];
@@ -62,7 +58,6 @@ export default function ContextLayerProductPage() {
       <section className="relative overflow-hidden bg-white border-b border-[rgba(0,0,0,0.05)]">
         <div className="mx-auto max-w-[1280px] px-6 lg:px-10 pt-24 pb-16 lg:pt-28">
           <div className="max-w-[860px] space-y-5">
-
             <FadeUp delay={0.1}>
               <h1 className="text-display-hero text-black lg:text-[64px] lg:leading-[1.04] lg:tracking-[-1.1px]">
                 Context Layer.
@@ -98,9 +93,7 @@ export default function ContextLayerProductPage() {
         <FadeUp>
           <div className="max-w-[640px] space-y-2 mb-8">
             <p className="text-button-upper text-[#777169]">Built on the Wiki</p>
-            <h2 className="text-section-heading text-black">
-              The foundation everything sits on.
-            </h2>
+            <h2 className="text-section-heading text-black">The foundation everything sits on.</h2>
           </div>
         </FadeUp>
         <FadeUp delay={0.1}>
@@ -183,9 +176,33 @@ function PromiseCard({
 
 function LayeredHeroGraphic() {
   const layers = [
-    { label: "Workspace narrative", sub: "1 doc · cross-repo", top: 0, z: 3, opacity: 1, accent: "#047857", accentBg: "#ecfdf5" },
-    { label: "Per-repo wikis", sub: "9 trees · nested pages", top: 44, z: 2, opacity: 0.92, accent: "#1d4ed8", accentBg: "#eff6ff" },
-    { label: "llms.txt", sub: "index · agent-ready", top: 88, z: 1, opacity: 0.82, accent: "#b45309", accentBg: "#fffbeb" },
+    {
+      label: "Workspace narrative",
+      sub: "1 doc · cross-repo",
+      top: 0,
+      z: 3,
+      opacity: 1,
+      accent: "#047857",
+      accentBg: "#ecfdf5",
+    },
+    {
+      label: "Per-repo wikis",
+      sub: "9 trees · nested pages",
+      top: 44,
+      z: 2,
+      opacity: 0.92,
+      accent: "#1d4ed8",
+      accentBg: "#eff6ff",
+    },
+    {
+      label: "llms.txt",
+      sub: "index · agent-ready",
+      top: 88,
+      z: 1,
+      opacity: 0.82,
+      accent: "#b45309",
+      accentBg: "#fffbeb",
+    },
   ];
   return (
     <div className="relative mt-14 h-[220px]">
@@ -225,10 +242,34 @@ function LayeredHeroGraphic() {
 
 function SourcesGraphic() {
   const items = [
-    { kind: "Code", label: "offering-service", accent: "#1d4ed8", bg: "#eff6ff", icon: <GitBranch size={14} strokeWidth={1.5} /> },
-    { kind: "File", label: "architecture.pdf", accent: "#525252", bg: "#f5f5f5", icon: <FileText size={14} strokeWidth={1.5} /> },
-    { kind: "Code", label: "web-ui", accent: "#1d4ed8", bg: "#eff6ff", icon: <GitBranch size={14} strokeWidth={1.5} /> },
-    { kind: "Discussion", label: "#eng-platform", accent: "#b45309", bg: "#fffbeb", icon: <MessageSquare size={14} strokeWidth={1.5} /> },
+    {
+      kind: "Code",
+      label: "offering-service",
+      accent: "#1d4ed8",
+      bg: "#eff6ff",
+      icon: <GitBranch size={14} strokeWidth={1.5} />,
+    },
+    {
+      kind: "File",
+      label: "architecture.pdf",
+      accent: "#525252",
+      bg: "#f5f5f5",
+      icon: <FileText size={14} strokeWidth={1.5} />,
+    },
+    {
+      kind: "Code",
+      label: "web-ui",
+      accent: "#1d4ed8",
+      bg: "#eff6ff",
+      icon: <GitBranch size={14} strokeWidth={1.5} />,
+    },
+    {
+      kind: "Discussion",
+      label: "#eng-platform",
+      accent: "#b45309",
+      bg: "#fffbeb",
+      icon: <MessageSquare size={14} strokeWidth={1.5} />,
+    },
   ];
   return (
     <div className="w-full max-w-[420px] space-y-2">
@@ -247,7 +288,9 @@ function SourcesGraphic() {
             <p className="text-caption text-black font-mono">{it.label}</p>
             <p className="text-micro text-[#777169] uppercase tracking-[0.08em]">{it.kind}</p>
           </div>
-          <StatusPill tone="indexed" dot>Indexed</StatusPill>
+          <StatusPill tone="indexed" dot>
+            Indexed
+          </StatusPill>
         </div>
       ))}
     </div>
@@ -266,7 +309,9 @@ function KnowledgeGraphic() {
             </span>
             <p className="text-body-medium text-black">Wiki</p>
           </div>
-          <StatusPill tone="indexed" dot>Live</StatusPill>
+          <StatusPill tone="indexed" dot>
+            Live
+          </StatusPill>
         </div>
         <div className="space-y-1.5">
           <span className="block h-1.5 w-full rounded-full bg-[#f5f5f5]" />
@@ -284,7 +329,9 @@ function KnowledgeGraphic() {
             </span>
             <p className="text-body-medium text-black">Intelligence</p>
           </div>
-          <StatusPill tone="info" dot>Refreshed</StatusPill>
+          <StatusPill tone="info" dot>
+            Refreshed
+          </StatusPill>
         </div>
         <div className="grid grid-cols-4 gap-2">
           <Stat label="Health" value="84" tone="indexed" />
@@ -297,7 +344,15 @@ function KnowledgeGraphic() {
   );
 }
 
-function Stat({ label, value, tone }: { label: string; value: string; tone: "indexed" | "warn" | "error" | "neutral" }) {
+function Stat({
+  label,
+  value,
+  tone,
+}: {
+  label: string;
+  value: string;
+  tone: "indexed" | "warn" | "error" | "neutral";
+}) {
   const color = {
     indexed: "#047857",
     warn: "#b45309",
@@ -318,7 +373,9 @@ function ChatbotGraphic() {
   return (
     <div className="w-full max-w-[420px] space-y-2">
       <div className="bg-[#f5f2ef] rounded-card px-4 py-3 max-w-[88%]">
-        <p className="text-caption text-black">How does the offering publication saga work across services?</p>
+        <p className="text-caption text-black">
+          How does the offering publication saga work across services?
+        </p>
       </div>
       <div className="bg-white rounded-card px-4 py-3 shadow-[var(--shadow-outline-ring)] border border-[rgba(0,0,0,0.04)] ml-6">
         <div className="flex items-center gap-2 mb-2">
@@ -350,9 +407,28 @@ function ChatbotGraphic() {
 
 function GenerateGraphic() {
   const tools = [
-    { name: "DocsGen", sub: "6 bundles · 21 cards", icon: <FileCode size={16} strokeWidth={1.5} />, bg: "#eff6ff", fg: "#1d4ed8" },
-    { name: "OmniBoard", sub: "Text · Audio · Video", icon: <Headphones size={16} strokeWidth={1.5} />, bg: "#ecfdf5", fg: "#047857" },
-    { name: "MCPGen", sub: "MCP descriptors", icon: <Plug size={16} strokeWidth={1.5} />, bg: "#fffbeb", fg: "#b45309", tentative: true },
+    {
+      name: "DocsGen",
+      sub: "6 bundles · 21 cards",
+      icon: <FileCode size={16} strokeWidth={1.5} />,
+      bg: "#eff6ff",
+      fg: "#1d4ed8",
+    },
+    {
+      name: "OmniBoard",
+      sub: "Text · Audio · Video",
+      icon: <Headphones size={16} strokeWidth={1.5} />,
+      bg: "#ecfdf5",
+      fg: "#047857",
+    },
+    {
+      name: "MCPGen",
+      sub: "MCP descriptors",
+      icon: <Plug size={16} strokeWidth={1.5} />,
+      bg: "#fffbeb",
+      fg: "#b45309",
+      tentative: true,
+    },
   ];
   return (
     <div className="w-full max-w-[420px] space-y-3">

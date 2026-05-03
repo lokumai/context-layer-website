@@ -22,24 +22,21 @@ const CAPABILITIES: Capability[] = [
     id: "ingestion",
     eyebrow: "01 · Source-Language Ingestion",
     title: "Parse once, map everything.",
-    body:
-      "Ingest the source repo into an AST + semantics snapshot — control flow, types, dependency graph. The translation model reads the snapshot, not the text.",
+    body: "Ingest the source repo into an AST + semantics snapshot — control flow, types, dependency graph. The translation model reads the snapshot, not the text.",
     graphic: <IngestionGraphic />,
   },
   {
     id: "translation",
     eyebrow: "02 · Semantic Translation",
     title: "Emit target code that preserves behavior.",
-    body:
-      "The translator reasons over the snapshot and emits idiomatic target-language code. Not a syntactic mapping — a behavior-preserving rewrite.",
+    body: "The translator reasons over the snapshot and emits idiomatic target-language code. Not a syntactic mapping — a behavior-preserving rewrite.",
     graphic: <TranslationGraphic />,
   },
   {
     id: "validation",
     eyebrow: "03 · Validation & Tests",
     title: "Run the original tests against the new code.",
-    body:
-      "We cross-run the source suite on the translated codebase and report deltas. Behavior parity you can defend to auditors.",
+    body: "We cross-run the source suite on the translated codebase and report deltas. Behavior parity you can defend to auditors.",
     graphic: <ValidationGraphic />,
   },
 ];
@@ -64,8 +61,8 @@ export default function CodeTranslationPage() {
             </FadeUp>
             <FadeUp delay={0.18}>
               <p className="text-body-large text-[#4e4e4e] max-w-[620px]">
-                Translate code across languages with semantic fidelity. Keep behavior, not just syntax.
-                Built on the same indexed substrate as the base Context Layer.
+                Translate code across languages with semantic fidelity. Keep behavior, not just
+                syntax. Built on the same indexed substrate as the base Context Layer.
               </p>
             </FadeUp>
             <FadeUp delay={0.24}>
@@ -94,9 +91,7 @@ export default function CodeTranslationPage() {
         <FadeUp>
           <div className="max-w-[640px] space-y-2 mb-8">
             <p className="text-button-upper text-[#777169]">Built on the Wiki</p>
-            <h2 className="text-section-heading text-black">
-              Translation grounded in context.
-            </h2>
+            <h2 className="text-section-heading text-black">Translation grounded in context.</h2>
           </div>
         </FadeUp>
         <FadeUp delay={0.1}>
@@ -180,9 +175,33 @@ function PromiseCard({
 
 function LayeredHeroGraphic() {
   const layers = [
-    { label: "Python source", sub: "Input · Legacy stack", top: 0, z: 3, opacity: 1, accent: "#047857", accentBg: "#ecfdf5" },
-    { label: "AST snapshot", sub: "Mapping · Universal schema", top: 44, z: 2, opacity: 0.92, accent: "#1d4ed8", accentBg: "#eff6ff" },
-    { label: "Go output", sub: "Emitted · Idiomatic code", top: 88, z: 1, opacity: 0.82, accent: "#b45309", accentBg: "#fffbeb" },
+    {
+      label: "Python source",
+      sub: "Input · Legacy stack",
+      top: 0,
+      z: 3,
+      opacity: 1,
+      accent: "#047857",
+      accentBg: "#ecfdf5",
+    },
+    {
+      label: "AST snapshot",
+      sub: "Mapping · Universal schema",
+      top: 44,
+      z: 2,
+      opacity: 0.92,
+      accent: "#1d4ed8",
+      accentBg: "#eff6ff",
+    },
+    {
+      label: "Go output",
+      sub: "Emitted · Idiomatic code",
+      top: 88,
+      z: 1,
+      opacity: 0.82,
+      accent: "#b45309",
+      accentBg: "#fffbeb",
+    },
   ];
   return (
     <div className="relative mt-14 h-[220px]">
@@ -220,9 +239,27 @@ function LayeredHeroGraphic() {
 
 function IngestionGraphic() {
   const items = [
-    { kind: "Source", label: "main.py", accent: "#047857", bg: "#ecfdf5", icon: <FileCode size={14} strokeWidth={1.5} /> },
-    { kind: "Graph", label: "control_flow.json", accent: "#1d4ed8", bg: "#eff6ff", icon: <GitBranch size={14} strokeWidth={1.5} /> },
-    { kind: "Types", label: "symbols.db", accent: "#525252", bg: "#f5f5f5", icon: <Layers size={14} strokeWidth={1.5} /> },
+    {
+      kind: "Source",
+      label: "main.py",
+      accent: "#047857",
+      bg: "#ecfdf5",
+      icon: <FileCode size={14} strokeWidth={1.5} />,
+    },
+    {
+      kind: "Graph",
+      label: "control_flow.json",
+      accent: "#1d4ed8",
+      bg: "#eff6ff",
+      icon: <GitBranch size={14} strokeWidth={1.5} />,
+    },
+    {
+      kind: "Types",
+      label: "symbols.db",
+      accent: "#525252",
+      bg: "#f5f5f5",
+      icon: <Layers size={14} strokeWidth={1.5} />,
+    },
   ];
   return (
     <div className="w-full max-w-[420px] space-y-2">
@@ -241,7 +278,9 @@ function IngestionGraphic() {
             <p className="text-caption text-black font-mono">{it.label}</p>
             <p className="text-micro text-[#777169] uppercase tracking-[0.08em]">{it.kind}</p>
           </div>
-          <StatusPill tone="indexed" dot>Parsed</StatusPill>
+          <StatusPill tone="indexed" dot>
+            Parsed
+          </StatusPill>
         </div>
       ))}
     </div>
@@ -259,7 +298,9 @@ function TranslationGraphic() {
             </span>
             <p className="text-body-medium text-black">Translation Engine</p>
           </div>
-          <StatusPill tone="info" dot>Processing</StatusPill>
+          <StatusPill tone="info" dot>
+            Processing
+          </StatusPill>
         </div>
         <div className="flex items-center gap-4">
           <div className="flex-1 p-2 bg-[#f9f9f9] rounded-standard text-center">
@@ -297,7 +338,9 @@ function ValidationGraphic() {
             </span>
             <p className="text-body-medium text-black">Validation Report</p>
           </div>
-          <StatusPill tone="indexed" dot>Verified</StatusPill>
+          <StatusPill tone="indexed" dot>
+            Verified
+          </StatusPill>
         </div>
         <div className="grid grid-cols-3 gap-2">
           <Stat label="Pass" value="142" tone="indexed" />
@@ -315,7 +358,15 @@ function ValidationGraphic() {
   );
 }
 
-function Stat({ label, value, tone }: { label: string; value: string; tone: "indexed" | "warn" | "error" | "neutral" }) {
+function Stat({
+  label,
+  value,
+  tone,
+}: {
+  label: string;
+  value: string;
+  tone: "indexed" | "warn" | "error" | "neutral";
+}) {
   const color = {
     indexed: "#047857",
     warn: "#b45309",

@@ -20,24 +20,21 @@ const CAPABILITIES: Capability[] = [
     id: "assessment",
     eyebrow: "01 · Assessment",
     title: "Catalog hotspots, blockers, dead code.",
-    body:
-      "Full-codebase scan producing a ranked list of risk areas, abandoned modules, and upgrade blockers. The baseline every migration plan should reference.",
+    body: "Full-codebase scan producing a ranked list of risk areas, abandoned modules, and upgrade blockers. The baseline every migration plan should reference.",
     graphic: <AssessmentGraphic />,
   },
   {
     id: "planning",
     eyebrow: "02 · Migration Planning",
     title: "A phased plan grounded in the code, not guesses.",
-    body:
-      "Produce a phased migration plan whose steps reference real files and dependencies. No hand-waving timelines — every phase ties to actual diff scope.",
+    body: "Produce a phased migration plan whose steps reference real files and dependencies. No hand-waving timelines — every phase ties to actual diff scope.",
     graphic: <PlanningGraphic />,
   },
   {
     id: "continuous",
     eyebrow: "03 · Continuous Modernization",
     title: "Short iterations, full audit trail.",
-    body:
-      "Apply changes in small verified steps. Every commit has agent rationale. Auditors can reconstruct the migration retrospectively from the Wiki logs.",
+    body: "Apply changes in small verified steps. Every commit has agent rationale. Auditors can reconstruct the migration retrospectively from the Wiki logs.",
     graphic: <ContinuousGraphic />,
   },
 ];
@@ -62,8 +59,8 @@ export default function CodeModernizationPage() {
             </FadeUp>
             <FadeUp delay={0.18}>
               <p className="text-body-large text-[#4e4e4e] max-w-[620px]">
-                Upgrade legacy stacks without big-bang rewrites. Ground every change in the actual codebase.
-                Built on the same indexed substrate as the base Context Layer.
+                Upgrade legacy stacks without big-bang rewrites. Ground every change in the actual
+                codebase. Built on the same indexed substrate as the base Context Layer.
               </p>
             </FadeUp>
             <FadeUp delay={0.24}>
@@ -92,9 +89,7 @@ export default function CodeModernizationPage() {
         <FadeUp>
           <div className="max-w-[640px] space-y-2 mb-8">
             <p className="text-button-upper text-[#777169]">Built on the Wiki</p>
-            <h2 className="text-section-heading text-black">
-              Modernization grounded in facts.
-            </h2>
+            <h2 className="text-section-heading text-black">Modernization grounded in facts.</h2>
           </div>
         </FadeUp>
         <FadeUp delay={0.1}>
@@ -132,8 +127,8 @@ export default function CodeModernizationPage() {
           <div className="bg-[rgba(245,242,239,0.8)] rounded-section shadow-[var(--shadow-warm)] px-10 py-16 text-center space-y-6">
             <h2 className="text-section-heading text-black">Premium product · Early access</h2>
             <p className="text-body text-[#4e4e4e] max-w-[560px] mx-auto">
-              Code Modernization is a high-touch premium engagement. We're selecting teams with significant
-              legacy debt that needs systematic, verifiable upgrading.
+              Code Modernization is a high-touch premium engagement. We're selecting teams with
+              significant legacy debt that needs systematic, verifiable upgrading.
             </p>
             <div className="pt-2">
               <PlaygroundButton variant="hero" href="mailto:early-access@context-layer.dev">
@@ -178,9 +173,33 @@ function PromiseCard({
 
 function LayeredHeroGraphic() {
   const layers = [
-    { label: "Legacy stack", sub: "Monolithic · EOL runtimes", top: 0, z: 3, opacity: 1, accent: "#047857", accentBg: "#ecfdf5" },
-    { label: "Migration plan", sub: "Phased · Dependency-aware", top: 44, z: 2, opacity: 0.92, accent: "#1d4ed8", accentBg: "#eff6ff" },
-    { label: "Modernized runtime", sub: "Cloud-native · Verified", top: 88, z: 1, opacity: 0.82, accent: "#b45309", accentBg: "#fffbeb" },
+    {
+      label: "Legacy stack",
+      sub: "Monolithic · EOL runtimes",
+      top: 0,
+      z: 3,
+      opacity: 1,
+      accent: "#047857",
+      accentBg: "#ecfdf5",
+    },
+    {
+      label: "Migration plan",
+      sub: "Phased · Dependency-aware",
+      top: 44,
+      z: 2,
+      opacity: 0.92,
+      accent: "#1d4ed8",
+      accentBg: "#eff6ff",
+    },
+    {
+      label: "Modernized runtime",
+      sub: "Cloud-native · Verified",
+      top: 88,
+      z: 1,
+      opacity: 0.82,
+      accent: "#b45309",
+      accentBg: "#fffbeb",
+    },
   ];
   return (
     <div className="relative mt-14 h-[220px]">
@@ -232,7 +251,9 @@ function AssessmentGraphic() {
             </span>
             <p className="text-body-medium text-black">Risk Catalog</p>
           </div>
-          <StatusPill tone="warn" dot>Scan Complete</StatusPill>
+          <StatusPill tone="warn" dot>
+            Scan Complete
+          </StatusPill>
         </div>
         <div className="grid grid-cols-3 gap-2">
           {risks.map((r) => (
@@ -302,14 +323,18 @@ function ContinuousGraphic() {
             </span>
             <p className="text-body-medium text-black">Wiki Logs</p>
           </div>
-          <StatusPill tone="indexed" dot>Synced</StatusPill>
+          <StatusPill tone="indexed" dot>
+            Synced
+          </StatusPill>
         </div>
         <div className="space-y-3">
           <div className="flex items-start gap-3">
             <div className="mt-1 w-1.5 h-1.5 rounded-full bg-[#047857]" />
             <div>
               <p className="text-caption text-black font-mono">refactor: identity-provider</p>
-              <p className="text-micro text-[#777169]">Grounded rationale attached via @context-layer</p>
+              <p className="text-micro text-[#777169]">
+                Grounded rationale attached via @context-layer
+              </p>
             </div>
           </div>
           <div className="flex items-start gap-3 opacity-60">
@@ -329,7 +354,15 @@ function ContinuousGraphic() {
   );
 }
 
-function Stat({ label, value, tone }: { label: string; value: string; tone: "indexed" | "warn" | "error" | "neutral" }) {
+function Stat({
+  label,
+  value,
+  tone,
+}: {
+  label: string;
+  value: string;
+  tone: "indexed" | "warn" | "error" | "neutral";
+}) {
   const color = {
     indexed: "#047857",
     warn: "#b45309",

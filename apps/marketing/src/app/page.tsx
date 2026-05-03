@@ -28,9 +28,8 @@ export default function HomePage() {
               </FadeUp>
               <FadeUp delay={0.18}>
                 <p className="text-body-large text-[#4e4e4e] max-w-[540px]">
-                  Build the context your codebase never had. An AI-native codebase
-                  knowledge and intelligence infrastructure — automatically built,
-                  synced, and agent-ready.
+                  Build the context your codebase never had. An AI-native codebase knowledge and
+                  intelligence infrastructure — automatically built, synced, and agent-ready.
                 </p>
               </FadeUp>
               <FadeUp delay={0.24}>
@@ -90,7 +89,11 @@ export default function HomePage() {
                 </p>
                 <dl className="grid gap-4 pt-2">
                   <div className="flex items-start gap-3">
-                    <span aria-hidden className="mt-1.5 w-2 h-2 rounded-full" style={{ backgroundColor: "#3b82f6" }} />
+                    <span
+                      aria-hidden
+                      className="mt-1.5 w-2 h-2 rounded-full"
+                      style={{ backgroundColor: "#3b82f6" }}
+                    />
                     <div>
                       <dt className="text-body-medium text-black">Human ↔ Context</dt>
                       <dd className="text-caption text-[#4e4e4e]">
@@ -99,7 +102,11 @@ export default function HomePage() {
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
-                    <span aria-hidden className="mt-1.5 w-2 h-2 rounded-full" style={{ backgroundColor: "#10b981" }} />
+                    <span
+                      aria-hidden
+                      className="mt-1.5 w-2 h-2 rounded-full"
+                      style={{ backgroundColor: "#10b981" }}
+                    />
                     <div>
                       <dt className="text-body-medium text-black">Agent ↔ Context</dt>
                       <dd className="text-caption text-[#4e4e4e]">
@@ -108,7 +115,11 @@ export default function HomePage() {
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
-                    <span aria-hidden className="mt-1.5 w-2 h-2 rounded-full" style={{ backgroundColor: "#b45309" }} />
+                    <span
+                      aria-hidden
+                      className="mt-1.5 w-2 h-2 rounded-full"
+                      style={{ backgroundColor: "#b45309" }}
+                    />
                     <div>
                       <dt className="text-body-medium text-black">Human ↔ Agent</dt>
                       <dd className="text-caption text-[#4e4e4e]">
@@ -135,8 +146,8 @@ export default function HomePage() {
               Input sources. Sync knowledge. Ask the chatbot. Generate artifacts.
             </h2>
             <p className="text-body text-[#4e4e4e]">
-              Four verbs, one substrate. This is how the playground is organized — and how your
-              team will think about the product from day one.
+              Four verbs, one substrate. This is how the playground is organized — and how your team
+              will think about the product from day one.
             </p>
           </div>
         </FadeUp>

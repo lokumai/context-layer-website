@@ -1,40 +1,12 @@
-import type { Metadata } from "next"
-import { Inter, Raleway, Geist_Mono } from "next/font/google"
-import "./globals.css"
+import { Footer } from "@context-layer/ui/components/marketing/chrome/footer";
+import { Navbar } from "@context-layer/ui/components/marketing/chrome/navbar";
 
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-  display: "swap",
-})
-
-const raleway = Raleway({
-  variable: "--font-raleway",
-  subsets: ["latin"],
-  display: "swap",
-})
-
-const geistMono = Geist_Mono({
-  variable: "--font-mono",
-  subsets: ["latin"],
-  display: "swap",
-})
-
-export const metadata: Metadata = {
-  title: "Context Layer",
-  description: "Turn your codebase into living knowledge.",
-}
-
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode
-}>) {
+export default function MarketingLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${inter.variable} ${raleway.variable} ${geistMono.variable}`}>
-      <body className="antialiased font-sans">
-        {children}
-      </body>
-    </html>
-  )
+    <>
+      <Navbar />
+      <main className="min-h-screen pt-16">{children}</main>
+      <Footer />
+    </>
+  );
 }

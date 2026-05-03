@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
   transpilePackages: ["@context-layer/ui"],
   eslint: {
     ignoreDuringBuilds: true,
-  }
+  },
 };
 
 export default nextConfig;

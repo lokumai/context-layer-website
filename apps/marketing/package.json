@@ -6,7 +6,7 @@
     "dev": "next dev --turbopack -p 3001",
     "build": "next build --turbopack",
     "start": "next start -p 3001",
-    "lint": "next lint",
+    "lint": "biome lint .",
     "e2e": "playwright test"
   },
   "dependencies": {
@@ -19,14 +19,11 @@
     "react-dom": "19.1.0"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3",
     "@playwright/test": "^1.59.1",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "15.5.15",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
