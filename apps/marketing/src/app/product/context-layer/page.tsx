@@ -3,17 +3,17 @@ import {
   FileCode,
   FileText,
   GitBranch,
-  Headphones,
   LayoutDashboard,
   Layers,
   MessageSquare,
-  Plug,
   RefreshCw,
   ShieldCheck,
   Sparkles,
 } from "lucide-react";
 import { PlaygroundButton } from "@context-layer/ui/components/marketing/chrome/playground-button";
 import { StatusPill } from "@context-layer/ui/components/marketing/status-pill";
+import { BRAND_ICONS } from "@context-layer/ui/brand-icons";
+import { AISdlcTriangle } from "@context-layer/ui/components/marketing/ai-sdlc-triangle";
 import {
   CapabilityScroller,
   type Capability,
@@ -32,7 +32,7 @@ const CAPABILITIES: Capability[] = [
     id: "knowledge",
     eyebrow: "02 · Knowledge",
     title: "Wiki and Intelligence — always-synced, always grounded.",
-    body: "A living narrative Wiki (workspace → per-repo → llms.txt) sits next to live Intelligence dashboards — health, security, coverage, dependencies. Updated on every commit.",
+    body: "A living narrative Wiki sits next to live Intelligence dashboards — health, security, coverage, dependencies. Updated on every commit.",
     graphic: <KnowledgeGraphic />,
   },
   {
@@ -45,8 +45,8 @@ const CAPABILITIES: Capability[] = [
   {
     id: "generate",
     eyebrow: "04 · Generate",
-    title: "One-shot artifacts your stakeholders can read.",
-    body: "DocsGen (6 bundles), OmniBoard (text · audio · video onboarding), and MCPGen (tentative — MCP descriptors for external agents). Outputs land in the Library.",
+    title: "Generate artifacts your stakeholders can read.",
+    body: "One click turns the wiki into something shareable — architecture maps for engineers, onboarding briefs for new hires, slide decks for stakeholders, API catalogs for integrators, compliance reports for auditors. Every artifact lands in your Library, versioned and ready to send.",
     graphic: <GenerateGraphic />,
   },
 ];
@@ -54,48 +54,87 @@ const CAPABILITIES: Capability[] = [
 export default function ContextLayerProductPage() {
   return (
     <>
-      {/* HERO */}
+      {/* HERO — Triangle integration */}
       <section className="relative overflow-hidden bg-white border-b border-[rgba(0,0,0,0.05)]">
-        <div className="mx-auto max-w-[1280px] px-6 lg:px-10 pt-24 pb-16 lg:pt-28">
-          <div className="max-w-[860px] space-y-5">
+        <div className="mx-auto max-w-[1440px] px-6 lg:px-10 pt-20 pb-16">
+          <FadeUp>
+            <h1 className="text-display-hero text-black lg:text-[64px] lg:leading-[1.04] lg:tracking-[-1.1px] mb-24">
+              Context Layer.
+            </h1>
+          </FadeUp>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
             <FadeUp delay={0.1}>
-              <h1 className="text-display-hero text-black lg:text-[64px] lg:leading-[1.04] lg:tracking-[-1.1px]">
-                Context Layer.
-              </h1>
-            </FadeUp>
-            <FadeUp delay={0.18}>
-              <p className="text-body-large text-[#4e4e4e] max-w-[620px]">
-                Turn an always-fresh Wiki into actionable tools. Documentation, dashboards, grounded
-                chat, and MCP descriptors — all built on the same indexed substrate.
-              </p>
-            </FadeUp>
-            <FadeUp delay={0.24}>
-              <div className="flex flex-wrap items-center gap-3 pt-2">
-                <PlaygroundButton>Open in playground</PlaygroundButton>
-                <a
-                  href="#foundation"
-                  className="text-button text-[#4e4e4e] hover:text-black transition-colors inline-flex items-center gap-1.5"
-                >
-                  Four verbs <span aria-hidden>↓</span>
-                </a>
+              <div className="space-y-5">
+                <h2 className="text-section-heading text-black">
+                  Human. Agent. Codebase. Context is the channel.
+                </h2>
+                <p className="text-body text-[#4e4e4e]">
+                  High-fidelity software development needs three reliable channels — and each one
+                  breaks without shared context. Context Layer is the medium they all read from.
+                </p>
+                <dl className="grid gap-4 pt-2">
+                  <div className="flex items-start gap-3">
+                    <span
+                      aria-hidden
+                      className="mt-1.5 w-2 h-2 rounded-full"
+                      style={{ backgroundColor: "#3b82f6" }}
+                    />
+                    <div>
+                      <dt className="text-body-medium text-black">Human ↔ Context</dt>
+                      <dd className="text-caption text-[#4e4e4e]">
+                        Read grounded docs. Run grounded queries. Onboard faster.
+                      </dd>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <span
+                      aria-hidden
+                      className="mt-1.5 w-2 h-2 rounded-full"
+                      style={{ backgroundColor: "#10b981" }}
+                    />
+                    <div>
+                      <dt className="text-body-medium text-black">Agent ↔ Context</dt>
+                      <dd className="text-caption text-[#4e4e4e]">
+                        Agents get structured context — not stale READMEs scraped from a directory.
+                      </dd>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <span
+                      aria-hidden
+                      className="mt-1.5 w-2 h-2 rounded-full"
+                      style={{ backgroundColor: "#b45309" }}
+                    />
+                    <div>
+                      <dt className="text-body-medium text-black">Human ↔ Agent</dt>
+                      <dd className="text-caption text-[#4e4e4e]">
+                        Both sides share one canonical source of truth. No two interpretations.
+                      </dd>
+                    </div>
+                  </div>
+                </dl>
+                <div className="flex flex-wrap items-center gap-3 pt-4">
+                  <PlaygroundButton>Open in playground</PlaygroundButton>
+                  <a
+                    href="#foundation"
+                    className="text-button text-[#4e4e4e] hover:text-black transition-colors inline-flex items-center gap-1.5"
+                  >
+                    Four verbs <span aria-hidden>↓</span>
+                  </a>
+                </div>
               </div>
             </FadeUp>
-          </div>
 
-          <FadeUp delay={0.3}>
-            <LayeredHeroGraphic />
-          </FadeUp>
+            <FadeUp delay={0.2} className="flex justify-center">
+              <AISdlcTriangle />
+            </FadeUp>
+          </div>
         </div>
       </section>
 
       {/* WIKI FOUNDATION PRELUDE */}
-      <section id="foundation" className="mx-auto max-w-[1280px] px-6 lg:px-10 py-16">
-        <FadeUp>
-          <div className="max-w-[640px] space-y-2 mb-8">
-            <p className="text-button-upper text-[#777169]">Built on the Wiki</p>
-            <h2 className="text-section-heading text-black">The foundation everything sits on.</h2>
-          </div>
-        </FadeUp>
+      <section id="foundation" className="mx-auto max-w-[1440px] px-6 lg:px-10 pt-16 pb-4">
         <FadeUp delay={0.1}>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <PromiseCard
@@ -106,18 +145,18 @@ export default function ContextLayerProductPage() {
               body="Versioned knowledge that lives as long as your codebase. Survives restarts, retries, and re-indexes."
             />
             <PromiseCard
-              icon={<Layers size={24} strokeWidth={1.5} />}
-              accentBg="#eff6ff"
-              accentFg="#1d4ed8"
-              title="Multi-Layer"
-              body="Workspace narrative → per-repo wikis → llms.txt for agents. Read at the level that fits the job."
-            />
-            <PromiseCard
               icon={<RefreshCw size={24} strokeWidth={1.5} />}
               accentBg="#fffbeb"
               accentFg="#b45309"
               title="Always Synced"
               body="Updates on every commit, PR merge, or chosen cadence. One canonical source of truth."
+            />
+            <PromiseCard
+              icon={<Sparkles size={24} strokeWidth={1.5} />}
+              accentBg="#eff6ff"
+              accentFg="#1d4ed8"
+              title="Agent-Ready"
+              body="Workspace narrative and grounded wikis for agents. Read at the level that fits the job."
             />
           </div>
         </FadeUp>
@@ -127,10 +166,10 @@ export default function ContextLayerProductPage() {
       <CapabilityScroller items={CAPABILITIES} />
 
       {/* CLOSING CTA */}
-      <section className="mx-auto max-w-[1280px] px-6 lg:px-10 pb-24">
+      <section className="mx-auto max-w-[1440px] px-6 lg:px-10 pb-24">
         <FadeUp>
           <div className="bg-[rgba(245,242,239,0.8)] rounded-section shadow-[var(--shadow-warm)] px-10 py-16 text-center space-y-6">
-            <h2 className="text-section-heading text-black">Stop reading stale docs.</h2>
+            <h2 className="text-section-heading text-black">Context is better when it's grounded.</h2>
             <p className="text-body text-[#4e4e4e] max-w-[560px] mx-auto">
               The playground ships with a 9-repo TMForum catalog. Every capability above is real
               inside it — Wiki, Intelligence, Chatbot, DocsGen.
@@ -174,125 +213,64 @@ function PromiseCard({
   );
 }
 
-function LayeredHeroGraphic() {
-  const layers = [
-    {
-      label: "Workspace narrative",
-      sub: "1 doc · cross-repo",
-      top: 0,
-      z: 3,
-      opacity: 1,
-      accent: "#047857",
-      accentBg: "#ecfdf5",
-    },
-    {
-      label: "Per-repo wikis",
-      sub: "9 trees · nested pages",
-      top: 44,
-      z: 2,
-      opacity: 0.92,
-      accent: "#1d4ed8",
-      accentBg: "#eff6ff",
-    },
-    {
-      label: "llms.txt",
-      sub: "index · agent-ready",
-      top: 88,
-      z: 1,
-      opacity: 0.82,
-      accent: "#b45309",
-      accentBg: "#fffbeb",
-    },
-  ];
-  return (
-    <div className="relative mt-14 h-[220px]">
-      {layers.map((l, i) => (
-        <div
-          key={l.label}
-          className="absolute left-1/2 -translate-x-1/2 w-[700px] max-w-full bg-white rounded-large shadow-[var(--shadow-outline-ring)]"
-          style={{
-            top: `${l.top}px`,
-            zIndex: l.z,
-            opacity: l.opacity,
-            transform: `translateX(-50%) rotate(${(i - 1) * 1}deg)`,
-          }}
-        >
-          <div className="px-6 py-4 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <span
-                className="inline-flex items-center justify-center w-8 h-8 rounded-standard"
-                style={{ backgroundColor: l.accentBg, color: l.accent }}
-              >
-                <Layers size={18} strokeWidth={1.5} />
-              </span>
-              <div>
-                <p className="text-button-upper text-[#777169]">Layer {i + 1}</p>
-                <p className="text-body-medium text-black">{l.label}</p>
-              </div>
-            </div>
-            <p className="text-caption text-[#777169]">{l.sub}</p>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
+
 
 // ────────────────────────── Capability graphics ──────────────────────────
 
 function SourcesGraphic() {
   const items = [
     {
-      kind: "Code",
+      kind: "GitHub",
       label: "offering-service",
-      accent: "#1d4ed8",
-      bg: "#eff6ff",
-      icon: <GitBranch size={14} strokeWidth={1.5} />,
+      brand: "github",
     },
     {
-      kind: "File",
-      label: "architecture.pdf",
-      accent: "#525252",
-      bg: "#f5f5f5",
-      icon: <FileText size={14} strokeWidth={1.5} />,
+      kind: "PDF",
+      label: "architecture-v2.pdf",
+      brand: "pdf",
     },
     {
-      kind: "Code",
-      label: "web-ui",
-      accent: "#1d4ed8",
-      bg: "#eff6ff",
-      icon: <GitBranch size={14} strokeWidth={1.5} />,
+      kind: "Google Drive",
+      label: "Institutional Memory",
+      brand: "gdrive",
     },
     {
-      kind: "Discussion",
-      label: "#eng-platform",
-      accent: "#b45309",
-      bg: "#fffbeb",
-      icon: <MessageSquare size={14} strokeWidth={1.5} />,
+      kind: "Jira",
+      label: "PROD-Backlog",
+      brand: "jira",
     },
   ];
   return (
     <div className="w-full max-w-[420px] space-y-2">
-      {items.map((it) => (
-        <div
-          key={it.label}
-          className="flex items-center gap-3 bg-white rounded-card px-3 py-2.5 shadow-[var(--shadow-outline-ring)] border border-[rgba(0,0,0,0.04)]"
-        >
-          <span
-            className="w-8 h-8 rounded-standard flex items-center justify-center"
-            style={{ backgroundColor: it.bg, color: it.accent }}
+      {items.map((it) => {
+        const iconData = BRAND_ICONS[it.brand as keyof typeof BRAND_ICONS];
+        return (
+          <div
+            key={it.label}
+            className="flex items-center gap-3 bg-white rounded-card px-3 py-2.5 shadow-[var(--shadow-outline-ring)] border border-[rgba(0,0,0,0.04)]"
           >
-            {it.icon}
-          </span>
-          <div className="flex-1">
-            <p className="text-caption text-black font-mono">{it.label}</p>
-            <p className="text-micro text-[#777169] uppercase tracking-[0.08em]">{it.kind}</p>
+            <span
+              className="w-8 h-8 rounded-standard flex items-center justify-center"
+              style={{ backgroundColor: iconData.bg, color: iconData.color }}
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                {iconData.paths ? (
+                  iconData.paths.map((p, i) => <path key={i} d={p.d} fill={p.fill} />)
+                ) : (
+                  <path d={iconData.path} />
+                )}
+              </svg>
+            </span>
+            <div className="flex-1">
+              <p className="text-caption text-black font-mono">{it.label}</p>
+              <p className="text-micro text-[#777169] uppercase tracking-[0.08em]">{it.kind}</p>
+            </div>
+            <StatusPill tone="indexed" dot>
+              Indexed
+            </StatusPill>
           </div>
-          <StatusPill tone="indexed" dot>
-            Indexed
-          </StatusPill>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }
@@ -313,10 +291,19 @@ function KnowledgeGraphic() {
             Live
           </StatusPill>
         </div>
-        <div className="space-y-1.5">
-          <span className="block h-1.5 w-full rounded-full bg-[#f5f5f5]" />
-          <span className="block h-1.5 w-[82%] rounded-full bg-[#f5f5f5]" />
-          <span className="block h-1.5 w-[68%] rounded-full bg-[#f5f5f5]" />
+        <div className="space-y-2">
+          <div className="space-y-1">
+            <p className="text-[11px] font-bold text-black uppercase tracking-wider">Architecture Overview</p>
+            <p className="text-[10px] text-[#777169] leading-relaxed">
+              The service mesh uses a sidecar pattern for all ingress/egress...
+            </p>
+          </div>
+          <div className="pt-1 border-t border-[#f5f5f5] space-y-1">
+            <p className="text-[11px] font-bold text-black uppercase tracking-wider">Onboarding Guide</p>
+            <p className="text-[10px] text-[#777169] leading-relaxed">
+              To run locally, you'll need Docker 24+ and the following env...
+            </p>
+          </div>
         </div>
       </div>
 
@@ -406,55 +393,126 @@ function ChatbotGraphic() {
 }
 
 function GenerateGraphic() {
-  const tools = [
+  // Outcome-first artifact rail — no internal module names. Each card
+  // describes a tangible deliverable a real stakeholder receives.
+  const artifacts: Array<{
+    format: "PDF" | "MP3" | "PPTX" | "MD";
+    title: string;
+    audience: string;
+    detail: string;
+    fg: string;
+    bg: string;
+    fresh?: boolean;
+  }> = [
     {
-      name: "DocsGen",
-      sub: "6 bundles · 21 cards",
-      icon: <FileCode size={16} strokeWidth={1.5} />,
-      bg: "#eff6ff",
-      fg: "#1d4ed8",
+      format: "PDF",
+      title: "Architecture Map",
+      audience: "Engineering",
+      detail: "24 pages · cross-repo flows",
+      fg: "#b91c1c",
+      bg: "#fef2f2",
+      fresh: true,
     },
     {
-      name: "OmniBoard",
-      sub: "Text · Audio · Video",
-      icon: <Headphones size={16} strokeWidth={1.5} />,
-      bg: "#ecfdf5",
-      fg: "#047857",
-    },
-    {
-      name: "MCPGen",
-      sub: "MCP descriptors",
-      icon: <Plug size={16} strokeWidth={1.5} />,
-      bg: "#fffbeb",
+      format: "MP3",
+      title: "Onboarding Brief",
+      audience: "New hires",
+      detail: "12 min · narrated walkthrough",
       fg: "#b45309",
-      tentative: true,
+      bg: "#fffbeb",
+    },
+    {
+      format: "PPTX",
+      title: "Stakeholder Slides",
+      audience: "Execs",
+      detail: "Q4 system review",
+      fg: "#1d4ed8",
+      bg: "#eff6ff",
+    },
+    {
+      format: "MD",
+      title: "API Catalog",
+      audience: "Integrators",
+      detail: "38 endpoints · OpenAPI",
+      fg: "#525252",
+      bg: "#f5f5f4",
     },
   ];
+
   return (
-    <div className="w-full max-w-[420px] space-y-3">
-      {tools.map((t) => (
-        <div
-          key={t.name}
-          className="bg-white rounded-card p-4 shadow-[var(--shadow-outline-ring)] border border-[rgba(0,0,0,0.04)] flex items-center gap-4"
-        >
-          <span
-            className="w-10 h-10 rounded-standard flex items-center justify-center"
-            style={{ backgroundColor: t.bg, color: t.fg }}
-          >
-            {t.icon}
+    <div className="w-full max-w-[440px] space-y-3">
+      {/* Active generation row */}
+      <div className="bg-white rounded-card border border-[rgba(0,0,0,0.05)] shadow-[var(--shadow-outline-ring)] px-4 py-3 space-y-2">
+        <div className="flex items-center gap-2">
+          <span className="relative flex h-2 w-2">
+            <span className="absolute inline-flex h-full w-full rounded-full bg-[#10b981] opacity-75 animate-ping" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-[#10b981]" />
           </span>
-          <div className="flex-1">
-            <div className="flex items-center gap-2">
-              <p className="text-body-medium text-black">{t.name}</p>
-              {t.tentative ? <StatusPill tone="neutral">Tentative</StatusPill> : null}
-            </div>
-            <p className="text-caption text-[#777169]">{t.sub}</p>
-          </div>
-          <span aria-hidden className="text-[#777169]">
-            <Sparkles size={16} strokeWidth={1.5} />
-          </span>
+          <p className="text-micro text-[#777169] uppercase tracking-[0.08em] font-semibold">
+            Generating
+          </p>
+          <span className="text-caption text-black ml-1">Compliance Audit</span>
+          <span className="ml-auto text-tiny font-mono text-[#777169]">64%</span>
         </div>
-      ))}
+        <div className="h-1.5 w-full rounded-pill bg-[#f5f5f4] overflow-hidden">
+          <div
+            className="h-full rounded-pill bg-[#10b981]"
+            style={{ width: "64%" }}
+            aria-hidden
+          />
+        </div>
+      </div>
+
+      {/* Library artifact stack */}
+      <div className="bg-white rounded-card border border-[rgba(0,0,0,0.05)] shadow-[var(--shadow-outline-ring)] divide-y divide-[rgba(0,0,0,0.05)]">
+        {artifacts.map((a) => (
+          <div key={a.title} className="px-4 py-3 flex items-center gap-3">
+            <span
+              className="rounded-standard inline-flex items-center justify-center text-[10px] font-bold tracking-[0.05em] flex-shrink-0"
+              style={{
+                width: 40,
+                height: 40,
+                backgroundColor: a.bg,
+                color: a.fg,
+              }}
+            >
+              {a.format}
+            </span>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 flex-wrap">
+                <p className="text-body-medium text-black leading-tight">{a.title}</p>
+                {a.fresh ? (
+                  <span className="text-tiny font-bold tracking-[0.06em] px-1.5 py-0.5 rounded-full bg-[#ecfdf5] text-[#047857] inline-flex items-center gap-1">
+                    <span className="w-1 h-1 rounded-full bg-[#10b981] animate-pulse" />
+                    JUST SHIPPED
+                  </span>
+                ) : null}
+              </div>
+              <p className="text-caption text-[#777169] truncate">
+                <span className="text-[#4e4e4e]">{a.audience}</span> · {a.detail}
+              </p>
+            </div>
+            <Sparkles
+              size={14}
+              strokeWidth={1.5}
+              className="text-[#9ca3af] flex-shrink-0"
+              aria-hidden
+            />
+          </div>
+        ))}
+      </div>
+
+      {/* Library footer */}
+      <div className="flex items-center justify-between px-1">
+        <div className="flex items-center gap-2">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#10b981]" />
+          <p className="text-micro text-[#777169] uppercase tracking-[0.08em] font-semibold">
+            Library
+          </p>
+          <span className="text-caption text-black">24 artifacts</span>
+        </div>
+        <span className="text-tiny text-[#777169]">synced from your codebase</span>
+      </div>
     </div>
   );
 }

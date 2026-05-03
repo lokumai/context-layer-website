@@ -5,7 +5,6 @@ import { SessionProvider } from "@/providers/session-provider";
 import { HydrationProvider } from "@/providers/hydration-provider";
 import "./globals.css";
 
-
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],

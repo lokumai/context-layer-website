@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+const BASE_PATH = "/context-layer-website";
+
 const COLUMNS = [
   {
     heading: "Product",
@@ -31,22 +33,22 @@ const COLUMNS = [
 export function Footer() {
   const year = new Date().getFullYear();
   return (
-    <footer className="mt-32 border-t border-border-subtle bg-white" data-testid="marketing-footer">
-      <div className="mx-auto max-w-[1280px] px-6 lg:px-10 py-16">
+    <footer className="mt-12 border-t border-border-subtle bg-white" data-testid="marketing-footer">
+      <div className="mx-auto max-w-[1440px] px-6 lg:px-10 py-16">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-10">
           <div className="col-span-2 md:col-span-1 space-y-3">
             <Link href="/" aria-label="Context Layer home" className="inline-flex items-center">
               {/* biome-ignore lint/performance/noImgElement: logo doesn't need next/image optimization */}
               <img
-                src="/logo-landscape.svg"
+                src={`${BASE_PATH}/logo_square.svg`}
                 alt="Context Layer"
-                className="h-7 w-auto"
-                width={140}
-                height={28}
+                className="h-10 w-auto lg:h-14"
+                width={280}
+                height={64}
               />
             </Link>
-            <p className="text-caption text-[#777169] max-w-[240px]">
-              Turn your codebase into living knowledge.
+            <p className="text-caption text-[#777169] max-w-[240px] pl-1">
+              Build the context your codebase never had.
             </p>
           </div>
           {COLUMNS.map((col) => (

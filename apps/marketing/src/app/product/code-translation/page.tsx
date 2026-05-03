@@ -46,7 +46,7 @@ export default function CodeTranslationPage() {
     <>
       {/* HERO */}
       <section className="relative overflow-hidden bg-white border-b border-[rgba(0,0,0,0.05)]">
-        <div className="mx-auto max-w-[1280px] px-6 lg:px-10 pt-24 pb-16 lg:pt-28">
+        <div className="mx-auto max-w-[1440px] px-6 lg:px-10 pt-24 pb-16 lg:pt-28">
           <div className="max-w-[860px] space-y-5">
             <FadeUp>
               <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs uppercase tracking-[0.08em] font-bold bg-[#fffbeb] text-[#b45309] border border-[#fef3c7]">
@@ -87,7 +87,7 @@ export default function CodeTranslationPage() {
       </section>
 
       {/* WIKI FOUNDATION PRELUDE */}
-      <section id="foundation" className="mx-auto max-w-[1280px] px-6 lg:px-10 py-16">
+      <section id="foundation" className="mx-auto max-w-[1440px] px-6 lg:px-10 py-16">
         <FadeUp>
           <div className="max-w-[640px] space-y-2 mb-8">
             <p className="text-button-upper text-[#777169]">Built on the Wiki</p>
@@ -124,7 +124,7 @@ export default function CodeTranslationPage() {
       <CapabilityScroller items={CAPABILITIES} />
 
       {/* CLOSING CTA */}
-      <section className="mx-auto max-w-[1280px] px-6 lg:px-10 pb-24">
+      <section className="mx-auto max-w-[1440px] px-6 lg:px-10 pb-24">
         <FadeUp>
           <div className="bg-[rgba(245,242,239,0.8)] rounded-section shadow-[var(--shadow-warm)] px-10 py-16 text-center space-y-6">
             <h2 className="text-section-heading text-black">Premium product · Early access</h2>

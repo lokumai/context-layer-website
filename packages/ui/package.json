@@ -4,6 +4,7 @@
   "private": true,
   "exports": {
     "./components/*": "./src/components/*.tsx",
+    "./brand-icons": "./src/components/marketing/brand-icons.ts",
     "./lib/*": "./src/lib/*.ts",
     "./utils": "./src/lib/utils.ts"
   },
