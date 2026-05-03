@@ -14,9 +14,9 @@ const H = 520;
 
 // Triangle vertices
 const POS = {
-  codebase: { x: W / 2, y: 130 },
-  human: { x: 110, y: H - 70 },
-  agent: { x: W - 110, y: H - 70 },
+  codebase: { x: W / 2, y: 110 },
+  human: { x: 110, y: H - 80 },
+  agent: { x: W - 110, y: H - 80 },
 } as const;
 
 // Centroid of the triangle = position of Context Layer
@@ -84,13 +84,13 @@ export function AISdlcTriangle() {
           x={W / 2}
           y={50}
           textAnchor="middle"
-          fontSize="30"
+          fontSize="18"
           fontFamily="var(--font-sans)"
           fontWeight="700"
-          letterSpacing="-0.02em"
-          fill="#0a0a0a"
+          letterSpacing="0.1em"
+          fill="#777169"
         >
-          The Communication Triangle
+          THE COMMUNICATION TRIANGLE
         </text>
 
         {/* Center ambient glow */}
@@ -330,8 +330,8 @@ function EdgeLabel({
 }
 
 function ContextNode({ reduce }: { reduce: boolean | null }) {
-  const rOuter = 56;
-  const rInner = 44;
+  const rOuter = 64;
+  const rInner = 50;
 
   return (
     <g>

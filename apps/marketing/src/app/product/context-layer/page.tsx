@@ -57,7 +57,7 @@ export default function ContextLayerProductPage() {
     <>
       {/* HERO — Triangle integration */}
       <section className="relative overflow-hidden bg-white border-b border-[rgba(0,0,0,0.05)]">
-        <div className="mx-auto max-w-[1440px] px-6 lg:px-10 pt-20 pb-16 lg:pt-24">
+        <div className="mx-auto max-w-[1440px] px-6 lg:px-10 pt-4 pb-16 lg:pt-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <FadeUp>
               <div className="space-y-5">
@@ -135,10 +135,7 @@ export default function ContextLayerProductPage() {
       {/* WIKI FOUNDATION PRELUDE */}
       <section id="foundation" className="mx-auto max-w-[1440px] px-6 lg:px-10 py-16">
         <FadeUp>
-          <div className="max-w-[640px] space-y-2 mb-8">
-            <p className="text-button-upper text-[#777169]">Built on the Wiki</p>
-            <h2 className="text-section-heading text-black">The foundation everything sits on.</h2>
-          </div>
+
         </FadeUp>
         <FadeUp delay={0.1}>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -150,18 +147,18 @@ export default function ContextLayerProductPage() {
               body="Versioned knowledge that lives as long as your codebase. Survives restarts, retries, and re-indexes."
             />
             <PromiseCard
-              icon={<Layers size={24} strokeWidth={1.5} />}
-              accentBg="#eff6ff"
-              accentFg="#1d4ed8"
-              title="Multi-Layer"
-              body="Workspace narrative → per-repo wikis → llms.txt for agents. Read at the level that fits the job."
-            />
-            <PromiseCard
               icon={<RefreshCw size={24} strokeWidth={1.5} />}
               accentBg="#fffbeb"
               accentFg="#b45309"
               title="Always Synced"
               body="Updates on every commit, PR merge, or chosen cadence. One canonical source of truth."
+            />
+            <PromiseCard
+              icon={<Sparkles size={24} strokeWidth={1.5} />}
+              accentBg="#eff6ff"
+              accentFg="#1d4ed8"
+              title="Agent-Ready"
+              body="Workspace narrative → per-repo wikis → llms.txt for agents. Read at the level that fits the job."
             />
           </div>
         </FadeUp>
