@@ -53,12 +53,12 @@ function LoginInner() {
         <div className="flex justify-center">
           <Link href="/" aria-label="Back to home">
             <Image
-              src="/logo-landscape.png"
+              src="/logo-landscape.svg"
               alt="Context Layer"
-              width={280}
-              height={64}
+              width={320}
+              height={72}
               priority
-              className="h-auto w-[240px]"
+              className="h-auto w-[320px]"
             />
           </Link>
         </div>

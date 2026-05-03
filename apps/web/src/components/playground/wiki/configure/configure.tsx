@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { useStore } from "@/stores";
 import type { WikiPayload } from "@/stores/types";
 import { GenerationInProgress } from "./generation-in-progress";
@@ -18,6 +18,14 @@ export function WikiConfigure({ workspaceId }: { workspaceId: string }) {
   const [mode, setMode] = useState<ConfigureMode>(hasWiki ? "living" : "idle");
   const [currentStep, setCurrentStep] = useState(0);
   const [stepLogs, setStepLogs] = useState<Record<number, string[]>>({});
+
+  useEffect(() => {
+    if (hasWiki && mode === "idle") {
+      setMode("living");
+    } else if (!hasWiki && mode === "living") {
+      setMode("idle");
+    }
+  }, [hasWiki, mode]);
 
   const handleGenerationComplete = useCallback(async () => {
     // Narrow fetch — never persona-filtered; the Configure tab has "earned" it.

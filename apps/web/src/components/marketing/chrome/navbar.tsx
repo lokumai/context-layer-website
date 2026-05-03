@@ -32,11 +32,11 @@ export function Navbar() {
         <a href="/" aria-label="Context Layer home" className="flex items-center">
           {/* biome-ignore lint/performance/noImgElement: logo doesn't need next/image optimization */}
           <img
-            src="/logo-landscape.png"
+            src="/logo-landscape.svg"
             alt="Context Layer"
-            className="h-7 w-auto"
-            width={160}
-            height={28}
+            className="h-9 w-auto"
+            width={180}
+            height={36}
           />
         </a>
 

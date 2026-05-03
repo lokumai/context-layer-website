@@ -32,7 +32,7 @@ export function Footer() {
           <div className="col-span-2 md:col-span-1 space-y-3">
             <a href="/" aria-label="Context Layer home" className="inline-flex items-center">
               {/* biome-ignore lint/performance/noImgElement: logo doesn't need next/image optimization */}
-              <img src="/logo-landscape.png" alt="Context Layer" className="h-6 w-auto" width={140} height={24} />
+              <img src="/logo-landscape.svg" alt="Context Layer" className="h-7 w-auto" width={140} height={28} />
             </a>
             <p className="text-caption text-[#777169] max-w-[240px]">
               Turn your codebase into living knowledge.

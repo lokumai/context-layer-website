@@ -52,13 +52,10 @@ export default function CodeTranslationPage() {
         <div className="mx-auto max-w-[1280px] px-6 lg:px-10 pt-24 pb-16 lg:pt-28">
           <div className="max-w-[860px] space-y-5">
             <FadeUp>
-              <div className="flex items-center gap-2">
-                <StatusPill tone="indexed" dot>Premium Add-on</StatusPill>
-                <StatusPill tone="info">Available via pilot</StatusPill>
-              </div>
-            </FadeUp>
-            <FadeUp delay={0.05}>
-              <p className="text-button-upper text-[#777169]">Code Translation</p>
+              <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs uppercase tracking-[0.08em] font-bold bg-[#fffbeb] text-[#b45309] border border-[#fef3c7]">
+                <span className="w-2 h-2 rounded-full bg-current opacity-80" />
+                Premium Add-on
+              </span>
             </FadeUp>
             <FadeUp delay={0.1}>
               <h1 className="text-display-hero text-black lg:text-[64px] lg:leading-[1.04] lg:tracking-[-1.1px]">

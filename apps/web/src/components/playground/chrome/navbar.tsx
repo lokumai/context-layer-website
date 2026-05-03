@@ -32,11 +32,11 @@ export function PlaygroundNavbar() {
           >
             {/* biome-ignore lint/performance/noImgElement: logo doesn't need next/image optimization */}
             <img
-              src="/logo-landscape.png"
+              src="/logo-landscape.svg"
               alt="Context Layer"
-              className="h-full w-auto"
-              width={140}
-              height={64}
+              className="h-9 w-auto"
+              width={180}
+              height={36}
             />
           </a>
           {inWorkspace && active ? (

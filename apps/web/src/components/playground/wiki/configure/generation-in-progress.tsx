@@ -51,8 +51,8 @@ export function GenerationInProgress({
     started.current = true;
     (async () => {
       const iter = simulateJob([...STEPS], () => undefined, {
-        totalMs: 8000,
-        minStepMs: 600,
+        totalMs: 5000,
+        minStepMs: 300,
       });
       let stepIdx = 0;
       while (true) {

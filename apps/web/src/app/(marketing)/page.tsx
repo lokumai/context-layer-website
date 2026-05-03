@@ -17,18 +17,8 @@ export default function HomePage() {
           <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_620px] gap-12 items-center">
             {/* LEFT — taglines + CTAs */}
             <div className="space-y-6">
-              <FadeUp>
-                <div className="flex flex-wrap items-center gap-2">
-                  <StatusPill tone="indexed" dot>AI-Native</StatusPill>
-                  <StatusPill tone="info" dot>Agent-Ready</StatusPill>
-                  <StatusPill tone="warn" dot>Human-Ready</StatusPill>
-                </div>
-              </FadeUp>
-              <FadeUp delay={0.05}>
-                <p className="text-button-upper text-[#777169]">Persistent Context-as-Infrastructure</p>
-              </FadeUp>
               <FadeUp delay={0.1}>
-                <h1 className="text-display-hero text-black text-balance lg:text-[64px] lg:leading-[1.04] lg:tracking-[-1.1px]">
+                <h1 className="text-display-hero text-black text-balance lg:text-[48px] lg:leading-[1.1] lg:tracking-[-0.8px]">
                   Codebase Knowledge
                   <br />
                   &amp; Intelligence

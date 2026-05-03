@@ -62,15 +62,7 @@ export default function ContextLayerProductPage() {
       <section className="relative overflow-hidden bg-white border-b border-[rgba(0,0,0,0.05)]">
         <div className="mx-auto max-w-[1280px] px-6 lg:px-10 pt-24 pb-16 lg:pt-28">
           <div className="max-w-[860px] space-y-5">
-            <FadeUp>
-              <div className="flex items-center gap-2">
-                <StatusPill tone="indexed" dot>The Base Product</StatusPill>
-                <StatusPill tone="info">Available in playground</StatusPill>
-              </div>
-            </FadeUp>
-            <FadeUp delay={0.05}>
-              <p className="text-button-upper text-[#777169]">Context Layer</p>
-            </FadeUp>
+
             <FadeUp delay={0.1}>
               <h1 className="text-display-hero text-black lg:text-[64px] lg:leading-[1.04] lg:tracking-[-1.1px]">
                 Context Layer.
