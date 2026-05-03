@@ -56,9 +56,9 @@ export default function ContextLayerProductPage() {
     <>
       {/* HERO — Triangle integration */}
       <section className="relative overflow-hidden bg-white border-b border-[rgba(0,0,0,0.05)]">
-        <div className="mx-auto max-w-[1440px] px-6 lg:px-10 pt-8 pb-16 lg:pt-10">
+        <div className="mx-auto max-w-[1440px] px-6 lg:px-10 pt-2 pb-16">
           <FadeUp>
-            <h1 className="text-display-hero text-black lg:text-[64px] lg:leading-[1.04] lg:tracking-[-1.1px] mb-12 lg:mb-16">
+            <h1 className="text-display-hero text-black lg:text-[64px] lg:leading-[1.04] lg:tracking-[-1.1px] mb-2">
               Context Layer.
             </h1>
           </FadeUp>
@@ -126,7 +126,7 @@ export default function ContextLayerProductPage() {
               </div>
             </FadeUp>
 
-            <FadeUp delay={0.2} className="flex justify-center lg:pt-4">
+            <FadeUp delay={0.2} className="flex justify-center">
               <AISdlcTriangle />
             </FadeUp>
           </div>
