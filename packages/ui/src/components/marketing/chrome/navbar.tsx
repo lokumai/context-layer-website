@@ -41,9 +41,9 @@ export function Navbar() {
           <Link href="/" aria-label="Context Layer home" className="flex items-center">
             {/* biome-ignore lint/performance/noImgElement: logo doesn't need next/image optimization */}
             <img
-              src={`${BASE_PATH}/logo-landscape.svg`}
+              src={`${BASE_PATH}/logo_square.svg`}
               alt="Context Layer"
-              className="h-20 w-auto lg:h-26"
+              className="h-12 w-auto lg:h-16"
               width={320}
               height={80}
             />

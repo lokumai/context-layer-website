@@ -48,7 +48,7 @@ export default function AboutPage() {
             body="Intellica's in-house AI team translating enterprise depth into product thinking."
           />
           <BrandCard
-            logo={`${BASE_PATH}/logo-landscape.svg`}
+            logo={`${BASE_PATH}/logo_square.svg`}
             alt="Context Layer logo"
             title="Context Layer"
             eyebrow="Product"

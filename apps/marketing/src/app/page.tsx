@@ -23,13 +23,12 @@ export default function HomePage() {
                   <br />
                   &amp; Intelligence
                   <br />
-                  <span className="text-[#4e4e4e]">Infrastructure.</span>
                 </h1>
               </FadeUp>
               <FadeUp delay={0.18}>
                 <p className="text-body-large text-[#4e4e4e] max-w-[540px]">
-                  Build the context your codebase never had. An AI-native codebase knowledge and
-                  intelligence infrastructure — automatically built, synced, and agent-ready.
+                  AI-native codebase knowledge and intelligence infrastructure — automatically
+                  built, synced, and evolved.
                 </p>
               </FadeUp>
               <FadeUp delay={0.24}>

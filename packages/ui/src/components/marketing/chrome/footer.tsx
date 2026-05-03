@@ -40,15 +40,15 @@ export function Footer() {
             <Link href="/" aria-label="Context Layer home" className="inline-flex items-center">
               {/* biome-ignore lint/performance/noImgElement: logo doesn't need next/image optimization */}
               <img
-                src={`${BASE_PATH}/logo-landscape.svg`}
+                src={`${BASE_PATH}/logo_square.svg`}
                 alt="Context Layer"
-                className="h-14 w-auto lg:h-16"
+                className="h-18 w-auto lg:h-26"
                 width={280}
                 height={64}
               />
             </Link>
             <p className="text-caption text-[#777169] max-w-[240px]">
-              Turn your codebase into living knowledge.
+              Build the context your codebase never had.
             </p>
           </div>
           {COLUMNS.map((col) => (
