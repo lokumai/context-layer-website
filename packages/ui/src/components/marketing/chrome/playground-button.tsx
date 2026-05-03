@@ -13,8 +13,7 @@ interface PlaygroundButtonProps {
 const variantClass: Record<Variant, string> = {
   default:
     "inline-flex items-center gap-2 bg-black text-white text-nav rounded-pill px-4 py-2 transition-opacity hover:opacity-90",
-  hero:
-    "inline-flex items-center gap-2 bg-black text-white text-nav rounded-pill px-5 py-2.5 transition-opacity hover:opacity-90",
+  hero: "inline-flex items-center gap-2 bg-black text-white text-nav rounded-pill px-5 py-2.5 transition-opacity hover:opacity-90",
   compact:
     "inline-flex items-center gap-2 bg-black text-white text-small rounded-pill px-4 py-1.5 transition-opacity hover:opacity-90",
 };
