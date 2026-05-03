@@ -33,7 +33,7 @@ jobs:
         run: bun install
 
       - name: Build with Next.js
-        run: bun run build --workspace=marketing
+        run: bun run build -- --filter=marketing
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
