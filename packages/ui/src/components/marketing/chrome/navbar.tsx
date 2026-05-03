@@ -43,7 +43,7 @@ export function Navbar() {
             <img
               src={`${BASE_PATH}/logo_square.svg`}
               alt="Context Layer"
-              className="h-12 w-auto lg:h-16"
+              className="h-8 w-auto lg:h-12"
               width={320}
               height={80}
             />
