@@ -36,7 +36,7 @@ export function Navbar() {
       className="sticky top-0 z-50 border-b border-border-subtle bg-[rgba(245,245,245,0.92)] backdrop-blur-md"
       data-testid="marketing-navbar"
     >
-      <nav className="mx-auto flex h-16 w-full max-w-[1280px] items-center px-6 lg:px-10">
+      <nav className="mx-auto flex h-16 w-full max-w-[1440px] items-center px-6 lg:px-10">
         <div className="flex items-center gap-10 lg:gap-16">
           <Link href="/" aria-label="Context Layer home" className="flex items-center">
             {/* biome-ignore lint/performance/noImgElement: logo doesn't need next/image optimization */}

@@ -1,11 +1,7 @@
 import { PlaygroundButton } from "@context-layer/ui/components/marketing/chrome/playground-button";
 import { AISdlcTriangle } from "@context-layer/ui/components/marketing/ai-sdlc-triangle";
-import { BackwardEngineeringWedge } from "@context-layer/ui/components/marketing/backward-engineering-wedge";
+import { CapabilityCarousel } from "@context-layer/ui/components/marketing/capability-carousel";
 import { ContextTriangleHero } from "@context-layer/ui/components/marketing/context-triangle-hero";
-import { LandAndExpandStrip } from "@context-layer/ui/components/marketing/land-and-expand-strip";
-import { PositioningMatrix } from "@context-layer/ui/components/marketing/positioning-matrix";
-import { ProductBento } from "@context-layer/ui/components/marketing/product-bento";
-import { StatusPill } from "@context-layer/ui/components/marketing/status-pill";
 import { FadeUp } from "@context-layer/ui/components/motion/fade-up";
 
 export default function HomePage() {
@@ -13,7 +9,7 @@ export default function HomePage() {
     <>
       {/* HERO — premium treatment */}
       <section className="relative overflow-hidden bg-white border-b border-[rgba(0,0,0,0.05)]">
-        <div className="mx-auto max-w-[1280px] px-6 lg:px-10 pt-4 pb-16 lg:pt-6 lg:pb-20">
+        <div className="mx-auto max-w-[1440px] px-6 lg:px-10 pt-4 pb-16 lg:pt-6 lg:pb-20">
           <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_620px] gap-12 items-center">
             {/* LEFT — taglines + CTAs */}
             <div className="space-y-6">
@@ -53,12 +49,12 @@ export default function HomePage() {
       </section>
 
       {/* BACKWARD ENGINEERING WEDGE */}
-      <section className="mx-auto max-w-[1280px] px-6 lg:px-10 py-20">
+      <section className="mx-auto max-w-[1440px] px-6 lg:px-10 py-20">
         <FadeUp>
           <div className="max-w-[720px] space-y-3 mb-10">
             <p className="text-button-upper text-[#777169]">The Missing Layer</p>
             <h2 className="text-section-heading text-black">
-              Everyone else builds forward. We&apos;re the backward-engineering layer.
+              Everyone else builds forward. We build backward.
             </h2>
             <p className="text-body text-[#4e4e4e]">
               Cursor, Claude Code, and Copilot help <em>write</em> code. Context Layer
@@ -67,14 +63,11 @@ export default function HomePage() {
             </p>
           </div>
         </FadeUp>
-        <FadeUp delay={0.1}>
-          <BackwardEngineeringWedge />
-        </FadeUp>
       </section>
 
       {/* AI-SDLC TRIANGLE — explainer */}
-      <section className="bg-white border-y border-[rgba(0,0,0,0.05)]">
-        <div className="mx-auto max-w-[1280px] px-6 lg:px-10 py-20">
+      <section className="bg-white border-y border-[rgba(0,0,0,0.05)] mt-12 lg:mt-16">
+        <div className="mx-auto max-w-[1440px] px-6 lg:px-10 py-24 lg:py-28">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <FadeUp>
               <div className="space-y-4">
@@ -129,85 +122,35 @@ export default function HomePage() {
                 </dl>
               </div>
             </FadeUp>
-            <FadeUp delay={0.1} className="flex justify-center">
+            <FadeUp delay={0.1} className="flex justify-center lg:translate-y-24">
               <AISdlcTriangle />
             </FadeUp>
           </div>
         </div>
       </section>
 
-      {/* PRODUCT MAP — 4-verb IA */}
-      <section id="how-you-use-it" className="mx-auto max-w-[1280px] px-6 lg:px-10 py-20">
-        <FadeUp>
-          <div className="max-w-[800px] space-y-3 mb-10">
-            <p className="text-button-upper text-[#777169]">How You Use It</p>
-            <h2 className="text-section-heading text-black">
-              Input sources. Sync knowledge. Ask the chatbot. Generate artifacts.
-            </h2>
-            <p className="text-body text-[#4e4e4e]">
-              Four verbs, one substrate. This is how the playground is organized — and how your team
-              will think about the product from day one.
-            </p>
-          </div>
-        </FadeUp>
-        <FadeUp delay={0.1}>
-          <ProductBento />
-        </FadeUp>
-      </section>
-
-      {/* MARKET POSITIONING */}
-      <section className="bg-white border-y border-[rgba(0,0,0,0.05)]">
-        <div className="mx-auto max-w-[1280px] px-6 lg:px-10 py-20">
+      {/* PRODUCT MAP — 4-verb IA, hybrid carousel-switcher */}
+      <section
+        id="how-you-use-it"
+        className="relative overflow-hidden bg-gradient-to-b from-white to-[#fafaf9] border-y border-[rgba(0,0,0,0.04)]"
+      >
+        <div className="mx-auto max-w-[1440px] px-6 lg:px-10 py-20">
           <FadeUp>
-            <div className="max-w-[720px] space-y-3 mb-10">
-              <p className="text-button-upper text-[#777169]">Where We Sit</p>
+            <div className="max-w-[860px] mx-auto text-center space-y-3 mb-10">
+              <p className="text-button-upper text-[#777169]">How You Use It</p>
               <h2 className="text-section-heading text-black">
-                Vertical, not horizontal. Backward, not forward.
+                Input Sources. Get Knowledge. Ask Chatbot. Generate Artifacts.
               </h2>
-              <p className="text-body text-[#4e4e4e]">
-                Agent-memory tools (Cognee, Mem0, Hindsight) are horizontal plumbing. Coding
-                assistants are forward engineering. Context Layer is the codebase-domain-specific,
-                backward-engineering layer that makes both more useful.
-              </p>
             </div>
           </FadeUp>
           <FadeUp delay={0.1}>
-            <PositioningMatrix />
+            <CapabilityCarousel />
           </FadeUp>
         </div>
       </section>
 
-      {/* LAND AND EXPAND */}
-      <section className="mx-auto max-w-[1280px] px-6 lg:px-10 py-20">
-        <FadeUp>
-          <div className="max-w-[720px] space-y-3 mb-10">
-            <p className="text-button-upper text-[#777169]">Sales Strategy</p>
-            <h2 className="text-section-heading text-black">
-              Start with context. Expand into transformation.
-            </h2>
-            <p className="text-body text-[#4e4e4e]">
-              Land the base product first. Once your codebase is context-aware, the premium
-              workflows — translation, modernization — sit on top with zero architectural surprise.
-            </p>
-          </div>
-        </FadeUp>
-        <FadeUp delay={0.1}>
-          <LandAndExpandStrip />
-        </FadeUp>
-        <FadeUp delay={0.2}>
-          <div className="mt-8 flex">
-            <a
-              href="mailto:hello@context-layer.dev"
-              className="inline-flex items-center gap-2 text-button text-black border-b border-black/40 hover:border-black transition-colors pb-0.5"
-            >
-              Talk to us <span aria-hidden>→</span>
-            </a>
-          </div>
-        </FadeUp>
-      </section>
-
       {/* CLOSING CTA */}
-      <section className="mx-auto max-w-[1280px] px-6 lg:px-10 pb-24">
+      <section className="mx-auto max-w-[1440px] px-6 lg:px-10 pb-24">
         <FadeUp>
           <div className="bg-[rgba(245,242,239,0.8)] rounded-section shadow-[var(--shadow-warm)] px-10 py-16 text-center space-y-6">
             <h2 className="text-section-heading text-black">

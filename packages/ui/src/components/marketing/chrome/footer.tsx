@@ -34,7 +34,7 @@ export function Footer() {
   const year = new Date().getFullYear();
   return (
     <footer className="mt-32 border-t border-border-subtle bg-white" data-testid="marketing-footer">
-      <div className="mx-auto max-w-[1280px] px-6 lg:px-10 py-16">
+      <div className="mx-auto max-w-[1440px] px-6 lg:px-10 py-16">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-10">
           <div className="col-span-2 md:col-span-1 space-y-3">
             <Link href="/" aria-label="Context Layer home" className="inline-flex items-center">

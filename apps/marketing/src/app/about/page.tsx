@@ -14,7 +14,7 @@ export default function AboutPage() {
   return (
     <>
       <section className="border-b border-[rgba(0,0,0,0.05)] bg-white">
-        <div className="mx-auto max-w-[1280px] px-6 py-16 lg:px-10 lg:py-24">
+        <div className="mx-auto max-w-[1440px] px-6 py-16 lg:px-10 lg:py-24">
           <div className="max-w-[860px] space-y-5">
             <FadeUp delay={0.02}>
               <h1 className="text-display-hero text-black lg:text-[64px] lg:leading-[1.02]">
@@ -31,7 +31,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-[1280px] px-6 py-16 lg:px-10">
+      <section className="mx-auto max-w-[1440px] px-6 py-16 lg:px-10">
         <div className="grid gap-6 lg:grid-cols-3">
           <BrandCard
             logo={`${BASE_PATH}/intellilca_logo.png`}
@@ -57,7 +57,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-[1280px] px-6 pb-24 lg:px-10">
+      <section className="mx-auto max-w-[1440px] px-6 pb-24 lg:px-10">
         <div className="grid gap-6 lg:grid-cols-[1fr_.9fr]">
           <FadeUp>
             <div className="rounded-section border border-[rgba(0,0,0,0.05)] bg-white p-8 shadow-[var(--shadow-outline-ring)]">

@@ -145,7 +145,7 @@ export function ContextTriangleHero() {
         viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
         className="w-full h-auto"
         role="img"
-        aria-label="Context Layer turns a pool of sources into shared knowledge for Human Dev and AI Agent — the AI-SDLC Triangle"
+        aria-label="Context Layer turns a pool of sources into shared knowledge for Humans and AI Agents — the AI-SDLC Triangle"
       >
         <title>AI-SDLC Triangle</title>
 
@@ -437,7 +437,7 @@ function VertexCard({
         fontWeight="700"
         fill="#0a0a0a"
       >
-        {icon === "user" ? "Human Dev" : "AI Agent"}
+        {icon === "user" ? "Humans" : "AI Agents"}
       </text>
     </motion.g>
   );
