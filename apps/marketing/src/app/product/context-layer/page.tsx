@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { PlaygroundButton } from "@context-layer/ui/components/marketing/chrome/playground-button";
 import { StatusPill } from "@context-layer/ui/components/marketing/status-pill";
+import { BRAND_ICONS } from "@context-layer/ui/brand-icons";
 import { AISdlcTriangle } from "@context-layer/ui/components/marketing/ai-sdlc-triangle";
 import {
   CapabilityScroller,
@@ -33,7 +34,7 @@ const CAPABILITIES: Capability[] = [
     id: "knowledge",
     eyebrow: "02 · Knowledge",
     title: "Wiki and Intelligence — always-synced, always grounded.",
-    body: "A living narrative Wiki (workspace → per-repo → llms.txt) sits next to live Intelligence dashboards — health, security, coverage, dependencies. Updated on every commit.",
+    body: "A living narrative Wiki sits next to live Intelligence dashboards — health, security, coverage, dependencies. Updated on every commit.",
     graphic: <KnowledgeGraphic />,
   },
   {
@@ -46,7 +47,7 @@ const CAPABILITIES: Capability[] = [
   {
     id: "generate",
     eyebrow: "04 · Generate",
-    title: "One-shot artifacts your stakeholders can read.",
+    title: "Generate artifacts your stakeholders can read.",
     body: "DocsGen (6 bundles), OmniBoard (text · audio · video onboarding), and MCPGen (tentative — MCP descriptors for external agents). Outputs land in the Library.",
     graphic: <GenerateGraphic />,
   },
@@ -160,7 +161,7 @@ export default function ContextLayerProductPage() {
               accentBg="#eff6ff"
               accentFg="#1d4ed8"
               title="Agent-Ready"
-              body="Workspace narrative → per-repo wikis → llms.txt for agents. Read at the level that fits the job."
+              body="Workspace narrative and grounded wikis for agents. Read at the level that fits the job."
             />
           </div>
         </FadeUp>
@@ -173,7 +174,7 @@ export default function ContextLayerProductPage() {
       <section className="mx-auto max-w-[1440px] px-6 lg:px-10 pb-24">
         <FadeUp>
           <div className="bg-[rgba(245,242,239,0.8)] rounded-section shadow-[var(--shadow-warm)] px-10 py-16 text-center space-y-6">
-            <h2 className="text-section-heading text-black">Stop reading stale docs.</h2>
+            <h2 className="text-section-heading text-black">Context is better when it's grounded.</h2>
             <p className="text-body text-[#4e4e4e] max-w-[560px] mx-auto">
               The playground ships with a 9-repo TMForum catalog. Every capability above is real
               inside it — Wiki, Intelligence, Chatbot, DocsGen.
@@ -224,56 +225,57 @@ function PromiseCard({
 function SourcesGraphic() {
   const items = [
     {
-      kind: "Code",
+      kind: "GitHub",
       label: "offering-service",
-      accent: "#1d4ed8",
-      bg: "#eff6ff",
-      icon: <GitBranch size={14} strokeWidth={1.5} />,
+      brand: "github",
     },
     {
-      kind: "File",
-      label: "architecture.pdf",
-      accent: "#525252",
-      bg: "#f5f5f5",
-      icon: <FileText size={14} strokeWidth={1.5} />,
+      kind: "PDF",
+      label: "architecture-v2.pdf",
+      brand: "pdf",
     },
     {
-      kind: "Code",
-      label: "web-ui",
-      accent: "#1d4ed8",
-      bg: "#eff6ff",
-      icon: <GitBranch size={14} strokeWidth={1.5} />,
+      kind: "Google Drive",
+      label: "Institutional Memory",
+      brand: "gdrive",
     },
     {
-      kind: "Discussion",
-      label: "#eng-platform",
-      accent: "#b45309",
-      bg: "#fffbeb",
-      icon: <MessageSquare size={14} strokeWidth={1.5} />,
+      kind: "Jira",
+      label: "PROD-Backlog",
+      brand: "jira",
     },
   ];
   return (
     <div className="w-full max-w-[420px] space-y-2">
-      {items.map((it) => (
-        <div
-          key={it.label}
-          className="flex items-center gap-3 bg-white rounded-card px-3 py-2.5 shadow-[var(--shadow-outline-ring)] border border-[rgba(0,0,0,0.04)]"
-        >
-          <span
-            className="w-8 h-8 rounded-standard flex items-center justify-center"
-            style={{ backgroundColor: it.bg, color: it.accent }}
+      {items.map((it) => {
+        const iconData = BRAND_ICONS[it.brand as keyof typeof BRAND_ICONS];
+        return (
+          <div
+            key={it.label}
+            className="flex items-center gap-3 bg-white rounded-card px-3 py-2.5 shadow-[var(--shadow-outline-ring)] border border-[rgba(0,0,0,0.04)]"
           >
-            {it.icon}
-          </span>
-          <div className="flex-1">
-            <p className="text-caption text-black font-mono">{it.label}</p>
-            <p className="text-micro text-[#777169] uppercase tracking-[0.08em]">{it.kind}</p>
+            <span
+              className="w-8 h-8 rounded-standard flex items-center justify-center"
+              style={{ backgroundColor: iconData.bg, color: iconData.color }}
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                {iconData.paths ? (
+                  iconData.paths.map((p, i) => <path key={i} d={p.d} fill={p.fill} />)
+                ) : (
+                  <path d={iconData.path} />
+                )}
+              </svg>
+            </span>
+            <div className="flex-1">
+              <p className="text-caption text-black font-mono">{it.label}</p>
+              <p className="text-micro text-[#777169] uppercase tracking-[0.08em]">{it.kind}</p>
+            </div>
+            <StatusPill tone="indexed" dot>
+              Indexed
+            </StatusPill>
           </div>
-          <StatusPill tone="indexed" dot>
-            Indexed
-          </StatusPill>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }
@@ -294,10 +296,19 @@ function KnowledgeGraphic() {
             Live
           </StatusPill>
         </div>
-        <div className="space-y-1.5">
-          <span className="block h-1.5 w-full rounded-full bg-[#f5f5f5]" />
-          <span className="block h-1.5 w-[82%] rounded-full bg-[#f5f5f5]" />
-          <span className="block h-1.5 w-[68%] rounded-full bg-[#f5f5f5]" />
+        <div className="space-y-2">
+          <div className="space-y-1">
+            <p className="text-[11px] font-bold text-black uppercase tracking-wider">Architecture Overview</p>
+            <p className="text-[10px] text-[#777169] leading-relaxed">
+              The service mesh uses a sidecar pattern for all ingress/egress...
+            </p>
+          </div>
+          <div className="pt-1 border-t border-[#f5f5f5] space-y-1">
+            <p className="text-[11px] font-bold text-black uppercase tracking-wider">Onboarding Guide</p>
+            <p className="text-[10px] text-[#777169] leading-relaxed">
+              To run locally, you'll need Docker 24+ and the following env...
+            </p>
+          </div>
         </div>
       </div>
 
