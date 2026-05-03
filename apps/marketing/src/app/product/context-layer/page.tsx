@@ -3,11 +3,9 @@ import {
   FileCode,
   FileText,
   GitBranch,
-  Headphones,
   LayoutDashboard,
   Layers,
   MessageSquare,
-  Plug,
   RefreshCw,
   ShieldCheck,
   Sparkles,
@@ -48,7 +46,7 @@ const CAPABILITIES: Capability[] = [
     id: "generate",
     eyebrow: "04 · Generate",
     title: "Generate artifacts your stakeholders can read.",
-    body: "DocsGen (6 bundles), OmniBoard (text · audio · video onboarding), and MCPGen (tentative — MCP descriptors for external agents). Outputs land in the Library.",
+    body: "One click turns the wiki into something shareable — architecture maps for engineers, onboarding briefs for new hires, slide decks for stakeholders, API catalogs for integrators, compliance reports for auditors. Every artifact lands in your Library, versioned and ready to send.",
     graphic: <GenerateGraphic />,
   },
 ];
@@ -136,7 +134,7 @@ export default function ContextLayerProductPage() {
       </section>
 
       {/* WIKI FOUNDATION PRELUDE */}
-      <section id="foundation" className="mx-auto max-w-[1440px] px-6 lg:px-10 py-16">
+      <section id="foundation" className="mx-auto max-w-[1440px] px-6 lg:px-10 pt-16 pb-4">
         <FadeUp>
 
         </FadeUp>
@@ -398,55 +396,126 @@ function ChatbotGraphic() {
 }
 
 function GenerateGraphic() {
-  const tools = [
+  // Outcome-first artifact rail — no internal module names. Each card
+  // describes a tangible deliverable a real stakeholder receives.
+  const artifacts: Array<{
+    format: "PDF" | "MP3" | "PPTX" | "MD";
+    title: string;
+    audience: string;
+    detail: string;
+    fg: string;
+    bg: string;
+    fresh?: boolean;
+  }> = [
     {
-      name: "DocsGen",
-      sub: "6 bundles · 21 cards",
-      icon: <FileCode size={16} strokeWidth={1.5} />,
-      bg: "#eff6ff",
-      fg: "#1d4ed8",
+      format: "PDF",
+      title: "Architecture Map",
+      audience: "Engineering",
+      detail: "24 pages · cross-repo flows",
+      fg: "#b91c1c",
+      bg: "#fef2f2",
+      fresh: true,
     },
     {
-      name: "OmniBoard",
-      sub: "Text · Audio · Video",
-      icon: <Headphones size={16} strokeWidth={1.5} />,
-      bg: "#ecfdf5",
-      fg: "#047857",
-    },
-    {
-      name: "MCPGen",
-      sub: "MCP descriptors",
-      icon: <Plug size={16} strokeWidth={1.5} />,
-      bg: "#fffbeb",
+      format: "MP3",
+      title: "Onboarding Brief",
+      audience: "New hires",
+      detail: "12 min · narrated walkthrough",
       fg: "#b45309",
-      tentative: true,
+      bg: "#fffbeb",
+    },
+    {
+      format: "PPTX",
+      title: "Stakeholder Slides",
+      audience: "Execs",
+      detail: "Q4 system review",
+      fg: "#1d4ed8",
+      bg: "#eff6ff",
+    },
+    {
+      format: "MD",
+      title: "API Catalog",
+      audience: "Integrators",
+      detail: "38 endpoints · OpenAPI",
+      fg: "#525252",
+      bg: "#f5f5f4",
     },
   ];
+
   return (
-    <div className="w-full max-w-[420px] space-y-3">
-      {tools.map((t) => (
-        <div
-          key={t.name}
-          className="bg-white rounded-card p-4 shadow-[var(--shadow-outline-ring)] border border-[rgba(0,0,0,0.04)] flex items-center gap-4"
-        >
-          <span
-            className="w-10 h-10 rounded-standard flex items-center justify-center"
-            style={{ backgroundColor: t.bg, color: t.fg }}
-          >
-            {t.icon}
+    <div className="w-full max-w-[440px] space-y-3">
+      {/* Active generation row */}
+      <div className="bg-white rounded-card border border-[rgba(0,0,0,0.05)] shadow-[var(--shadow-outline-ring)] px-4 py-3 space-y-2">
+        <div className="flex items-center gap-2">
+          <span className="relative flex h-2 w-2">
+            <span className="absolute inline-flex h-full w-full rounded-full bg-[#10b981] opacity-75 animate-ping" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-[#10b981]" />
           </span>
-          <div className="flex-1">
-            <div className="flex items-center gap-2">
-              <p className="text-body-medium text-black">{t.name}</p>
-              {t.tentative ? <StatusPill tone="neutral">Tentative</StatusPill> : null}
-            </div>
-            <p className="text-caption text-[#777169]">{t.sub}</p>
-          </div>
-          <span aria-hidden className="text-[#777169]">
-            <Sparkles size={16} strokeWidth={1.5} />
-          </span>
+          <p className="text-micro text-[#777169] uppercase tracking-[0.08em] font-semibold">
+            Generating
+          </p>
+          <span className="text-caption text-black ml-1">Compliance Audit</span>
+          <span className="ml-auto text-tiny font-mono text-[#777169]">64%</span>
         </div>
-      ))}
+        <div className="h-1.5 w-full rounded-pill bg-[#f5f5f4] overflow-hidden">
+          <div
+            className="h-full rounded-pill bg-[#10b981]"
+            style={{ width: "64%" }}
+            aria-hidden
+          />
+        </div>
+      </div>
+
+      {/* Library artifact stack */}
+      <div className="bg-white rounded-card border border-[rgba(0,0,0,0.05)] shadow-[var(--shadow-outline-ring)] divide-y divide-[rgba(0,0,0,0.05)]">
+        {artifacts.map((a) => (
+          <div key={a.title} className="px-4 py-3 flex items-center gap-3">
+            <span
+              className="rounded-standard inline-flex items-center justify-center text-[10px] font-bold tracking-[0.05em] flex-shrink-0"
+              style={{
+                width: 40,
+                height: 40,
+                backgroundColor: a.bg,
+                color: a.fg,
+              }}
+            >
+              {a.format}
+            </span>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 flex-wrap">
+                <p className="text-body-medium text-black leading-tight">{a.title}</p>
+                {a.fresh ? (
+                  <span className="text-tiny font-bold tracking-[0.06em] px-1.5 py-0.5 rounded-full bg-[#ecfdf5] text-[#047857] inline-flex items-center gap-1">
+                    <span className="w-1 h-1 rounded-full bg-[#10b981] animate-pulse" />
+                    JUST SHIPPED
+                  </span>
+                ) : null}
+              </div>
+              <p className="text-caption text-[#777169] truncate">
+                <span className="text-[#4e4e4e]">{a.audience}</span> · {a.detail}
+              </p>
+            </div>
+            <Sparkles
+              size={14}
+              strokeWidth={1.5}
+              className="text-[#9ca3af] flex-shrink-0"
+              aria-hidden
+            />
+          </div>
+        ))}
+      </div>
+
+      {/* Library footer */}
+      <div className="flex items-center justify-between px-1">
+        <div className="flex items-center gap-2">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#10b981]" />
+          <p className="text-micro text-[#777169] uppercase tracking-[0.08em] font-semibold">
+            Library
+          </p>
+          <span className="text-caption text-black">24 artifacts</span>
+        </div>
+        <span className="text-tiny text-[#777169]">synced from your codebase</span>
+      </div>
     </div>
   );
 }
