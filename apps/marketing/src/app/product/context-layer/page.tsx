@@ -64,7 +64,7 @@ export default function ContextLayerProductPage() {
                 <h1 className="text-display-hero text-black lg:text-[64px] lg:leading-[1.04] lg:tracking-[-1.1px]">
                   Context Layer.
                 </h1>
-                <p className="text-button-upper text-[#777169]">The Communication Triangle</p>
+
                 <h2 className="text-section-heading text-black">
                   Human. Agent. Codebase. Context is the channel.
                 </h2>
