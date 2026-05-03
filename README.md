@@ -55,10 +55,10 @@ Use these commands to work on specific parts of the ecosystem without starting e
 
 | Command | Action |
 |---|---|
-| `bun dev --filter=marketing` | Run only the Marketing site (:3001) |
-| `bun dev --filter=web` | Run only the Playground (:3000) |
-| `bun build --filter=marketing` | Build static export for Marketing |
-| `bun build --filter=web` | Build standalone bundle for Playground |
+| `bun run dev --filter=marketing` | Run only the Marketing site (:3001) |
+| `bun run dev --filter=web` | Run only the Playground (:3000) |
+| `bun run build --filter=marketing` | Build static export for Marketing |
+| `bun run build --filter=web` | Build standalone bundle for Playground |
 | `bun run lint` | Lint everything with Biome |
 | `bun run test` | Run all Vitest + Playwright tests |
 
