@@ -4,7 +4,9 @@ import { isValidBundleSlug } from "@/components/playground/generate/docsgen/cata
 
 export default async function DocsGenBundlePage({
   params,
-}: { params: Promise<{ id: string; bundle: string }> }) {
+}: {
+  params: Promise<{ id: string; bundle: string }>;
+}) {
   const { id, bundle } = await params;
 
   if (!id || !bundle) return null;

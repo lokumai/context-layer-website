@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+const BASE_PATH = "/context-layer-website";
+
 const COLUMNS = [
   {
     heading: "Product",
@@ -38,11 +40,11 @@ export function Footer() {
             <Link href="/" aria-label="Context Layer home" className="inline-flex items-center">
               {/* biome-ignore lint/performance/noImgElement: logo doesn't need next/image optimization */}
               <img
-                src="/logo-landscape.svg"
+                src={`${BASE_PATH}/logo-landscape.svg`}
                 alt="Context Layer"
-                className="h-7 w-auto"
-                width={140}
-                height={28}
+                className="h-14 w-auto lg:h-16"
+                width={280}
+                height={64}
               />
             </Link>
             <p className="text-caption text-[#777169] max-w-[240px]">

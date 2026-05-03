@@ -24,7 +24,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Context Layer | Codebase Knowledge Infrastructure",
-  description: "Build the context your codebase never had. Context Layer automatically builds, syncs, and evolves codebase context.",
+  description:
+    "Build the context your codebase never had. Context Layer automatically builds, syncs, and evolves codebase context.",
 };
 
 export default function RootLayout({
@@ -36,7 +37,7 @@ export default function RootLayout({
     <html lang="en" className={`${inter.variable} ${raleway.variable} ${geistMono.variable}`}>
       <body className="antialiased font-sans">
         <Navbar />
-        <main className="min-h-screen pt-16">{children}</main>
+        <main className="min-h-screen">{children}</main>
         <Footer />
       </body>
     </html>
