@@ -135,9 +135,6 @@ export default function ContextLayerProductPage() {
 
       {/* WIKI FOUNDATION PRELUDE */}
       <section id="foundation" className="mx-auto max-w-[1440px] px-6 lg:px-10 pt-16 pb-4">
-        <FadeUp>
-
-        </FadeUp>
         <FadeUp delay={0.1}>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <PromiseCard

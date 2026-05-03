@@ -12,17 +12,17 @@ const PRODUCTS = [
   {
     href: "/product/context-layer",
     label: "Context Layer",
-    description: "Wiki, Intelligence, Chatbot.",
+    description: "Shared context for humans and agents.",
   },
   {
     href: "/product/code-translation",
     label: "Code Translation",
-    description: "Semantic rewrites across languages.",
+    description: "Logic-preserving language migrations.",
   },
   {
     href: "/product/code-modernization",
     label: "Code Modernization",
-    description: "Phased upgrades with audit trails.",
+    description: "Verifiable paths to modern code.",
   },
 ];
 
