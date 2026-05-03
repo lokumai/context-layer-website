@@ -57,14 +57,16 @@ export default function ContextLayerProductPage() {
     <>
       {/* HERO — Triangle integration */}
       <section className="relative overflow-hidden bg-white border-b border-[rgba(0,0,0,0.05)]">
-        <div className="mx-auto max-w-[1440px] px-6 lg:px-10 pt-4 pb-16 lg:pt-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <FadeUp>
-              <div className="space-y-5">
-                <h1 className="text-display-hero text-black lg:text-[64px] lg:leading-[1.04] lg:tracking-[-1.1px]">
-                  Context Layer.
-                </h1>
+        <div className="mx-auto max-w-[1440px] px-6 lg:px-10 pt-8 pb-16 lg:pt-10">
+          <FadeUp>
+            <h1 className="text-display-hero text-black lg:text-[64px] lg:leading-[1.04] lg:tracking-[-1.1px] mb-12 lg:mb-16">
+              Context Layer.
+            </h1>
+          </FadeUp>
 
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+            <FadeUp delay={0.1}>
+              <div className="space-y-5">
                 <h2 className="text-section-heading text-black">
                   Human. Agent. Codebase. Context is the channel.
                 </h2>
@@ -125,7 +127,7 @@ export default function ContextLayerProductPage() {
               </div>
             </FadeUp>
 
-            <FadeUp delay={0.1} className="flex justify-center lg:translate-y-24">
+            <FadeUp delay={0.2} className="flex justify-center lg:pt-4">
               <AISdlcTriangle />
             </FadeUp>
           </div>
