@@ -2,6 +2,7 @@ import { PlaygroundButton } from "@context-layer/ui/components/marketing/chrome/
 import { AISdlcTriangle } from "@context-layer/ui/components/marketing/ai-sdlc-triangle";
 import { CapabilityCarousel } from "@context-layer/ui/components/marketing/capability-carousel";
 import { ContextTriangleHero } from "@context-layer/ui/components/marketing/context-triangle-hero";
+import { ForwardBackwardLoop } from "@context-layer/ui/components/marketing/forward-backward-loop";
 import { FadeUp } from "@context-layer/ui/components/motion/fade-up";
 
 export default function HomePage() {
@@ -9,8 +10,8 @@ export default function HomePage() {
     <>
       {/* HERO — premium treatment */}
       <section className="relative overflow-hidden bg-white border-b border-[rgba(0,0,0,0.05)]">
-        <div className="mx-auto max-w-[1440px] px-6 lg:px-10 pt-4 pb-16 lg:pt-6 lg:pb-20">
-          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_620px] gap-12 items-center">
+        <div className="mx-auto max-w-[1280px] px-6 lg:px-10 pt-4 pb-16 lg:pt-6 lg:pb-20">
+          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_620px] gap-8 items-center">
             {/* LEFT — taglines + CTAs */}
             <div className="space-y-6">
               <FadeUp delay={0.1}>
@@ -41,7 +42,7 @@ export default function HomePage() {
             </div>
 
             {/* RIGHT — signature animation */}
-            <FadeUp delay={0.32} className="lg:pl-6">
+            <FadeUp delay={0.32}>
               <ContextTriangleHero />
             </FadeUp>
           </div>
