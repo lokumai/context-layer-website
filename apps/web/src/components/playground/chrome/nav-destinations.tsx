@@ -5,6 +5,7 @@ import { LayoutGroup, motion } from "motion/react";
 import { usePathname } from "next/navigation";
 import { type ReactNode, useEffect, useRef, useState } from "react";
 import { LAYOUT_SPRING } from "@/lib/motion/spring";
+import { useStore } from "@/stores";
 
 interface Props {
   workspaceId: string;

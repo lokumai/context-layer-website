@@ -12,13 +12,13 @@ import {
   ShieldCheck,
   Sparkles,
 } from "lucide-react";
-import { PlaygroundButton } from "@/components/marketing/chrome/playground-button";
-import { StatusPill } from "@/components/marketing/status-pill";
+import { PlaygroundButton } from "@context-layer/ui/components/marketing/chrome/playground-button";
+import { StatusPill } from "@context-layer/ui/components/marketing/status-pill";
 import {
   CapabilityScroller,
   type Capability,
-} from "@/components/marketing/capability-sticky";
-import { FadeUp } from "@/components/motion/fade-up";
+} from "@context-layer/ui/components/marketing/capability-sticky";
+import { FadeUp } from "@context-layer/ui/components/motion/fade-up";
 
 const CAPABILITIES: Capability[] = [
   {

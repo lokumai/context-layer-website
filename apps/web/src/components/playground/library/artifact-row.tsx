@@ -3,7 +3,7 @@
 
 import type { Artifact } from "@context-layer/mocks";
 import { FileImage, FileText, Headphones, Video } from "lucide-react";
-import { StatusPill } from "@/components/marketing/status-pill";
+import { StatusPill } from "@context-layer/ui/components/marketing/status-pill";
 import { DOCSGEN_CATALOG } from "@/components/playground/generate/docsgen/catalog";
 import { ActionsMenu } from "./actions-menu";
 import { BUNDLE_ICON_MAP, relativeTime } from "./artifact-tile";

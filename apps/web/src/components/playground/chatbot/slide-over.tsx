@@ -22,9 +22,12 @@ interface Props {
 
 export function ChatbotSideDock({ workspaceId, contextLabel }: Props) {
   const [open, setOpen] = useState(false);
+  const isHydrated = useStore((s) => s.isHydrated);
   const workspace = useStore((s) => s.workspaces.find((w) => w.id === workspaceId));
 
-  if (!workspace?.hasWiki) return null;
+  // Hide entirely if we are hydrated and we definitely know there is no wiki.
+  // While hydrating, we assume the wiki might exist so we render the button (prevents SSR layout shift/test flakiness).
+  if (isHydrated && !workspace?.hasWiki) return null;
 
   return (
     <>

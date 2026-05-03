@@ -2,7 +2,7 @@
 
 import { FileText, Inbox, ListChecks, RefreshCw, Trash2, Zap } from "lucide-react";
 import { useState } from "react";
-import { StatusPill } from "@/components/marketing/status-pill";
+import { StatusPill } from "@context-layer/ui/components/marketing/status-pill";
 import { simulateJob } from "@/lib/simulate-latency";
 import { useStore } from "@/stores";
 

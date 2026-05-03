@@ -2,7 +2,7 @@
 
 import { RefreshCw } from "lucide-react";
 import { useState } from "react";
-import { StatusPill, type StatusTone } from "@/components/marketing/status-pill";
+import { StatusPill, type StatusTone } from "@context-layer/ui/components/marketing/status-pill";
 import { simulateJob } from "@/lib/simulate-latency";
 import { useStore } from "@/stores";
 

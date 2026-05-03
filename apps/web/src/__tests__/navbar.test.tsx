@@ -1,6 +1,6 @@
 import { cleanup, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
-import { Navbar } from "@/components/marketing/chrome/navbar";
+import { Navbar } from "@context-layer/ui/components/marketing/chrome/navbar";
 
 describe("Marketing Navbar", () => {
   afterEach(() => cleanup());

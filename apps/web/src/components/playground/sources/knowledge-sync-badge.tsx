@@ -1,5 +1,5 @@
 import type { KnowledgeSyncStatus } from "@context-layer/mocks";
-import { StatusPill } from "@/components/marketing/status-pill";
+import { StatusPill } from "@context-layer/ui/components/marketing/status-pill";
 
 // Visual marker for whether a source is "in lock-step" with the workspace's
 // Wiki. Orthogonal to the source's IndexingStatus — a source can be

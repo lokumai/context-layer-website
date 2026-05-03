@@ -1,6 +1,6 @@
 import { Plug } from "lucide-react";
 import Link from "next/link";
-import { StatusPill } from "@/components/marketing/status-pill";
+import { StatusPill } from "@context-layer/ui/components/marketing/status-pill";
 
 export default async function McpGenPage(props: { params: Promise<{ id: string }> }) {
   const { id } = await props.params;

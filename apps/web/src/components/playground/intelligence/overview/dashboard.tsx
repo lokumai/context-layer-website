@@ -7,7 +7,7 @@
 import type { KnowledgeGraph } from "@context-layer/mocks";
 import { ArrowRight, Boxes, HeartPulse, Search, ShieldCheck, Target, X } from "lucide-react";
 import { useMemo, useState } from "react";
-import { StatusPill } from "@/components/marketing/status-pill";
+import { StatusPill } from "@context-layer/ui/components/marketing/status-pill";
 import { filterKnowledgeGraph } from "@/lib/intelligence/kg-filter";
 import { useStore } from "@/stores";
 import { IntelligenceFreshnessControls } from "../config-header";

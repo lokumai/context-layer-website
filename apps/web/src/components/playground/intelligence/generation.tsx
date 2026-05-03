@@ -9,7 +9,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { StatusPill } from "@/components/marketing/status-pill";
+import { StatusPill } from "@context-layer/ui/components/marketing/status-pill";
 import { TriangleLoader } from "@/components/playground/loaders/triangle-loader";
 import { TrickleLogs } from "@/components/playground/loaders/trickle-logs";
 import { simulateJob } from "@/lib/simulate-latency";

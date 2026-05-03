@@ -5,7 +5,7 @@
 "use client";
 
 import { useStore } from "@/stores";
-import { StatusPill } from "@/components/marketing/status-pill";
+import { StatusPill } from "@context-layer/ui/components/marketing/status-pill";
 import Link from "next/link";
 import {
   Activity,

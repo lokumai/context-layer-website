@@ -4,7 +4,7 @@ import type { Job, JobStatus } from "@context-layer/mocks";
 import { ChevronDown, ChevronRight, GitCompare } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
-import { StatusPill, type StatusTone } from "@/components/marketing/status-pill";
+import { StatusPill, type StatusTone } from "@context-layer/ui/components/marketing/status-pill";
 import { CONTEXT_SPRING } from "@/lib/motion/spring";
 import { DiffRenderer } from "./diff-renderer";
 import { LogStep } from "./log-step";

@@ -1,12 +1,12 @@
-import { PlaygroundButton } from "@/components/marketing/chrome/playground-button";
-import { AISdlcTriangle } from "@/components/marketing/ai-sdlc-triangle";
-import { BackwardEngineeringWedge } from "@/components/marketing/backward-engineering-wedge";
-import { ContextTriangleHero } from "@/components/marketing/context-triangle-hero";
-import { LandAndExpandStrip } from "@/components/marketing/land-and-expand-strip";
-import { PositioningMatrix } from "@/components/marketing/positioning-matrix";
-import { ProductBento } from "@/components/marketing/product-bento";
-import { StatusPill } from "@/components/marketing/status-pill";
-import { FadeUp } from "@/components/motion/fade-up";
+import { PlaygroundButton } from "@context-layer/ui/components/marketing/chrome/playground-button";
+import { AISdlcTriangle } from "@context-layer/ui/components/marketing/ai-sdlc-triangle";
+import { BackwardEngineeringWedge } from "@context-layer/ui/components/marketing/backward-engineering-wedge";
+import { ContextTriangleHero } from "@context-layer/ui/components/marketing/context-triangle-hero";
+import { LandAndExpandStrip } from "@context-layer/ui/components/marketing/land-and-expand-strip";
+import { PositioningMatrix } from "@context-layer/ui/components/marketing/positioning-matrix";
+import { ProductBento } from "@context-layer/ui/components/marketing/product-bento";
+import { StatusPill } from "@context-layer/ui/components/marketing/status-pill";
+import { FadeUp } from "@context-layer/ui/components/motion/fade-up";
 
 export default function HomePage() {
   return (
