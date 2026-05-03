@@ -20,7 +20,7 @@ Context Layer is an **AI-native infrastructure** that automatically builds, sync
 
 ## 🛠️ Technical Stack
 Built on the "Vercel Meta" 2026 stack:
-- **Core**: Next.js 15 (App Router), Turborepo, Bun
+- **Core**: Next.js 16 (App Router), Turborepo, Bun
 - **UI**: Tailwind CSS v4, Motion, Lucide, shadcn/ui
 - **State/Auth**: Zustand (Persona-keyed Persist), Auth.js v5
 - **Quality**: Vitest, Playwright, Biome
@@ -77,7 +77,6 @@ Sign in via `/login` using the following passwords (set in `.env.local`):
 
 ## 🎬 Client demos
 - [AGENTS.md](AGENTS.md) — Briefing for AI agents + the portable Siloed Agent Persona.
-- [docs/DEMO_STORIES.md](docs/DEMO_STORIES.md) — "Without vs With" Claude Code demo scripts.
 
 ## 📚 Documentation
 - [docs/DESIGN.md](docs/DESIGN.md) — Visual identity & motion language.

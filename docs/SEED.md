@@ -68,7 +68,8 @@ No real agents or workflows are implemented. The playground is a **demo that mim
 |---|---|
 | **Runtime / Package Manager** | Bun |
 | **Monorepo** | Turborepo |
-| **Framework** | Next.js 15 (App Router) |
+| **Framework** | Next.js 16 (App Router) |
+| **React** | React 19 |
 | **Styling** | Tailwind CSS v4 |
 | **UI Components** | shadcn/ui |
 | **Animation** | Motion (formerly Framer Motion) |

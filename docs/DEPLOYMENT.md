@@ -18,7 +18,7 @@ Any pushes to `main` will trigger the GitHub Action to build and deploy the mark
 
 The core application runtime consists of two services deployed together on DigitalOcean App Platform:
 
-- **`context-layer-web`** — Next.js 15 (standalone) on port 3000. Handles authentication, mock runtime, and the Playground UI.
+- **`context-layer-web`** — Next.js 16 (standalone) on port 3000. Handles authentication, mock runtime, and the Playground UI.
 - **`context-layer-mcp`** — Streamable-HTTP MCP server on port 8765.
 
 Both services live behind a single domain (e.g., `app.context-layer.dev`). `/` routes to the web playground, and `/mcp-api/*` routes to the MCP server.
@@ -160,7 +160,7 @@ Once deployed, the URLs you'll share are:
 - **MCP healthcheck**: `https://<your-do-app>.ondigitalocean.app/mcp-api/healthz`
 - **MCP endpoint**: `https://<your-do-app>.ondigitalocean.app/mcp-api/mcp`
 
-For the live demo flows, follow [`docs/DEMO_STORIES.md`](DEMO_STORIES.md).
+For the live demo flows, follow `AGENTS.md` and the instructions in the playground.
 
 ---
 

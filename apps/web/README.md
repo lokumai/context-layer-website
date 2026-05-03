@@ -15,7 +15,8 @@ bun run build
 Generates a standalone Node.js production bundle.
 
 ## Tech Stack
-- Next.js 15 (Standalone)
+- Next.js 16 (Standalone)
+- React 19
 - Auth.js v5
 - Zustand (Persona persistence)
 - Shared components from `@context-layer/ui`

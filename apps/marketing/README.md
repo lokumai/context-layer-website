@@ -15,7 +15,8 @@ bun run build
 Generates a static export in `out/`, suitable for GitHub Pages.
 
 ## Tech Stack
-- Next.js 15 (Static Export)
+- Next.js 16 (Static Export)
+- React 19
 - Tailwind CSS v4
 - Motion
 - Shared components from `@context-layer/ui`
