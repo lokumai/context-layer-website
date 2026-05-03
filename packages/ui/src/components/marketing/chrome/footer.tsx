@@ -42,12 +42,12 @@ export function Footer() {
               <img
                 src={`${BASE_PATH}/logo_square.svg`}
                 alt="Context Layer"
-                className="h-18 w-auto lg:h-26"
+                className="h-10 w-auto lg:h-14"
                 width={280}
                 height={64}
               />
             </Link>
-            <p className="text-caption text-[#777169] max-w-[240px]">
+            <p className="text-caption text-[#777169] max-w-[240px] pl-1">
               Build the context your codebase never had.
             </p>
           </div>
