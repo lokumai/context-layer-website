@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { GlowPulse } from "../../motion/glow-pulse";
 import { PlaygroundButton } from "./playground-button";
@@ -29,7 +30,7 @@ export function Navbar() {
       data-testid="marketing-navbar"
     >
       <nav className="mx-auto max-w-[1280px] px-6 lg:px-10 h-16 flex items-center justify-between">
-        <a href="/" aria-label="Context Layer home" className="flex items-center">
+        <Link href="/" aria-label="Context Layer home" className="flex items-center">
           {/* biome-ignore lint/performance/noImgElement: logo doesn't need next/image optimization */}
           <img
             src="/logo-landscape.svg"
@@ -38,17 +39,17 @@ export function Navbar() {
             width={180}
             height={36}
           />
-        </a>
+        </Link>
 
         <div className="hidden lg:flex items-center gap-8">
           {LINKS.map((l) => (
-            <a
+            <Link
               key={l.href}
               href={l.href}
               className="text-nav text-[#4e4e4e] hover:text-black transition-colors"
             >
               {l.label}
-            </a>
+            </Link>
           ))}
         </div>
 
@@ -86,14 +87,14 @@ export function Navbar() {
         <div className="lg:hidden bg-white border-b border-border-subtle">
           <div className="px-6 py-4 flex flex-col gap-4">
             {LINKS.map((l) => (
-              <a
+              <Link
                 key={l.href}
                 href={l.href}
                 className="text-nav text-black"
                 onClick={() => setMobileOpen(false)}
               >
                 {l.label}
-              </a>
+              </Link>
             ))}
           </div>
         </div>

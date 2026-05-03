@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const COLUMNS = [
   {
     heading: "Product",
@@ -33,7 +35,7 @@ export function Footer() {
       <div className="mx-auto max-w-[1280px] px-6 lg:px-10 py-16">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-10">
           <div className="col-span-2 md:col-span-1 space-y-3">
-            <a href="/" aria-label="Context Layer home" className="inline-flex items-center">
+            <Link href="/" aria-label="Context Layer home" className="inline-flex items-center">
               {/* biome-ignore lint/performance/noImgElement: logo doesn't need next/image optimization */}
               <img
                 src="/logo-landscape.svg"
@@ -42,7 +44,7 @@ export function Footer() {
                 width={140}
                 height={28}
               />
-            </a>
+            </Link>
             <p className="text-caption text-[#777169] max-w-[240px]">
               Turn your codebase into living knowledge.
             </p>
@@ -55,12 +57,24 @@ export function Footer() {
               <ul className="space-y-2">
                 {col.items.map((it) => (
                   <li key={it.label}>
-                    <a
-                      href={it.href}
-                      className="text-caption text-[#4e4e4e] hover:text-black transition-colors"
-                    >
-                      {it.label}
-                    </a>
+                    {it.href.startsWith("http") || it.href === "#" ? (
+                      <a
+                        href={it.href}
+                        className="text-caption text-[#4e4e4e] hover:text-black transition-colors"
+                        {...(it.href.startsWith("http")
+                          ? { target: "_blank", rel: "noopener noreferrer" }
+                          : {})}
+                      >
+                        {it.label}
+                      </a>
+                    ) : (
+                      <Link
+                        href={it.href}
+                        className="text-caption text-[#4e4e4e] hover:text-black transition-colors"
+                      >
+                        {it.label}
+                      </Link>
+                    )}
                   </li>
                 ))}
               </ul>

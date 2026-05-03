@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { ReactNode } from "react";
 
 type Variant = "default" | "hero" | "compact";
@@ -24,10 +25,21 @@ export function PlaygroundButton({
   href = process.env.NEXT_PUBLIC_PLAYGROUND_URL || "/workspaces",
 }: PlaygroundButtonProps) {
   const classes = `${variantClass[variant]} ${className}`.trim();
+
+  // External links (mailto, http) use a plain <a>; internal paths use Next.js Link for basePath support
+  if (href.startsWith("http") || href.startsWith("mailto:")) {
+    return (
+      <a href={href} className={classes} data-testid="playground-button">
+        <span>{children}</span>
+        <span aria-hidden>→</span>
+      </a>
+    );
+  }
+
   return (
-    <a href={href} className={classes} data-testid="playground-button">
+    <Link href={href} className={classes} data-testid="playground-button">
       <span>{children}</span>
       <span aria-hidden>→</span>
-    </a>
+    </Link>
   );
 }

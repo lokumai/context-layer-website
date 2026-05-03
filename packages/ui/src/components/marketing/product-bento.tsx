@@ -1,3 +1,4 @@
+import Link from "next/link";
 import {
   BookOpen,
   FileText,
@@ -241,7 +242,7 @@ function GroupCard({
 
 function PremiumCard({ href, title, tagline }: { href: string; title: string; tagline: string }) {
   return (
-    <a
+    <Link
       href={href}
       className="group flex items-center justify-between bg-white rounded-large px-6 py-5 shadow-[var(--shadow-outline-ring)] hover:shadow-[var(--shadow-card)] transition-shadow"
     >
@@ -258,6 +259,6 @@ function PremiumCard({ href, title, tagline }: { href: string; title: string; ta
       <span aria-hidden className="text-black transition-transform group-hover:translate-x-1">
         →
       </span>
-    </a>
+    </Link>
   );
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { type MouseEvent, useRef } from "react";
 
 interface ProductCardProps {
@@ -22,7 +23,7 @@ export function ProductCard({ href, eyebrow, title, description, available }: Pr
   }
 
   return (
-    <a
+    <Link
       ref={ref}
       href={href}
       onMouseMove={onMove}
@@ -59,6 +60,6 @@ export function ProductCard({ href, eyebrow, title, description, available }: Pr
           </span>
         </p>
       </div>
-    </a>
+    </Link>
   );
 }

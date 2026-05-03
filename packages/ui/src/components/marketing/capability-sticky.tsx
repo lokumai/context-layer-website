@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import type { ReactNode } from "react";
 import { ScrollSection, StickyScrollGroup, useStickyActive } from "../motion/scroll-section";
 
@@ -34,12 +35,12 @@ export function CapabilityScroller({ items }: { items: Capability[] }) {
                 </div>
                 <h3 className="text-section-heading text-black">{c.title}</h3>
                 <p className="text-body text-[#4e4e4e] max-w-[500px]">{c.body}</p>
-                <a
+                <Link
                   href="/login"
                   className="text-button text-black inline-flex items-center gap-1 pt-2 hover:gap-2 transition-[gap]"
                 >
                   Explore in playground <span aria-hidden>→</span>
-                </a>
+                </Link>
               </ScrollSection>
             ))}
           </div>
