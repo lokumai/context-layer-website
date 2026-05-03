@@ -42,12 +42,15 @@ interface ScrollSectionProps {
 
 export function ScrollSection({ id, children, className }: ScrollSectionProps) {
   const ref = useRef<HTMLElement | null>(null);
-  const inView = useInView(ref, { amount: 0.5 });
+  const inView = useInView(ref, { margin: "-45% 0px -45% 0px" });
   const ctx = useContext(Ctx);
+  const setActiveId = ctx?.setActiveId;
 
   useEffect(() => {
-    if (ctx && inView) ctx.setActiveId(id);
-  }, [ctx, inView, id]);
+    if (setActiveId && inView) {
+      setActiveId(id);
+    }
+  }, [setActiveId, inView, id]);
 
   return (
     <section ref={ref} id={id} className={className} data-active={inView}>
