@@ -146,14 +146,14 @@ Primary quality risk is **integration correctness**, not visual rendering.
 
 Proceed only when all are true:
 
-- [ ] Marketing app builds as static output (`output: "export"`) with no server-only imports.
-- [ ] All playground CTAs resolve via configured external base URL (`NEXT_PUBLIC_PLAYGROUND_URL`).
-- [ ] SEO metadata/canonicals/sitemap are domain-correct.
-- [ ] Global styling and font loading are correctly established in the new app's root layout.
-- [ ] Local UI dependencies are either moved to `@context-layer/ui` or safely duplicated.
-- [ ] CI has separate pipelines for Pages and Docker/DO paths.
-- [ ] Tests reflect split-domain reality (no stale same-origin assumptions in `marketing.spec.ts`).
-- [ ] `DEPLOYMENT.md` matches actual repository dual-target workflows.
+- [x] Marketing app builds as static output (`output: "export"`) with no server-only imports.
+- [x] All playground CTAs resolve via configured external base URL (`NEXT_PUBLIC_PLAYGROUND_URL`).
+- [x] SEO metadata/canonicals/sitemap are domain-correct.
+- [x] Global styling and font loading are correctly established in the new app's root layout.
+- [x] Local UI dependencies are either moved to `@context-layer/ui` or safely duplicated.
+- [x] CI has separate pipelines for Pages and Docker/DO paths.
+- [x] Tests reflect split-domain reality (no stale same-origin assumptions in `marketing.spec.ts`).
+- [x] `DEPLOYMENT.md` matches actual repository dual-target workflows.
 
 ---
 
