@@ -1,6 +1,4 @@
 {
   "repoId": "store-query-service",
-  "nodes": [
-    { "slug": "overview", "title": "Overview", "file": "overview.md" }
-  ]
+  "nodes": [{ "slug": "overview", "title": "Overview", "file": "overview.md" }]
 }

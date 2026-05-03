@@ -51,5 +51,7 @@ console.log(
     "committed outputs.",
 );
 console.log();
-console.log("This harness is a stub — wire it to a live DeepWiki client to " +
-  "actually re-generate the dataset.");
+console.log(
+  "This harness is a stub — wire it to a live DeepWiki client to " +
+    "actually re-generate the dataset.",
+);

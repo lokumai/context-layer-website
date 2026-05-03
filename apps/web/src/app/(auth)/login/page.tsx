@@ -53,12 +53,12 @@ function LoginInner() {
         <div className="flex justify-center">
           <Link href="/" aria-label="Back to home">
             <Image
-              src="/logo-landscape.png"
+              src="/logo-landscape.svg"
               alt="Context Layer"
-              width={280}
-              height={64}
+              width={320}
+              height={72}
               priority
-              className="h-auto w-[240px]"
+              className="h-auto w-[320px]"
             />
           </Link>
         </div>
@@ -124,9 +124,15 @@ function LoginInner() {
 
         <p className="text-micro text-[#777169] text-center leading-relaxed">
           Demo personas:
-          <span className="mx-1 rounded-subtle bg-[var(--color-stone)] px-1.5 py-0.5 font-mono">empty</span>
-          <span className="mx-1 rounded-subtle bg-[var(--color-stone)] px-1.5 py-0.5 font-mono">partial</span>
-          <span className="mx-1 rounded-subtle bg-[var(--color-stone)] px-1.5 py-0.5 font-mono">full</span>
+          <span className="mx-1 rounded-subtle bg-[var(--color-stone)] px-1.5 py-0.5 font-mono">
+            empty
+          </span>
+          <span className="mx-1 rounded-subtle bg-[var(--color-stone)] px-1.5 py-0.5 font-mono">
+            partial
+          </span>
+          <span className="mx-1 rounded-subtle bg-[var(--color-stone)] px-1.5 py-0.5 font-mono">
+            full
+          </span>
           <span className="mx-2 text-[#cfcfcf]">·</span>
           Passwords come from environment variables.
         </p>

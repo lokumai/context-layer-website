@@ -7,7 +7,7 @@
 import type { DependencyNode } from "@context-layer/mocks";
 import { FilterX } from "lucide-react";
 import { useMemo, useState } from "react";
-import { StatusPill } from "@/components/marketing/status-pill";
+import { StatusPill } from "@context-layer/ui/components/marketing/status-pill";
 import { useStore } from "@/stores";
 import { IntelligenceFreshnessControls } from "../config-header";
 

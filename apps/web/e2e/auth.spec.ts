@@ -41,12 +41,17 @@ test.describe("auth + hydration", () => {
       expect(body.personaId).toBe(persona.id);
       expect(body.payload.sources.length).toBe(persona.expectedSources);
 
+      // Wait for DOM signaling hydration is complete.
+      await expect(page.locator("body")).toHaveAttribute("data-hydrated", "true");
+
       // Persona-scoped localStorage bucket eventually populates.
       await expect
         .poll(
           async () =>
-            (await page.evaluate((key) => window.localStorage.getItem(key), `context-layer:${persona.id}`)) !==
-            null,
+            (await page.evaluate(
+              (key) => window.localStorage.getItem(key),
+              `context-layer:${persona.id}`,
+            )) !== null,
         )
         .toBe(true);
     });

@@ -3,7 +3,7 @@
 import { CheckCircle2, ChevronRight, Circle, X } from "lucide-react";
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { StatusPill } from "@/components/marketing/status-pill";
+import { StatusPill } from "@context-layer/ui/components/marketing/status-pill";
 import { useStore } from "@/stores";
 
 type SyncStrategy = "per-commit" | "per-pr-merge" | "hourly" | "daily" | "weekly" | "manual";

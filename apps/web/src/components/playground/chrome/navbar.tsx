@@ -8,14 +8,21 @@ import { WorkspacePill } from "./workspace-pill";
 
 export function PlaygroundNavbar() {
   const workspaces = useStore((s) => s.workspaces);
+  const isHydrated = useStore((s) => s.isHydrated);
   const activeId = useStore((s) => s.activeWorkspaceId);
-  const sourceCount = useStore((s) => s.sources.length);
-  const active = workspaces.find((w) => w.id === activeId) ?? null;
+  const activeWorkspace = workspaces.find((w) => w.id === activeId) ?? null;
   const pathname = usePathname() ?? "";
+  const sourceCount = useStore((s) => s.sources.length);
+  const workspaceIdFromPath = pathname.match(/^\/workspace\/([^/]+)/)?.[1] ?? null;
+  const routeWorkspace = workspaceIdFromPath
+    ? (workspaces.find((w) => w.id === workspaceIdFromPath) ?? null)
+    : null;
+  const workspace = routeWorkspace ?? activeWorkspace;
+  const workspaceId = workspace?.id ?? workspaceIdFromPath;
 
   // On /workspaces (outside any workspace) the center destinations + workspace
   // pill are meaningless. Show only logo (left) + profile (right).
-  const inWorkspace = pathname.startsWith("/workspace/") && active !== null;
+  const inWorkspace = pathname.startsWith("/workspace/") && workspaceId !== null;
 
   return (
     <header
@@ -32,27 +39,27 @@ export function PlaygroundNavbar() {
           >
             {/* biome-ignore lint/performance/noImgElement: logo doesn't need next/image optimization */}
             <img
-              src="/logo-landscape.png"
+              src="/logo-landscape.svg"
               alt="Context Layer"
-              className="h-full w-auto"
-              width={140}
-              height={64}
+              className="h-9 w-auto"
+              width={180}
+              height={36}
             />
           </a>
-          {inWorkspace && active ? (
+          {inWorkspace && workspace ? (
             <>
               <span aria-hidden className="h-5 w-px bg-[rgba(0,0,0,0.1)]" />
-              <WorkspacePill workspace={active} allWorkspaces={workspaces} />
+              <WorkspacePill workspace={workspace} allWorkspaces={workspaces} />
             </>
           ) : null}
         </div>
 
         {/* Center region: destinations — hidden on /workspaces */}
-        {inWorkspace && active ? (
+        {inWorkspace && workspaceId ? (
           <div className="hidden md:block">
             <NavDestinations
-              workspaceId={active.id}
-              hasWiki={active.hasWiki}
+              workspaceId={workspaceId}
+              hasWiki={workspace?.hasWiki ?? false}
               sourceCount={sourceCount}
             />
           </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import { History } from "lucide-react";
-import { StatusPill } from "@/components/marketing/status-pill";
+import { StatusPill } from "@context-layer/ui/components/marketing/status-pill";
 import { useStore } from "@/stores";
 
 function relativeTime(iso: string | null): string {

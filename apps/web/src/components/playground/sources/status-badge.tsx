@@ -1,5 +1,5 @@
 import type { IndexingStatus } from "@context-layer/mocks";
-import { StatusPill, type StatusTone } from "@/components/marketing/status-pill";
+import { StatusPill, type StatusTone } from "@context-layer/ui/components/marketing/status-pill";
 
 // Per IMPROVE.md / Phase 14: when status === "indexing" the label reads
 // "Processing…" so users understand the source is being parsed. The

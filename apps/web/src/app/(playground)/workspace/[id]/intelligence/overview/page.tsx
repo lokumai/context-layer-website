@@ -1,13 +1,10 @@
-"use client";
-
-import { useParams } from "next/navigation";
 import { IntelligencePageShell } from "@/components/playground/intelligence/page-shell";
 import { IntelligenceOverview } from "@/components/playground/intelligence/overview/dashboard";
+import { connection } from "next/server";
 
-export default function OverviewPage() {
-  const params = useParams();
-  const id = Array.isArray(params?.id) ? params.id[0] : (params?.id as string | undefined);
-  if (!id) return null;
+export default async function OverviewPage({ params }: { params: Promise<{ id: string }> }) {
+  await connection();
+  const { id } = await params;
   return (
     <IntelligencePageShell workspaceId={id}>
       <IntelligenceOverview workspaceId={id} />

@@ -5,7 +5,7 @@
 import type { Artifact } from "@context-layer/mocks";
 import { X } from "lucide-react";
 import { useEffect } from "react";
-import { StatusPill } from "@/components/marketing/status-pill";
+import { StatusPill } from "@context-layer/ui/components/marketing/status-pill";
 import { MultimodalPreviewBody } from "@/components/playground/artifacts/multimodal-preview";
 import { PreviewModal } from "@/components/playground/generate/docsgen/preview-modal";
 

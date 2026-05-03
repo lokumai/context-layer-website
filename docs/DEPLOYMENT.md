@@ -1,15 +1,29 @@
-# Deployment — DigitalOcean App Platform via GHCR
+# Deployment
 
-Phase 20 ships a single CI/CD pipeline that builds two Docker images, pushes them to GitHub Container Registry (GHCR), and rolls a DigitalOcean App Platform app:
+The context-layer architecture is split into two independent deployments to maximize performance, isolate concerns, and leverage static hosting.
 
-- **`context-layer-web`** — Next.js 15 (standalone) on port 3000.
-- **`context-layer-mcp`** — Streamable-HTTP MCP server on port 8765.
+## 1. Marketing Website — GitHub Pages
 
-Both services live behind a single domain. `/` routes to web, `/mcp-api/*` routes to the MCP server (path-stripped).
+The marketing website (`apps/marketing`) is a fully static Next.js export. It is automatically deployed to GitHub Pages.
+
+- **URL**: `www.context-layer.dev` (or the repository root)
+- **CI/CD**: `.github/workflows/deploy-pages.yaml`
+- **Output**: `./apps/marketing/out`
+
+Any pushes to `main` will trigger the GitHub Action to build and deploy the marketing site.
 
 ---
 
-## First-time setup
+## 2. Playground & MCP — DigitalOcean App Platform via GHCR
+
+The core application runtime consists of two services deployed together on DigitalOcean App Platform:
+
+- **`context-layer-web`** — Next.js 16 (standalone) on port 3000. Handles authentication, mock runtime, and the Playground UI.
+- **`context-layer-mcp`** — Streamable-HTTP MCP server on port 8765.
+
+Both services live behind a single domain (e.g., `app.context-layer.dev`). `/` routes to the web playground, and `/mcp-api/*` routes to the MCP server.
+
+### First-time setup
 
 You only do this once.
 
@@ -95,7 +109,8 @@ docker run --rm -p 8765:8765 \
   context-layer-mcp
 
 # smoke
-curl http://localhost:3000/                  # 200, marketing site
+curl http://localhost:3000/                  # 200, Playground entry
+curl http://localhost:3001/                  # 200, Marketing site (when running locally via bun dev)
 curl http://localhost:8765/healthz           # { ok: true, transport: "http" }
 curl -H "Authorization: Bearer dev-token" \
      -H "Accept: application/json,text/event-stream" \
@@ -139,12 +154,13 @@ Cursor uses the same JSON shape under its MCP settings.
 
 Once deployed, the URLs you'll share are:
 
-- **Marketing**: `https://<your-do-app>.ondigitalocean.app/`
-- **Login**: `https://<your-do-app>.ondigitalocean.app/login` (use one of the three persona passwords from DO secrets)
+- **Marketing**: `https://<your-github-user>.github.io/<repo>/` (or custom domain)
+- **Playground**: `https://<your-do-app>.ondigitalocean.app/`
+- **Login**: `https://<your-do-app>.ondigitalocean.app/login` (use persona passwords)
 - **MCP healthcheck**: `https://<your-do-app>.ondigitalocean.app/mcp-api/healthz`
-- **MCP endpoint** (Claude Desktop config target): `https://<your-do-app>.ondigitalocean.app/mcp-api/mcp`
+- **MCP endpoint**: `https://<your-do-app>.ondigitalocean.app/mcp-api/mcp`
 
-For the live demo flows, follow [`docs/DEMO_STORIES.md`](DEMO_STORIES.md).
+For the live demo flows, follow `AGENTS.md` and the instructions in the playground.
 
 ---
 

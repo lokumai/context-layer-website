@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { StatusPill } from "@/components/marketing/status-pill";
+import { StatusPill } from "@context-layer/ui/components/marketing/status-pill";
 import { MultimodalPreviewBody } from "@/components/playground/artifacts/multimodal-preview";
 import { ChatInput } from "@/components/playground/chatbot/chat-input";
 import { CitationProvider } from "@/components/playground/chatbot/citation";

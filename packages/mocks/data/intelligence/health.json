@@ -26,7 +26,10 @@
     {
       "repoId": "specification-service",
       "score": 82,
-      "fragileAreas": ["cached_characteristics divergence during long partition windows", "consumer back-pressure is not instrumented"],
+      "fragileAreas": [
+        "cached_characteristics divergence during long partition windows",
+        "consumer back-pressure is not instrumented"
+      ],
       "architectureViolations": 1,
       "codeSmells": 6
     },
@@ -40,21 +43,31 @@
     {
       "repoId": "offering-service",
       "score": 78,
-      "fragileAreas": ["Camunda reachability — no graceful-degrade path", "saga compensation ordering assumes external workers run in a specific order", "pre-flight validation double-calls services"],
+      "fragileAreas": [
+        "Camunda reachability — no graceful-degrade path",
+        "saga compensation ordering assumes external workers run in a specific order",
+        "pre-flight validation double-calls services"
+      ],
       "architectureViolations": 2,
       "codeSmells": 9
     },
     {
       "repoId": "store-query-service",
       "score": 85,
-      "fragileAreas": ["out-of-order event arrival under heavy replay", "ES index template drift vs. Motor doc shape"],
+      "fragileAreas": [
+        "out-of-order event arrival under heavy replay",
+        "ES index template drift vs. Motor doc shape"
+      ],
       "architectureViolations": 0,
       "codeSmells": 5
     },
     {
       "repoId": "frontend",
       "score": 79,
-      "fragileAreas": ["saga polling has no max-duration cutoff", "auth-context localStorage access is client-only, but some hooks run during SSR warmup"],
+      "fragileAreas": [
+        "saga polling has no max-duration cutoff",
+        "auth-context localStorage access is client-only, but some hooks run during SSR warmup"
+      ],
       "architectureViolations": 1,
       "codeSmells": 7
     },

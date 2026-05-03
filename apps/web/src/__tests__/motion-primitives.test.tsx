@@ -1,14 +1,14 @@
 import { cleanup, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
-import { FadeUp } from "@/components/motion/fade-up";
-import { GlowPulse } from "@/components/motion/glow-pulse";
-import { MagneticButton } from "@/components/motion/magnetic-button";
+import { FadeUp } from "@context-layer/ui/components/motion/fade-up";
+import { GlowPulse } from "@context-layer/ui/components/motion/glow-pulse";
+import { MagneticButton } from "@context-layer/ui/components/motion/magnetic-button";
 import {
   ScrollSection,
   StickyScrollGroup,
-} from "@/components/motion/scroll-section";
-import { TerminalType } from "@/components/motion/terminal-type";
-import { PlaygroundButton } from "@/components/marketing/chrome/playground-button";
+} from "@context-layer/ui/components/motion/scroll-section";
+import { TerminalType } from "@context-layer/ui/components/motion/terminal-type";
+import { PlaygroundButton } from "@context-layer/ui/components/marketing/chrome/playground-button";
 
 describe("motion primitives render their children without crashing", () => {
   afterEach(() => cleanup());

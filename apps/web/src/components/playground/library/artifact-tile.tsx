@@ -15,7 +15,7 @@ import {
   Shield,
   Video,
 } from "lucide-react";
-import { StatusPill } from "@/components/marketing/status-pill";
+import { StatusPill } from "@context-layer/ui/components/marketing/status-pill";
 import { ActionsMenu } from "./actions-menu";
 
 export const BUNDLE_ICON_MAP: Record<ArtifactBundle, LucideIcon> = {

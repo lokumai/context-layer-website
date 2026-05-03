@@ -20,7 +20,7 @@ Context Layer is an **AI-native infrastructure** that automatically builds, sync
 
 ## 🛠️ Technical Stack
 Built on the "Vercel Meta" 2026 stack:
-- **Core**: Next.js 15 (App Router), Turborepo, Bun
+- **Core**: Next.js 16 (App Router), Turborepo, Bun
 - **UI**: Tailwind CSS v4, Motion, Lucide, shadcn/ui
 - **State/Auth**: Zustand (Persona-keyed Persist), Auth.js v5
 - **Quality**: Vitest, Playwright, Biome
@@ -28,24 +28,58 @@ Built on the "Vercel Meta" 2026 stack:
 ---
 
 ## 🚀 Getting Started
-1. **Install**: `bun install`
-2. **Dev**: `bun run dev`
-3. **Demo Personas**: Sign in via `/login` using the following passwords (set in `.env.local`):
-   - `empty`: Zero-state onboarding
-   - `partial`: Active sources, no Wiki generated
-   - `full`: Complete 9-repo workspace with Wiki, Intelligence, and Chatbot history
+
+### 1. Installation
+```sh
+bun install
+```
+
+### 2. Development (Run All)
+```sh
+bun dev
+```
+*   **Playground**: [localhost:3000](http://localhost:3000)
+*   **Marketing**: [localhost:3001](http://localhost:3001)
+*   **MCP Server**: [localhost:8765](http://localhost:8765)
+
+### 3. Build (Production)
+```sh
+bun run build
+```
+
+---
+
+## 🛠️ Workspace Management
+
+Use these commands to work on specific parts of the ecosystem without starting everything.
+
+| Command | Action |
+|---|---|
+| `bun dev --filter=marketing` | Run only the Marketing site (:3001) |
+| `bun dev --filter=web` | Run only the Playground (:3000) |
+| `bun build --filter=marketing` | Build static export for Marketing |
+| `bun build --filter=web` | Build standalone bundle for Playground |
+| `bun run lint` | Lint everything with Biome |
+| `bun run test` | Run all Vitest + Playwright tests |
+
+---
+
+## 👤 Demo Personas
+Sign in via `/login` using the following passwords (set in `.env.local`):
+- `empty`: Zero-state onboarding
+- `partial`: Active sources, no Wiki generated
+- `full`: Complete 9-repo workspace with Wiki, Intelligence, and Chatbot history
 
 ---
 
 ## 🚢 Deployment
-- [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) — Docker + GitHub Actions + DigitalOcean App Platform pipeline. Connect Claude Desktop to a remote MCP endpoint.
+- [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) — Dual-pipeline (GitHub Pages + DigitalOcean) and remote MCP setup.
 
 ## 🎬 Client demos
-- [AGENTS.md](AGENTS.md) — Project briefing for AI coding agents + the portable Siloed Agent Persona block.
-- [docs/DEMO_STORIES.md](docs/DEMO_STORIES.md) — Three "Without vs With" Claude Code demo scripts (Saga Trace, Multi-Repo Audit, Black-Box SDK).
+- [AGENTS.md](AGENTS.md) — Briefing for AI agents + the portable Siloed Agent Persona.
 
 ## 📚 Documentation
-- [docs/DESIGN.md](docs/DESIGN.md) — ElevenLabs × Engineering Dashboard visual identity.
-- [docs/UI_UX.md](docs/UI_UX.md) — Core information architecture and user flows.
-- [docs/PHASES.md](docs/PHASES.md) — Milestone tracking and delivery logs.
-- [docs/SEED.md](docs/SEED.md) — Technical foundation and initial decisions.
+- [docs/DESIGN.md](docs/DESIGN.md) — Visual identity & motion language.
+- [docs/UI_UX.md](docs/UI_UX.md) — IA grouping & user flows.
+- [docs/PHASES.md](docs/PHASES.md) — Milestone tracking.
+- [docs/SEED.md](docs/SEED.md) — Tech foundation.

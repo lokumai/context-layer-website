@@ -1,33 +1,10 @@
-"use client";
+import { connection } from "next/server";
+import { WorkspaceScopeClient } from "@/components/playground/workspace-scope-client";
 
-import { notFound, useParams } from "next/navigation";
-import { useEffect } from "react";
-import { useStore } from "@/stores";
-
-export default function WorkspaceScopeLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const params = useParams();
-  const id = Array.isArray(params?.id) ? params.id[0] : (params?.id as string | undefined);
-  const workspaces = useStore((s) => s.workspaces);
-  const setActive = useStore((s) => s.setActiveWorkspace);
-  const isHydrated = useStore((s) => s.isHydrated);
-
-  useEffect(() => {
-    if (!id) return;
-    if (!isHydrated) return;
-    const exists = workspaces.some((w) => w.id === id);
-    if (!exists) return; // notFound below renders instead
-    setActive(id);
-  }, [id, workspaces, setActive, isHydrated]);
-
-  // While hydrating, render children; they can show their own loading state.
-  // After hydration, if the workspace id isn't in the store, 404.
-  if (isHydrated && id && !workspaces.some((w) => w.id === id)) {
-    notFound();
-  }
-
-  return <>{children}</>;
+// Calling connection() here opts the entire [id] subtree out of static prerendering.
+// This is the Next.js 16 canonical way to force dynamic rendering for a route segment
+// when the route depends on request-time state (Zustand/session).
+export default async function WorkspaceScopeLayout({ children }: { children: React.ReactNode }) {
+  await connection();
+  return <WorkspaceScopeClient>{children}</WorkspaceScopeClient>;
 }

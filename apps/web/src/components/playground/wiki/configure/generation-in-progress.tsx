@@ -2,7 +2,7 @@
 
 import { CheckCircle2, ChevronDown, ChevronRight, CircleDashed, Loader2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { StatusPill } from "@/components/marketing/status-pill";
+import { StatusPill } from "@context-layer/ui/components/marketing/status-pill";
 import { TriangleLoader } from "@/components/playground/loaders/triangle-loader";
 import { TrickleLogs } from "@/components/playground/loaders/trickle-logs";
 import { simulateJob } from "@/lib/simulate-latency";
@@ -51,8 +51,8 @@ export function GenerationInProgress({
     started.current = true;
     (async () => {
       const iter = simulateJob([...STEPS], () => undefined, {
-        totalMs: 8000,
-        minStepMs: 600,
+        totalMs: 5000,
+        minStepMs: 300,
       });
       let stepIdx = 0;
       while (true) {

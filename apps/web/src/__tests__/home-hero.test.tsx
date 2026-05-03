@@ -4,15 +4,21 @@ import * as React from "react";
 
 // Shim motion — we only assert copy, not motion behavior.
 vi.mock("motion/react", () => {
-  const pass =
-    (tag: string) =>
-    (props: Record<string, unknown>) => {
-      const rest: Record<string, unknown> = { ...props };
-      for (const key of ["initial", "animate", "whileInView", "viewport", "transition", "exit", "style"]) {
-        delete rest[key];
-      }
-      return React.createElement(tag, rest, (props as { children?: React.ReactNode }).children);
-    };
+  const pass = (tag: string) => (props: Record<string, unknown>) => {
+    const rest: Record<string, unknown> = { ...props };
+    for (const key of [
+      "initial",
+      "animate",
+      "whileInView",
+      "viewport",
+      "transition",
+      "exit",
+      "style",
+    ]) {
+      delete rest[key];
+    }
+    return React.createElement(tag, rest, (props as { children?: React.ReactNode }).children);
+  };
   return {
     motion: new Proxy(
       {},

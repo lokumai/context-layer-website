@@ -5,18 +5,14 @@ describe("simulateJob", () => {
   it("yields one event per step and resolves with the finalize value", async () => {
     const events: ProgressEvent[] = [];
     let t = 0;
-    const iter = simulateJob(
-      ["clone", "analyze", "render", "commit"],
-      () => 42,
-      {
-        totalMs: 400,
-        minStepMs: 10,
-        now: () => t,
-        sleep: async (ms) => {
-          t += ms;
-        },
+    const iter = simulateJob(["clone", "analyze", "render", "commit"], () => 42, {
+      totalMs: 400,
+      minStepMs: 10,
+      now: () => t,
+      sleep: async (ms) => {
+        t += ms;
       },
-    );
+    });
     let result: number | undefined;
     while (true) {
       const next = await iter.next();

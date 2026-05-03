@@ -22,8 +22,8 @@
 ## Phase 1: Project Setup & Core Infrastructure
 
 * **Status:** `[x] Complete`
-* **Goal:** Establish the production-ready Next.js 15 monorepo foundation.
-* **Execution Details:** Implement the technical infrastructure detailed in `SEED.md` (Turborepo, Bun, Next.js 15, `shadcn/ui`, Tailwind v4, Biome, Vitest/Playwright).
+* **Goal:** Establish the production-ready Next.js 16 monorepo foundation.
+* **Execution Details:** Implement the technical infrastructure detailed in `SEED.md` (Turborepo, Bun, Next.js 16, `shadcn/ui`, Tailwind v4, Biome, Vitest/Playwright).
 * **Definition of Done:** The monorepo compiles successfully without warnings, `shadcn/ui` is functional, the testing suite runs successfully, and the architecture cleanly separates the web app from shared packages.
 
 ## [x] Phase 2: Design System & Typography Foundation
@@ -287,3 +287,19 @@ Production build: all 4 marketing routes statically prerendered; middleware 92 k
   * **`docs/DEPLOYMENT.md`** — operator runbook covering: first-time `doctl apps create`, GitHub repo-secret setup, DO env-var injection (per-component table), local Docker test (build + run + healthz curl), Claude Desktop remote-MCP config snippet, demo URL list, and operational notes (image sizes, cold start, log streaming, rollback, custom domain, cost).
   * **README** — new "Deployment" + "Client demos" sections linking to the new docs.
   * **Verification** — `bun run build` clean with standalone output; `.next/standalone/apps/web/server.js` produced; `packages/mocks/data/**` traced into the standalone tree; web 118/118 Vitest, mcp 13/13 Vitest, mocks 22/22 Vitest all green; existing 51/51 Playwright suite untouched (Phase 20 changes are infra-only).
+
+## Phase 21: Website & Playground Architectural Separation
+* **Status:** `[x] Complete`
+...
+  * **Verification** — `bun run build` successful for both workspaces; `bun run lint` (Biome) passing repo-wide; E2E tests stabilized with hydration-aware sign-in logic.
+
+## Phase 22: Next.js 16 & React 19.2 Platform Upgrade
+* **Status:** `[x] Complete`
+* **Delivered (2026-05-03):**
+  * **Core Stack Upgrade** — Migrated the entire monorepo to **Next.js 16.2.4** and **React 19.2.5**.
+  * **Built-in MCP Integration** — Enabled the native Next.js MCP diagnostics endpoint (`/_next/mcp`), aligning the platform with the project's core agentic technology.
+  * **Performance Optimization** — Activated the **React Compiler** (`reactCompiler: true`) and **Cache Components** across the playground to leverage modern memoization and caching patterns.
+  * **Architecture Modernization** — Migrated `middleware.ts` to the new `proxy.ts` convention to better define network boundaries.
+  * **Async API Compliance** — Audited and migrated all server components to use async `params`, `headers`, and `cookies` as required by Next.js 16.
+  * **Tooling Alignment** — Updated **Turborepo (2.9.8)** and **Biome (2.4.14)** to ensure stability with the new Next.js version.
+  * **Verification** — Full `bun run build` successful with React Compiler optimizations; `bun install` lockfile updated; dev servers verified on standard ports (:3000 web, :3001 marketing).

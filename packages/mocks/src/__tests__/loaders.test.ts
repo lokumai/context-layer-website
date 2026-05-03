@@ -173,8 +173,7 @@ describe("@context-layer/mocks loaders", () => {
     const qa = await getCannedQA();
     const hasDual = qa.some(
       (p) =>
-        p.citations.some((c) => c.kind === "wiki") &&
-        p.citations.some((c) => c.kind === "code"),
+        p.citations.some((c) => c.kind === "wiki") && p.citations.some((c) => c.kind === "code"),
     );
     expect(hasDual).toBe(true);
   });

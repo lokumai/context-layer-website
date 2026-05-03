@@ -112,8 +112,11 @@ try {
   const dep = await getDependencies();
   if (dep.nodes.length < 10) throw new Error("dependency nodes suspiciously few");
   const graph = await getKnowledgeGraph();
-  if (graph.nodes.length < 9 || graph.edges.length < 10) throw new Error("knowledge graph too thin");
-  ok(`health(${h.overallScore}) · security(${sec.findings.length} findings) · coverage(${cov.overall}%)`);
+  if (graph.nodes.length < 9 || graph.edges.length < 10)
+    throw new Error("knowledge graph too thin");
+  ok(
+    `health(${h.overallScore}) · security(${sec.findings.length} findings) · coverage(${cov.overall}%)`,
+  );
   ok(`graph: ${graph.nodes.length} nodes / ${graph.edges.length} edges`);
 } catch (err) {
   fail("intelligence", err);

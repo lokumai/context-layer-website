@@ -1,6 +1,6 @@
 # Context Layer — UI/UX Specification
 
-This document details the user experience for both the public-facing Marketing pages and the authenticated, workspace-scoped Playground environment.
+This document details the user experience for both the standalone public-facing Marketing pages (`apps/marketing`) and the authenticated, workspace-scoped Playground environment (`apps/web`). Although deployed separately, they maintain a unified visual identity and seamless cross-domain navigation.
 
 ---
 
@@ -731,4 +731,4 @@ The public-facing marketing pages (`/`, `/product/context-layer`, etc.) are the 
 2. **Products:** Dedicated pages for specific offerings. These should feature side-by-side sticky scrolling (text on one side, a dynamic updating graphic on the other).
 
 ### 11.3 Call to Action (CTA)
-Every page must have a clear, floating or fixed header containing the **"Playground"** button in the top right. This button must be highly visible (perhaps with a subtle pulse or glow) and strictly redirect unauthenticated users to `/login`.
+Every page must have a clear, floating or fixed header containing the **"Playground"** button in the top right. This button must be highly visible (perhaps with a subtle pulse or glow) and, since the marketing site is a standalone static export, it must strictly navigate users to the Playground domain (via `NEXT_PUBLIC_PLAYGROUND_URL`) where authentication is handled.
