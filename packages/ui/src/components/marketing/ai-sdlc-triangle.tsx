@@ -53,7 +53,14 @@ export function AISdlcTriangle() {
 
         <defs>
           {/* Spoke gradients — from each vertex's color into the green center */}
-          <linearGradient id="ct-spoke-codebase" x1="0" y1="0" x2="0" y2="1">
+          <linearGradient
+            id="ct-spoke-codebase"
+            x1={POS.codebase.x}
+            y1={POS.codebase.y}
+            x2={CENTER.x}
+            y2={CENTER.y}
+            gradientUnits="userSpaceOnUse"
+          >
             <stop offset="0%" stopColor={COLORS.codebase} stopOpacity="0.55" />
             <stop offset="100%" stopColor={COLORS.context} stopOpacity="0.95" />
           </linearGradient>
