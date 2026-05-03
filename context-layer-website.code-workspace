@@ -5,6 +5,9 @@
 		},
 		{
 			"path": "../context-layer-info"
+		},
+		{
+			"path": "../microservices-product-catalog"
 		}
 	],
 	"settings": {}
