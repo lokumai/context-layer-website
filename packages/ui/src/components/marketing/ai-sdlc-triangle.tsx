@@ -10,13 +10,13 @@ import { Bot, Boxes, User } from "lucide-react";
 // spokes show that Context Layer is the channel each one actually flows through.
 
 const W = 620;
-const H = 520;
+const H = 500;
 
 // Triangle vertices
 const POS = {
-  codebase: { x: W / 2, y: 110 },
-  human: { x: 110, y: H - 80 },
-  agent: { x: W - 110, y: H - 80 },
+  codebase: { x: W / 2, y: 80 },
+  human: { x: 110, y: 410 },
+  agent: { x: W - 110, y: 410 },
 } as const;
 
 // Centroid of the triangle = position of Context Layer
@@ -89,9 +89,9 @@ export function AISdlcTriangle() {
         {/* Large Title */}
         <text
           x={W / 2}
-          y={50}
+          y={20}
           textAnchor="middle"
-          fontSize="18"
+          fontSize="13"
           fontFamily="var(--font-sans)"
           fontWeight="700"
           letterSpacing="0.1em"
