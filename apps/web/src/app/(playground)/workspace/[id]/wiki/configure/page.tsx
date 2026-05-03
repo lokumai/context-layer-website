@@ -1,11 +1,8 @@
-"use client";
-
-import { useParams } from "next/navigation";
 import { WikiConfigure } from "@/components/playground/wiki/configure/configure";
+import { connection } from "next/server";
 
-export default function WikiConfigurePage() {
-  const params = useParams();
-  const id = Array.isArray(params?.id) ? params.id[0] : (params?.id as string | undefined);
-  if (!id) return null;
+export default async function WikiConfigurePage({ params }: { params: Promise<{ id: string }> }) {
+  await connection();
+  const { id } = await params;
   return <WikiConfigure workspaceId={id} />;
 }

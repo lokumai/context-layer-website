@@ -6,7 +6,7 @@ import { auth } from "./auth";
 const PUBLIC_PATHS = new Set<string>(["/", "/login"]);
 const PUBLIC_PREFIXES = ["/product/", "/api/auth/", "/_next/", "/assets/", "/favicon"];
 
-export default auth((req) => {
+export const proxy = auth((req) => {
   const { pathname, search } = req.nextUrl;
 
   const isPublic =

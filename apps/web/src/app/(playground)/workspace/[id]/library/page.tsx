@@ -1,11 +1,8 @@
-"use client";
-
-import { useParams } from "next/navigation";
 import { LibrarySurface } from "@/components/playground/library/library-surface";
+import { connection } from "next/server";
 
-export default function LibraryPage() {
-  const params = useParams();
-  const id = Array.isArray(params?.id) ? params.id[0] : (params?.id as string | undefined);
-  if (!id) return null;
+export default async function LibraryPage({ params }: { params: Promise<{ id: string }> }) {
+  await connection();
+  const { id } = await params;
   return <LibrarySurface workspaceId={id} />;
 }

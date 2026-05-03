@@ -290,14 +290,16 @@ Production build: all 4 marketing routes statically prerendered; middleware 92 k
 
 ## Phase 21: Website & Playground Architectural Separation
 * **Status:** `[x] Complete`
-* **Delivered (2026-05-03):**
-  * **Application Split** — Extracted the marketing routes from `apps/web` into a new standalone workspace `apps/marketing`.
-  * **Static Marketing Site** — Configured `apps/marketing` for static export (`output: "export"`) to enable deployment via GitHub Pages.
-  * **Shared UI Package** — Created `@context-layer/ui` (in `packages/ui`) and relocated `components/marketing` and `components/motion` to allow both applications to consume the same high-fidelity design system.
-  * **Cross-Domain Integration** — Introduced `NEXT_PUBLIC_PLAYGROUND_URL` to facilitate seamless navigation from the marketing domain to the auth-gated playground instance.
-  * **Tooling Consolidation (Biome-Only)** — Purged all legacy ESLint configurations and dependencies across the monorepo, enforcing the unified **Biome** linting and formatting policy.
-  * **CI/CD Automation** — Established a dual-target deployment pipeline:
-    - **Marketing**: `.github/workflows/deploy-pages.yaml` (Static Pages).
-    - **Playground**: Updated `.github/workflows/build-push.yaml` (Containerized DO).
-  * **Documentation Sync** — Updated `SEED.md`, `UI_UX.md`, `DEPLOYMENT.md`, `README.md`, and `AGENTS.md` to reflect the decoupled architecture and update demo URLs.
+...
   * **Verification** — `bun run build` successful for both workspaces; `bun run lint` (Biome) passing repo-wide; E2E tests stabilized with hydration-aware sign-in logic.
+
+## Phase 22: Next.js 16 & React 19.2 Platform Upgrade
+* **Status:** `[x] Complete`
+* **Delivered (2026-05-03):**
+  * **Core Stack Upgrade** — Migrated the entire monorepo to **Next.js 16.2.4** and **React 19.2.5**.
+  * **Built-in MCP Integration** — Enabled the native Next.js MCP diagnostics endpoint (`/_next/mcp`), aligning the platform with the project's core agentic technology.
+  * **Performance Optimization** — Activated the **React Compiler** (`reactCompiler: true`) and **Cache Components** across the playground to leverage modern memoization and caching patterns.
+  * **Architecture Modernization** — Migrated `middleware.ts` to the new `proxy.ts` convention to better define network boundaries.
+  * **Async API Compliance** — Audited and migrated all server components to use async `params`, `headers`, and `cookies` as required by Next.js 16.
+  * **Tooling Alignment** — Updated **Turborepo (2.9.8)** and **Biome (2.4.14)** to ensure stability with the new Next.js version.
+  * **Verification** — Full `bun run build` successful with React Compiler optimizations; `bun install` lockfile updated; dev servers verified on standard ports (:3000 web, :3001 marketing).

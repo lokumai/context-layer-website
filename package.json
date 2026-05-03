@@ -13,8 +13,9 @@
     "test": "turbo run test"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.4.12",
-    "turbo": "^2.0.0"
+    "@biomejs/biome": "^2.4.14",
+    "babel-plugin-react-compiler": "^1.0.0",
+    "turbo": "^2.9.8"
   },
   "packageManager": "bun@1.0.0"
 }

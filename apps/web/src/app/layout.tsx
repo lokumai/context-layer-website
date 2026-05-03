@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { Inter, Raleway, Geist_Mono } from "next/font/google";
+import { Suspense } from "react";
 import { SessionProvider } from "@/providers/session-provider";
 import { HydrationProvider } from "@/providers/hydration-provider";
 import "./globals.css";
+
 
 const inter = Inter({
   variable: "--font-inter",
@@ -36,7 +38,9 @@ export default function RootLayout({
     <html lang="en" className={`${inter.variable} ${raleway.variable} ${geistMono.variable}`}>
       <body className="antialiased font-sans">
         <SessionProvider>
-          <HydrationProvider>{children}</HydrationProvider>
+          <Suspense>
+            <HydrationProvider>{children}</HydrationProvider>
+          </Suspense>
         </SessionProvider>
       </body>
     </html>
