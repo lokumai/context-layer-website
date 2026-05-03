@@ -97,3 +97,22 @@ Key pillars settled (details in UI_UX.md):
 - **Version history via git diff** in Wiki Logs — enterprise audit-friendly.
 - **DocsGen** uses tabbed bundles with card-based generation; outputs land in Library. "Agent Infrastructure" bundle renamed to **Agentify**.
 - **OmniBoard** is a specialized chatbot environment (plan → HITL approve → long job → Library + NotebookLM-like exploration). MCPGen is tentative.
+
+---
+
+## 2026-05-03 — Architectural Separation
+
+**Decision: Decouple Marketing Website from Playground Application**
+
+To enable static-site speed for marketing and independent deployment cadence for the dynamic playground, the monorepo was split into two distinct Next.js applications.
+
+| App | Workspace | Deployment | Purpose |
+|---|---|---|---|
+| **Marketing** | `apps/marketing` | GitHub Pages (Static Export) | Performance, SEO, and Landing Pages |
+| **Playground** | `apps/web` | DigitalOcean (Standalone Node) | Auth-gated demo, Mocks, and State |
+
+**Key technical shifts:**
+- **Shared UI**: Moved `components/marketing` and `components/motion` to a unified `@context-layer/ui` package.
+- **Cross-Domain Navigation**: Replaced relative links to `/login` with `NEXT_PUBLIC_PLAYGROUND_URL` to bridge the two domains.
+- **Tooling Consolidation**: Purged legacy ESLint configurations in favor of a strictly **Biome-only** linting/formatting strategy repo-wide.
+- **Clean Routing**: Flattened marketing routes to remove the redundant `(marketing)` group.

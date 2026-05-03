@@ -1,6 +1,6 @@
 # AGENTS.md — Context Layer Website
 
-> **One-line:** Landing pages + auth-gated mock playground for the Context Layer ecosystem. Mock-first by design: every "AI output" is pre-generated and served from `packages/mocks` so real agents can be swapped in later behind the same service interface.
+> **One-line:** Decoupled ecosystem comprising a static marketing site (`apps/marketing`) and an auth-gated mock playground (`apps/web`). Mock-first by design: every "AI output" is pre-generated and served from `packages/mocks` so real agents can be swapped in later behind the same service interface.
 
 This file is the canonical onboarding for AI coding agents (Claude Code, Cursor, Codex, Copilot, etc.) working on this repository. `CLAUDE.md` at the root mirrors this file verbatim.
 
@@ -28,7 +28,7 @@ The project follows **Goal-Driven Development** — the docs below describe *wha
 
 ```sh
 bun install              # install all workspace deps
-bun dev                  # turbo: run all dev servers (web on :3000, mcp on :8765)
+bun dev                  # turbo: run all dev servers (web on :3000, marketing on :3001, mcp on :8765)
 bun run build            # turbo: production build
 bun run lint             # biome lint
 bun run format           # biome format --write
@@ -43,7 +43,8 @@ Requires **Bun ≥ 1.0** and **Node ≥ 20** (for tooling that still expects Nod
 
 ```
 apps/
-  web/           Next.js 15 (App Router) — landing pages + playground
+  marketing/     Next.js 15 (Static Export) — landing pages on GitHub Pages
+  web/           Next.js 15 (Standalone) — auth-gated playground on DigitalOcean
 packages/
   ui/            Shared shadcn/ui-based component library
   mocks/         @context-layer/mocks — pre-generated wiki / intelligence / artifacts
@@ -187,9 +188,9 @@ After the subagent returns, **review and verify the actual changes**. The summar
 
 ## 13. Deployment
 
-- Single domain serves both services. `/` → web, `/mcp-api/*` → MCP server.
-- Push to `main` → GHCR build → `doctl apps update` → DO rolls the app. ~6–8 minutes wall time.
-- See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for first-time setup, secrets, and local Docker testing.
+- **Marketing**: Pushed to `main` → GitHub Actions → GitHub Pages.
+- **Playground**: Pushed to `main` → GHCR build → `doctl apps update` → DigitalOcean.
+- See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for full dual-target setup, secrets, and local Docker testing.
 
 ---
 

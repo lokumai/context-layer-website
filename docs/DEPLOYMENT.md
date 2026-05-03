@@ -109,7 +109,8 @@ docker run --rm -p 8765:8765 \
   context-layer-mcp
 
 # smoke
-curl http://localhost:3000/                  # 200, marketing site
+curl http://localhost:3000/                  # 200, Playground entry
+curl http://localhost:3001/                  # 200, Marketing site (when running locally via bun dev)
 curl http://localhost:8765/healthz           # { ok: true, transport: "http" }
 curl -H "Authorization: Bearer dev-token" \
      -H "Accept: application/json,text/event-stream" \
@@ -153,10 +154,11 @@ Cursor uses the same JSON shape under its MCP settings.
 
 Once deployed, the URLs you'll share are:
 
-- **Marketing**: `https://<your-do-app>.ondigitalocean.app/`
-- **Login**: `https://<your-do-app>.ondigitalocean.app/login` (use one of the three persona passwords from DO secrets)
+- **Marketing**: `https://<your-github-user>.github.io/<repo>/` (or custom domain)
+- **Playground**: `https://<your-do-app>.ondigitalocean.app/`
+- **Login**: `https://<your-do-app>.ondigitalocean.app/login` (use persona passwords)
 - **MCP healthcheck**: `https://<your-do-app>.ondigitalocean.app/mcp-api/healthz`
-- **MCP endpoint** (Claude Desktop config target): `https://<your-do-app>.ondigitalocean.app/mcp-api/mcp`
+- **MCP endpoint**: `https://<your-do-app>.ondigitalocean.app/mcp-api/mcp`
 
 For the live demo flows, follow [`docs/DEMO_STORIES.md`](DEMO_STORIES.md).
 

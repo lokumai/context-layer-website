@@ -287,3 +287,17 @@ Production build: all 4 marketing routes statically prerendered; middleware 92 k
   * **`docs/DEPLOYMENT.md`** — operator runbook covering: first-time `doctl apps create`, GitHub repo-secret setup, DO env-var injection (per-component table), local Docker test (build + run + healthz curl), Claude Desktop remote-MCP config snippet, demo URL list, and operational notes (image sizes, cold start, log streaming, rollback, custom domain, cost).
   * **README** — new "Deployment" + "Client demos" sections linking to the new docs.
   * **Verification** — `bun run build` clean with standalone output; `.next/standalone/apps/web/server.js` produced; `packages/mocks/data/**` traced into the standalone tree; web 118/118 Vitest, mcp 13/13 Vitest, mocks 22/22 Vitest all green; existing 51/51 Playwright suite untouched (Phase 20 changes are infra-only).
+
+## Phase 21: Website & Playground Architectural Separation
+* **Status:** `[x] Complete`
+* **Delivered (2026-05-03):**
+  * **Application Split** — Extracted the marketing routes from `apps/web` into a new standalone workspace `apps/marketing`.
+  * **Static Marketing Site** — Configured `apps/marketing` for static export (`output: "export"`) to enable deployment via GitHub Pages.
+  * **Shared UI Package** — Created `@context-layer/ui` (in `packages/ui`) and relocated `components/marketing` and `components/motion` to allow both applications to consume the same high-fidelity design system.
+  * **Cross-Domain Integration** — Introduced `NEXT_PUBLIC_PLAYGROUND_URL` to facilitate seamless navigation from the marketing domain to the auth-gated playground instance.
+  * **Tooling Consolidation (Biome-Only)** — Purged all legacy ESLint configurations and dependencies across the monorepo, enforcing the unified **Biome** linting and formatting policy.
+  * **CI/CD Automation** — Established a dual-target deployment pipeline:
+    - **Marketing**: `.github/workflows/deploy-pages.yaml` (Static Pages).
+    - **Playground**: Updated `.github/workflows/build-push.yaml` (Containerized DO).
+  * **Documentation Sync** — Updated `SEED.md`, `UI_UX.md`, `DEPLOYMENT.md`, `README.md`, and `AGENTS.md` to reflect the decoupled architecture and update demo URLs.
+  * **Verification** — `bun run build` successful for both workspaces; `bun run lint` (Biome) passing repo-wide; E2E tests stabilized with hydration-aware sign-in logic.
