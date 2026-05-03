@@ -43,8 +43,8 @@ Requires **Bun ≥ 1.0** and **Node ≥ 20** (for tooling that still expects Nod
 
 ```
 apps/
-  marketing/     Next.js 15 (Static Export) — landing pages on GitHub Pages
-  web/           Next.js 15 (Standalone) — auth-gated playground on DigitalOcean
+  marketing/     Next.js 16 (Static Export) — landing pages on GitHub Pages
+  web/           Next.js 16 (Standalone) — auth-gated playground on DigitalOcean
 packages/
   ui/            Shared shadcn/ui-based component library
   mocks/         @context-layer/mocks — pre-generated wiki / intelligence / artifacts
@@ -67,7 +67,9 @@ All mock data is generated from [`amirkiarafiei/microservices-product-catalog`](
 |---|---|
 | Runtime / Package Manager | Bun |
 | Monorepo | Turborepo |
-| Framework | Next.js 15 (App Router, standalone output) |
+| Framework | Next.js 16 (App Router, standalone output) |
+| React | React 19 |
+| Next.js Features | cacheComponents, reactCompiler |
 | Styling | Tailwind CSS v4 |
 | Components | shadcn/ui + custom primitives in `packages/ui` |
 | Animation | Motion (formerly Framer Motion) |
@@ -181,6 +183,8 @@ When delegating to a subagent, the subagent has zero context from this conversat
 2. Pointers to the relevant docs (SEED / UI_UX / DESIGN — see §1)
 3. The constraints from §6, §7, §11 of this file
 4. A clear scope boundary so the subagent does not over-reach
+
+**Delegation to other providers:** If you need to delegate tasks to subagents from other providers (e.g., `gemini-cli`, `copilot-cli`, etc.), you **MUST** refer to the necessary skill for specific instructions on cross-provider delegation protocol.
 
 After the subagent returns, **review and verify the actual changes**. The summary describes intent, not what was done.
 
