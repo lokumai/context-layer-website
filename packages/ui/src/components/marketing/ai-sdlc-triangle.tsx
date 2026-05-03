@@ -143,7 +143,7 @@ export function AISdlcTriangle() {
         <VertexCard
           pos={POS.codebase}
           icon={<Boxes size={20} strokeWidth={1.5} />}
-          kicker="ARTIFACT"
+          kicker="LEGACY"
           title="Codebase"
           fg={COLORS.codebase}
           bg={COLORS.codebaseBg}
@@ -215,7 +215,7 @@ function Spoke({
   // Trim 60px from the vertex side so the spoke lands on the card edge,
   // and 36px from the center side so it lands on the Context Layer puck.
   const start = inset_(from, to, 64);
-  const end = inset_(to, from, 38);
+  const end = inset_(to, from, 68);
 
   return (
     <g>
