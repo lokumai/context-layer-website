@@ -22,7 +22,7 @@ export function PlaygroundButton({
   children = "Playground",
   variant = "default",
   className = "",
-  href = "/workspaces",
+  href = process.env.NEXT_PUBLIC_PLAYGROUND_URL || "/workspaces",
 }: PlaygroundButtonProps) {
   const classes = `${variantClass[variant]} ${className}`.trim();
   return (
