@@ -49,25 +49,55 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* BACKWARD ENGINEERING WEDGE */}
+      {/* PRODUCT MAP — 4-verb IA, hybrid carousel-switcher */}
+      <section
+        id="how-you-use-it"
+        className="relative overflow-hidden bg-white border-y border-[rgba(0,0,0,0.04)]"
+      >
+        <div className="mx-auto max-w-[1440px] px-6 lg:px-10 py-20">
+          <FadeUp>
+            <div className="max-w-[860px] mx-auto text-center space-y-3 mb-10">
+              <p className="text-button-upper text-[#777169]">How You Use It</p>
+              <h2 className="text-section-heading text-black">
+                Input Sources. Get Knowledge. Ask Chatbot. Generate Artifacts.
+              </h2>
+            </div>
+          </FadeUp>
+          <FadeUp delay={0.1}>
+            <CapabilityCarousel />
+          </FadeUp>
+        </div>
+      </section>
+
+      {/* THE MISSING LAYER — forward/backward loop */}
       <section className="mx-auto max-w-[1440px] px-6 lg:px-10 py-20">
-        <FadeUp>
-          <div className="max-w-[720px] space-y-3 mb-10">
-            <p className="text-button-upper text-[#777169]">The Missing Layer</p>
-            <h2 className="text-section-heading text-black">
-              Everyone else builds forward. We build backward.
-            </h2>
-            <p className="text-body text-[#4e4e4e]">
-              Cursor, Claude Code, and Copilot help <em>write</em> code. Context Layer
-              reverse-engineers the code that&apos;s already there — so both humans and agents can
-              trust what they&apos;re building on.
-            </p>
-          </div>
-        </FadeUp>
+        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_760px] gap-12 lg:gap-16 items-center">
+          <FadeUp>
+            <div className="max-w-[640px] space-y-4">
+              <p className="text-button-upper text-[#777169]">The Missing Layer</p>
+              <h2 className="text-section-heading text-black">
+                Everyone else builds forward. We build backward.
+              </h2>
+              <p className="text-body text-[#4e4e4e]">
+                Cursor, Claude Code, and Copilot help <em>write</em> code. Context Layer
+                reverse-engineers the code that&apos;s already there — so both humans and agents
+                can trust what they&apos;re building on.
+              </p>
+              <p className="text-body text-[#4e4e4e]">
+                The two halves close into a loop: developers ship into the codebase,
+                Context Layer reads it back into shared knowledge, and that knowledge feeds the
+                next round of work.
+              </p>
+            </div>
+          </FadeUp>
+          <FadeUp delay={0.1}>
+            <ForwardBackwardLoop />
+          </FadeUp>
+        </div>
       </section>
 
       {/* AI-SDLC TRIANGLE — explainer */}
-      <section className="bg-white border-y border-[rgba(0,0,0,0.05)] mt-12 lg:mt-16">
+      <section className="bg-[#fafaf9] border-y border-[rgba(0,0,0,0.05)]">
         <div className="mx-auto max-w-[1440px] px-6 lg:px-10 py-24 lg:py-28">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <FadeUp>
@@ -130,26 +160,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* PRODUCT MAP — 4-verb IA, hybrid carousel-switcher */}
-      <section
-        id="how-you-use-it"
-        className="relative overflow-hidden bg-gradient-to-b from-white to-[#fafaf9] border-y border-[rgba(0,0,0,0.04)]"
-      >
-        <div className="mx-auto max-w-[1440px] px-6 lg:px-10 py-20">
-          <FadeUp>
-            <div className="max-w-[860px] mx-auto text-center space-y-3 mb-10">
-              <p className="text-button-upper text-[#777169]">How You Use It</p>
-              <h2 className="text-section-heading text-black">
-                Input Sources. Get Knowledge. Ask Chatbot. Generate Artifacts.
-              </h2>
-            </div>
-          </FadeUp>
-          <FadeUp delay={0.1}>
-            <CapabilityCarousel />
-          </FadeUp>
-        </div>
-      </section>
-
       {/* CLOSING CTA */}
       <section className="mx-auto max-w-[1440px] px-6 lg:px-10 pb-24">
         <FadeUp>
@@ -158,8 +168,7 @@ export default function HomePage() {
               Knowledge is better when it&apos;s contextual.
             </h2>
             <p className="text-body text-[#4e4e4e] max-w-[560px] mx-auto">
-              The playground ships pre-loaded with a 9-repo TMForum catalog. Pick a persona and
-              explore the Wiki, Intelligence, Chatbot, and DocsGen end-to-end.
+            Try the playground and experience the full loop: understand the code, surface the signals, ask the questions, and export the results.
             </p>
             <div className="pt-2">
               <PlaygroundButton variant="hero">Open the playground</PlaygroundButton>
