@@ -13,7 +13,7 @@ export default function HomePage() {
     <>
       {/* HERO — premium treatment */}
       <section className="relative overflow-hidden bg-white border-b border-[rgba(0,0,0,0.05)]">
-        <div className="mx-auto max-w-[1280px] px-6 lg:px-10 pt-12 pb-16 lg:pt-16 lg:pb-20">
+        <div className="mx-auto max-w-[1280px] px-6 lg:px-10 pt-4 pb-16 lg:pt-6 lg:pb-20">
           <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_620px] gap-12 items-center">
             {/* LEFT — taglines + CTAs */}
             <div className="space-y-6">
