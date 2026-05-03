@@ -1,5 +1,4 @@
 import { PlaygroundButton } from "@context-layer/ui/components/marketing/chrome/playground-button";
-import { AISdlcTriangle } from "@context-layer/ui/components/marketing/ai-sdlc-triangle";
 import { CapabilityCarousel } from "@context-layer/ui/components/marketing/capability-carousel";
 import { ContextTriangleHero } from "@context-layer/ui/components/marketing/context-triangle-hero";
 import { ForwardBackwardLoop } from "@context-layer/ui/components/marketing/forward-backward-loop";
@@ -96,69 +95,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* AI-SDLC TRIANGLE — explainer */}
-      <section className="bg-[#fafaf9] border-y border-[rgba(0,0,0,0.05)]">
-        <div className="mx-auto max-w-[1440px] px-6 lg:px-10 py-24 lg:py-28">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <FadeUp>
-              <div className="space-y-4">
-                <p className="text-button-upper text-[#777169]">The Communication Triangle</p>
-                <h2 className="text-section-heading text-black">
-                  Human. Agent. Codebase. Context is the channel.
-                </h2>
-                <p className="text-body text-[#4e4e4e]">
-                  High-fidelity software development needs three reliable channels — and each one
-                  breaks without shared context. Context Layer is the medium they all read from.
-                </p>
-                <dl className="grid gap-4 pt-2">
-                  <div className="flex items-start gap-3">
-                    <span
-                      aria-hidden
-                      className="mt-1.5 w-2 h-2 rounded-full"
-                      style={{ backgroundColor: "#3b82f6" }}
-                    />
-                    <div>
-                      <dt className="text-body-medium text-black">Human ↔ Context</dt>
-                      <dd className="text-caption text-[#4e4e4e]">
-                        Read grounded docs. Run grounded queries. Onboard faster.
-                      </dd>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <span
-                      aria-hidden
-                      className="mt-1.5 w-2 h-2 rounded-full"
-                      style={{ backgroundColor: "#10b981" }}
-                    />
-                    <div>
-                      <dt className="text-body-medium text-black">Agent ↔ Context</dt>
-                      <dd className="text-caption text-[#4e4e4e]">
-                        Agents get structured context — not stale READMEs scraped from a directory.
-                      </dd>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <span
-                      aria-hidden
-                      className="mt-1.5 w-2 h-2 rounded-full"
-                      style={{ backgroundColor: "#b45309" }}
-                    />
-                    <div>
-                      <dt className="text-body-medium text-black">Human ↔ Agent</dt>
-                      <dd className="text-caption text-[#4e4e4e]">
-                        Both sides share one canonical source of truth. No two interpretations.
-                      </dd>
-                    </div>
-                  </div>
-                </dl>
-              </div>
-            </FadeUp>
-            <FadeUp delay={0.1} className="flex justify-center lg:translate-y-24">
-              <AISdlcTriangle />
-            </FadeUp>
-          </div>
-        </div>
-      </section>
+
 
       {/* CLOSING CTA */}
       <section className="mx-auto max-w-[1440px] px-6 lg:px-10 pb-24">

@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { PlaygroundButton } from "@context-layer/ui/components/marketing/chrome/playground-button";
 import { StatusPill } from "@context-layer/ui/components/marketing/status-pill";
+import { AISdlcTriangle } from "@context-layer/ui/components/marketing/ai-sdlc-triangle";
 import {
   CapabilityScroller,
   type Capability,
@@ -54,37 +55,80 @@ const CAPABILITIES: Capability[] = [
 export default function ContextLayerProductPage() {
   return (
     <>
-      {/* HERO */}
+      {/* HERO — Triangle integration */}
       <section className="relative overflow-hidden bg-white border-b border-[rgba(0,0,0,0.05)]">
-        <div className="mx-auto max-w-[1440px] px-6 lg:px-10 pt-24 pb-16 lg:pt-28">
-          <div className="max-w-[860px] space-y-5">
-            <FadeUp delay={0.1}>
-              <h1 className="text-display-hero text-black lg:text-[64px] lg:leading-[1.04] lg:tracking-[-1.1px]">
-                Context Layer.
-              </h1>
-            </FadeUp>
-            <FadeUp delay={0.18}>
-              <p className="text-body-large text-[#4e4e4e] max-w-[620px]">
-                Turn an always-fresh Wiki into actionable tools. Documentation, dashboards, grounded
-                chat, and MCP descriptors — all built on the same indexed substrate.
-              </p>
-            </FadeUp>
-            <FadeUp delay={0.24}>
-              <div className="flex flex-wrap items-center gap-3 pt-2">
-                <PlaygroundButton>Open in playground</PlaygroundButton>
-                <a
-                  href="#foundation"
-                  className="text-button text-[#4e4e4e] hover:text-black transition-colors inline-flex items-center gap-1.5"
-                >
-                  Four verbs <span aria-hidden>↓</span>
-                </a>
+        <div className="mx-auto max-w-[1440px] px-6 lg:px-10 pt-20 pb-16 lg:pt-24">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <FadeUp>
+              <div className="space-y-5">
+                <h1 className="text-display-hero text-black lg:text-[64px] lg:leading-[1.04] lg:tracking-[-1.1px]">
+                  Context Layer.
+                </h1>
+                <p className="text-button-upper text-[#777169]">The Communication Triangle</p>
+                <h2 className="text-section-heading text-black">
+                  Human. Agent. Codebase. Context is the channel.
+                </h2>
+                <p className="text-body text-[#4e4e4e]">
+                  High-fidelity software development needs three reliable channels — and each one
+                  breaks without shared context. Context Layer is the medium they all read from.
+                </p>
+                <dl className="grid gap-4 pt-2">
+                  <div className="flex items-start gap-3">
+                    <span
+                      aria-hidden
+                      className="mt-1.5 w-2 h-2 rounded-full"
+                      style={{ backgroundColor: "#3b82f6" }}
+                    />
+                    <div>
+                      <dt className="text-body-medium text-black">Human ↔ Context</dt>
+                      <dd className="text-caption text-[#4e4e4e]">
+                        Read grounded docs. Run grounded queries. Onboard faster.
+                      </dd>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <span
+                      aria-hidden
+                      className="mt-1.5 w-2 h-2 rounded-full"
+                      style={{ backgroundColor: "#10b981" }}
+                    />
+                    <div>
+                      <dt className="text-body-medium text-black">Agent ↔ Context</dt>
+                      <dd className="text-caption text-[#4e4e4e]">
+                        Agents get structured context — not stale READMEs scraped from a directory.
+                      </dd>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <span
+                      aria-hidden
+                      className="mt-1.5 w-2 h-2 rounded-full"
+                      style={{ backgroundColor: "#b45309" }}
+                    />
+                    <div>
+                      <dt className="text-body-medium text-black">Human ↔ Agent</dt>
+                      <dd className="text-caption text-[#4e4e4e]">
+                        Both sides share one canonical source of truth. No two interpretations.
+                      </dd>
+                    </div>
+                  </div>
+                </dl>
+                <div className="flex flex-wrap items-center gap-3 pt-4">
+                  <PlaygroundButton>Open in playground</PlaygroundButton>
+                  <a
+                    href="#foundation"
+                    className="text-button text-[#4e4e4e] hover:text-black transition-colors inline-flex items-center gap-1.5"
+                  >
+                    Four verbs <span aria-hidden>↓</span>
+                  </a>
+                </div>
               </div>
             </FadeUp>
-          </div>
 
-          <FadeUp delay={0.3}>
-            <LayeredHeroGraphic />
-          </FadeUp>
+            <FadeUp delay={0.1} className="flex justify-center lg:translate-y-24">
+              <AISdlcTriangle />
+            </FadeUp>
+          </div>
         </div>
       </section>
 
@@ -174,69 +218,7 @@ function PromiseCard({
   );
 }
 
-function LayeredHeroGraphic() {
-  const layers = [
-    {
-      label: "Workspace narrative",
-      sub: "1 doc · cross-repo",
-      top: 0,
-      z: 3,
-      opacity: 1,
-      accent: "#047857",
-      accentBg: "#ecfdf5",
-    },
-    {
-      label: "Per-repo wikis",
-      sub: "9 trees · nested pages",
-      top: 44,
-      z: 2,
-      opacity: 0.92,
-      accent: "#1d4ed8",
-      accentBg: "#eff6ff",
-    },
-    {
-      label: "llms.txt",
-      sub: "index · agent-ready",
-      top: 88,
-      z: 1,
-      opacity: 0.82,
-      accent: "#b45309",
-      accentBg: "#fffbeb",
-    },
-  ];
-  return (
-    <div className="relative mt-14 h-[220px]">
-      {layers.map((l, i) => (
-        <div
-          key={l.label}
-          className="absolute left-1/2 -translate-x-1/2 w-[700px] max-w-full bg-white rounded-large shadow-[var(--shadow-outline-ring)]"
-          style={{
-            top: `${l.top}px`,
-            zIndex: l.z,
-            opacity: l.opacity,
-            transform: `translateX(-50%) rotate(${(i - 1) * 1}deg)`,
-          }}
-        >
-          <div className="px-6 py-4 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <span
-                className="inline-flex items-center justify-center w-8 h-8 rounded-standard"
-                style={{ backgroundColor: l.accentBg, color: l.accent }}
-              >
-                <Layers size={18} strokeWidth={1.5} />
-              </span>
-              <div>
-                <p className="text-button-upper text-[#777169]">Layer {i + 1}</p>
-                <p className="text-body-medium text-black">{l.label}</p>
-              </div>
-            </div>
-            <p className="text-caption text-[#777169]">{l.sub}</p>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
+
 
 // ────────────────────────── Capability graphics ──────────────────────────
 
