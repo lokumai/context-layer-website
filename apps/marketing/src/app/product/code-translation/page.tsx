@@ -16,6 +16,7 @@ import {
   type Capability,
 } from "@context-layer/ui/components/marketing/capability-sticky";
 import { FadeUp } from "@context-layer/ui/components/motion/fade-up";
+import { LayeredStepGraphic } from "@context-layer/ui/components/marketing/layered-step-graphic";
 
 const CAPABILITIES: Capability[] = [
   {
@@ -47,42 +48,70 @@ export default function CodeTranslationPage() {
       {/* HERO */}
       <section className="relative overflow-hidden bg-white border-b border-[rgba(0,0,0,0.05)]">
         <div className="mx-auto max-w-[1440px] px-6 lg:px-10 pt-24 pb-16 lg:pt-28">
-          <div className="max-w-[860px] space-y-5">
-            <FadeUp>
-              <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs uppercase tracking-[0.08em] font-bold bg-[#fffbeb] text-[#b45309] border border-[#fef3c7]">
-                <span className="w-2 h-2 rounded-full bg-current opacity-80" />
-                Premium Add-on
-              </span>
-            </FadeUp>
-            <FadeUp delay={0.1}>
-              <h1 className="text-display-hero text-black lg:text-[64px] lg:leading-[1.04] lg:tracking-[-1.1px]">
-                Code Translation.
-              </h1>
-            </FadeUp>
-            <FadeUp delay={0.18}>
-              <p className="text-body-large text-[#4e4e4e] max-w-[620px]">
-                Translate code across languages with semantic fidelity. Keep behavior, not just
-                syntax. Built on the same indexed substrate as the base Context Layer.
-              </p>
-            </FadeUp>
-            <FadeUp delay={0.24}>
-              <div className="flex flex-wrap items-center gap-3 pt-2">
-                <PlaygroundButton href="mailto:early-access@context-layer.dev">
-                  Request early access
-                </PlaygroundButton>
-                <a
-                  href="#foundation"
-                  className="text-button text-[#4e4e4e] hover:text-black transition-colors inline-flex items-center gap-1.5"
-                >
-                  Core capabilities <span aria-hidden>↓</span>
-                </a>
+          <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(420px,560px)] lg:items-start">
+            <div className="max-w-[860px] space-y-5">
+              <FadeUp>
+                <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs uppercase tracking-[0.08em] font-bold bg-[#fffbeb] text-[#b45309] border border-[#fef3c7]">
+                  <span className="w-2 h-2 rounded-full bg-current opacity-80" />
+                  Premium Add-on
+                </span>
+              </FadeUp>
+              <FadeUp delay={0.1}>
+                <h1 className="text-display-hero text-black lg:text-[64px] lg:leading-[1.04] lg:tracking-[-1.1px]">
+                  Code Translation.
+                </h1>
+              </FadeUp>
+              <FadeUp delay={0.18}>
+                <p className="text-body-large text-[#4e4e4e] max-w-[620px]">
+                  Translate code across languages with semantic fidelity. Keep behavior, not just
+                  syntax. Built on the same indexed substrate as the base Context Layer.
+                </p>
+              </FadeUp>
+              <FadeUp delay={0.24}>
+                <div className="flex flex-wrap items-center gap-3 pt-2">
+                  <PlaygroundButton href="mailto:early-access@context-layer.dev">
+                    Request early access
+                  </PlaygroundButton>
+                  <a
+                    href="#foundation"
+                    className="text-button text-[#4e4e4e] hover:text-black transition-colors inline-flex items-center gap-1.5"
+                  >
+                    Core capabilities <span aria-hidden>↓</span>
+                  </a>
+                </div>
+              </FadeUp>
+            </div>
+
+            <FadeUp delay={0.3}>
+              <div className="lg:justify-self-end lg:pt-4">
+                <LayeredStepGraphic
+                  layers={[
+                    {
+                      label: "Python source",
+                      sub: "Input · Legacy stack",
+                      accent: "#047857",
+                      accentBg: "#ecfdf5",
+                      tag: "Input",
+                    },
+                    {
+                      label: "AST snapshot",
+                      sub: "Mapping · Universal schema",
+                      accent: "#1d4ed8",
+                      accentBg: "#eff6ff",
+                      tag: "Transform",
+                    },
+                    {
+                      label: "Go output",
+                      sub: "Emitted · Idiomatic code",
+                      accent: "#b45309",
+                      accentBg: "#fffbeb",
+                      tag: "Output",
+                    },
+                  ]}
+                />
               </div>
             </FadeUp>
           </div>
-
-          <FadeUp delay={0.3}>
-            <LayeredHeroGraphic />
-          </FadeUp>
         </div>
       </section>
 
@@ -173,69 +202,6 @@ function PromiseCard({
   );
 }
 
-function LayeredHeroGraphic() {
-  const layers = [
-    {
-      label: "Python source",
-      sub: "Input · Legacy stack",
-      top: 0,
-      z: 3,
-      opacity: 1,
-      accent: "#047857",
-      accentBg: "#ecfdf5",
-    },
-    {
-      label: "AST snapshot",
-      sub: "Mapping · Universal schema",
-      top: 44,
-      z: 2,
-      opacity: 0.92,
-      accent: "#1d4ed8",
-      accentBg: "#eff6ff",
-    },
-    {
-      label: "Go output",
-      sub: "Emitted · Idiomatic code",
-      top: 88,
-      z: 1,
-      opacity: 0.82,
-      accent: "#b45309",
-      accentBg: "#fffbeb",
-    },
-  ];
-  return (
-    <div className="relative mt-14 h-[220px]">
-      {layers.map((l, i) => (
-        <div
-          key={l.label}
-          className="absolute left-1/2 -translate-x-1/2 w-[700px] max-w-full bg-white rounded-large shadow-[var(--shadow-outline-ring)]"
-          style={{
-            top: `${l.top}px`,
-            zIndex: l.z,
-            opacity: l.opacity,
-            transform: `translateX(-50%) rotate(${(i - 1) * 1}deg)`,
-          }}
-        >
-          <div className="px-6 py-4 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <span
-                className="inline-flex items-center justify-center w-8 h-8 rounded-standard"
-                style={{ backgroundColor: l.accentBg, color: l.accent }}
-              >
-                <Layers size={18} strokeWidth={1.5} />
-              </span>
-              <div>
-                <p className="text-button-upper text-[#777169]">Layer {i + 1}</p>
-                <p className="text-body-medium text-black">{l.label}</p>
-              </div>
-            </div>
-            <p className="text-caption text-[#777169]">{l.sub}</p>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
 
 function IngestionGraphic() {
   const items = [

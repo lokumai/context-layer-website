@@ -1,7 +1,6 @@
 import { PlaygroundButton } from "@context-layer/ui/components/marketing/chrome/playground-button";
 import { CapabilityCarousel } from "@context-layer/ui/components/marketing/capability-carousel";
 import { ContextTriangleHero } from "@context-layer/ui/components/marketing/context-triangle-hero";
-import { ForwardBackwardLoop } from "@context-layer/ui/components/marketing/forward-backward-loop";
 import { FadeUp } from "@context-layer/ui/components/motion/fade-up";
 
 export default function HomePage() {
@@ -67,35 +66,6 @@ export default function HomePage() {
           </FadeUp>
         </div>
       </section>
-
-      {/* THE MISSING LAYER — forward/backward loop */}
-      <section className="mx-auto max-w-[1440px] px-6 lg:px-10 py-20">
-        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_760px] gap-12 lg:gap-16 items-center">
-          <FadeUp>
-            <div className="max-w-[640px] space-y-4">
-              <p className="text-button-upper text-[#777169]">The Missing Layer</p>
-              <h2 className="text-section-heading text-black">
-                Everyone else builds forward. We build backward.
-              </h2>
-              <p className="text-body text-[#4e4e4e]">
-                Cursor, Claude Code, and Copilot help <em>write</em> code. Context Layer
-                reverse-engineers the code that&apos;s already there — so both humans and agents
-                can trust what they&apos;re building on.
-              </p>
-              <p className="text-body text-[#4e4e4e]">
-                The two halves close into a loop: developers ship into the codebase,
-                Context Layer reads it back into shared knowledge, and that knowledge feeds the
-                next round of work.
-              </p>
-            </div>
-          </FadeUp>
-          <FadeUp delay={0.1}>
-            <ForwardBackwardLoop />
-          </FadeUp>
-        </div>
-      </section>
-
-
 
       {/* CLOSING CTA */}
       <section className="mx-auto max-w-[1440px] px-6 lg:px-10 pb-12">
