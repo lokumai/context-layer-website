@@ -44,15 +44,46 @@ Requires **Bun ≥ 1.0** and **Node ≥ 20** (for tooling that still expects Nod
 
 ```
 apps/
-  marketing/     Next.js 16 (Static Export) — landing pages on GitHub Pages
-  web/           Next.js 16 (Standalone) — auth-gated playground on DigitalOcean
+  marketing/                          Next.js 16 (Static Export) — landing pages on GitHub Pages
+    src/app/                          App Router (page.tsx, layout.tsx)
+      about/
+      product/                        context-layer · code-modernization · code-translation
+    e2e/                              Playwright specs
+    public/
+  web/                                Next.js 16 (Standalone) — auth-gated playground on DigitalOcean
+    src/
+      app/                            App Router
+        (auth)/                       Login / persona pages
+        (playground)/                 Gated playground routes
+        api/                          Route handlers
+      components/playground/          Playground UI primitives
+      lib/                            chatbot · intelligence · hydration · motion · workspaces
+      stores/                         Zustand stores + slices (persona-keyed persist)
+      providers/                      React context providers
+      __tests__/                      Vitest unit tests
+    e2e/                              Playwright specs
+    public/
 packages/
-  ui/            Shared shadcn/ui-based component library
-  mocks/         @context-layer/mocks — pre-generated wiki / intelligence / artifacts
-  mcp/           Streamable-HTTP MCP server (port 8765)
-  config/        Shared tsconfig, biome, eslint stubs
-deploy/docker/   Dockerfiles for web + mcp images
-.github/workflows/  CI + deploy pipelines (build-push.yaml, deploy-pages.yaml)
+  ui/                                 Shared shadcn/ui-based component library
+    src/
+      components/marketing/           Hero animations, carousels, marketing-only primitives
+      components/motion/              Shared motion primitives (FadeUp, …)
+      lib/                            Util helpers
+      styles/                         Global / shared CSS
+  mocks/                              @context-layer/mocks — pre-generated wiki / intelligence / artifacts
+    src/
+      loaders/                        getWorkspace, listSources, getWikiTree, listArtifacts, …
+      scripts/                        Mock-data generation
+      __tests__/
+    data/                             Generated content (repos/, artifacts/, chatbot/, intelligence/, …)
+  mcp/                                Streamable-HTTP MCP server (port 8765)
+    src/
+      tools/                          MCP tool handlers (ask, wiki, intelligence)
+      scripts/
+      __tests__/
+  config/                             Shared tsconfig, biome, eslint stubs
+deploy/docker/                        Dockerfiles for web + mcp images
+.github/workflows/                    CI + deploy pipelines (build-push.yaml, deploy-pages.yaml)
 ```
 
 `packages/mocks` is the **stable service abstraction** every UI surface consumes (`getWorkspace`, `listSources`, `getWikiTree`, `listArtifacts`, …). When real agents arrive later, only the loader implementation changes — UI never moves.
