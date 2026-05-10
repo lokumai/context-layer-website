@@ -5,12 +5,15 @@ import { auth } from "./auth";
 // session; unauthenticated requests redirect to /login with a callbackUrl.
 const PUBLIC_PATHS = new Set<string>(["/", "/login"]);
 const PUBLIC_PREFIXES = ["/product/", "/api/auth/", "/_next/", "/assets/", "/favicon"];
+const PUBLIC_FILES = new Set<string>(["/logo-landscape.svg"]);
 
 export const proxy = auth((req) => {
   const { pathname, search } = req.nextUrl;
 
   const isPublic =
-    PUBLIC_PATHS.has(pathname) || PUBLIC_PREFIXES.some((p) => pathname.startsWith(p));
+    PUBLIC_PATHS.has(pathname) ||
+    PUBLIC_FILES.has(pathname) ||
+    PUBLIC_PREFIXES.some((p) => pathname.startsWith(p));
 
   // Bounce authenticated users away from /login into the playground.
   // Honor the callbackUrl param if it points inside the playground; otherwise /workspaces.

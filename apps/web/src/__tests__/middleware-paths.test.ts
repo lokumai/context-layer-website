@@ -6,9 +6,14 @@ import { describe, expect, it } from "vitest";
 
 const PUBLIC_PATHS = new Set<string>(["/", "/login"]);
 const PUBLIC_PREFIXES = ["/product/", "/api/auth/", "/_next/", "/assets/", "/favicon"];
+const PUBLIC_FILES = new Set<string>(["/logo-landscape.svg"]);
 
 function isPublicPath(pathname: string): boolean {
-  return PUBLIC_PATHS.has(pathname) || PUBLIC_PREFIXES.some((p) => pathname.startsWith(p));
+  return (
+    PUBLIC_PATHS.has(pathname) ||
+    PUBLIC_FILES.has(pathname) ||
+    PUBLIC_PREFIXES.some((p) => pathname.startsWith(p))
+  );
 }
 
 describe("middleware path classification", () => {
@@ -19,6 +24,7 @@ describe("middleware path classification", () => {
     expect(isPublicPath("/api/auth/session")).toBe(true);
     expect(isPublicPath("/_next/static/chunks/x.js")).toBe(true);
     expect(isPublicPath("/favicon.ico")).toBe(true);
+    expect(isPublicPath("/logo-landscape.svg")).toBe(true);
   });
 
   it("marks playground surfaces as private", () => {
