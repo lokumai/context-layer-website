@@ -84,14 +84,15 @@ export async function bootstrapPayload(persona: PersonaId): Promise<HydrationPay
     listJobs(),
   ]);
 
+  const codeSources = sources.filter((s) => s.kind === "code");
   const treeEntries = await Promise.all(
-    sources.map(async (s) => [s.id, await getWikiTree(s.id)] as const),
+    codeSources.map(async (s) => [s.id, await getWikiTree(s.id)] as const),
   );
   const wikiTrees = Object.fromEntries(treeEntries);
 
   const masterLlms = await getLlmsTxt(null);
   const llmsEntries = await Promise.all(
-    sources.map(async (s) => [s.id, await getLlmsTxt(s.id)] as const),
+    codeSources.map(async (s) => [s.id, await getLlmsTxt(s.id)] as const),
   );
   const llms = Object.fromEntries([["_workspace", masterLlms], ...llmsEntries]);
 

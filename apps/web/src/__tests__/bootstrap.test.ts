@@ -16,7 +16,7 @@ describe("bootstrapPayload", () => {
   it("partial persona → workspace + sources, no wiki/intelligence/chatbot/artifacts", async () => {
     const p = await bootstrapPayload("partial");
     expect(p.workspaces).toHaveLength(1);
-    expect(p.sources).toHaveLength(9);
+    expect(p.sources).toHaveLength(14);
     expect(p.wiki).toBeNull();
     expect(p.intelligence).toBeNull();
     expect(p.chatbot).toBeNull();
@@ -27,7 +27,7 @@ describe("bootstrapPayload", () => {
   it("full persona → every slice populated", async () => {
     const p = await bootstrapPayload("full");
     expect(p.workspaces).toHaveLength(1);
-    expect(p.sources).toHaveLength(9);
+    expect(p.sources).toHaveLength(14);
 
     expect(p.wiki).not.toBeNull();
     const wiki = p.wiki;

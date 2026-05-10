@@ -24,14 +24,15 @@ export async function GET() {
     getSagaFlows(),
   ]);
 
+  const codeSources = sources.filter((s) => s.kind === "code");
   const treeEntries = await Promise.all(
-    sources.map(async (s) => [s.id, await getWikiTree(s.id)] as const),
+    codeSources.map(async (s) => [s.id, await getWikiTree(s.id)] as const),
   );
   const tree = Object.fromEntries(treeEntries);
 
   const masterLlms = await getLlmsTxt(null);
   const perRepoLlms = await Promise.all(
-    sources.map(async (s) => [s.id, await getLlmsTxt(s.id)] as const),
+    codeSources.map(async (s) => [s.id, await getLlmsTxt(s.id)] as const),
   );
   const llms = Object.fromEntries([["_workspace", masterLlms], ...perRepoLlms]);
 

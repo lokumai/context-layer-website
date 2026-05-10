@@ -74,6 +74,8 @@ export function sourceIconForCategory(category: SourceCategory): IconRef {
       return { type: "brand", key: "linear" };
     case "jira":
       return { type: "brand", key: "jira" };
+    case "pdf":
+      return { type: "brand", key: "pdf" };
   }
 }
 

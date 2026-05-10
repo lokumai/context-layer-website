@@ -24,7 +24,8 @@ export type SourceCategory =
   | "slack"
   | "discord"
   | "linear"
-  | "jira";
+  | "jira"
+  | "pdf";
 
 /**
  * Whether the indexed source is in lock-step with the workspace's Wiki.

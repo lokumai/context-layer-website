@@ -19,6 +19,6 @@ describe("@context-layer/mocks — cross-package import", () => {
     const ws = await getWorkspace();
     const sources = await listSources();
     expect(ws.slug).toBe("microservices-product-catalog");
-    expect(sources).toHaveLength(9);
+    expect(sources).toHaveLength(14);
   });
 });

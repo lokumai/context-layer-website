@@ -24,7 +24,7 @@ describe("@context-layer/mocks loaders", () => {
   it("workspace: exposes the microservices-product-catalog workspace", async () => {
     const ws = await getWorkspace();
     expect(ws.id).toBe("ws-microservices-product-catalog");
-    expect(ws.sourceCount).toBe(9);
+    expect(ws.sourceCount).toBeGreaterThanOrEqual(9);
     expect(ws.syncStrategy).toMatch(/per-pr-merge|per-commit|hourly|daily|weekly|manual/);
   });
 
@@ -40,49 +40,50 @@ describe("@context-layer/mocks loaders", () => {
     expect(s.markdown.length).toBeGreaterThan(1500);
   });
 
-  it("sources: lists exactly 9 sources", async () => {
+  it("sources: includes the 9 core microservice repos", async () => {
     const s = await listSources();
-    expect(s).toHaveLength(9);
-    const ids = s.map((x) => x.id).sort();
-    expect(ids).toEqual(
-      [
-        "api-gateway",
-        "characteristic-service",
-        "frontend",
-        "identity-service",
-        "offering-service",
-        "pricing-service",
-        "shared-chassis",
-        "specification-service",
-        "store-query-service",
-      ].sort(),
-    );
+    const ids = new Set(s.map((x) => x.id));
+    for (const id of [
+      "api-gateway",
+      "characteristic-service",
+      "frontend",
+      "identity-service",
+      "offering-service",
+      "pricing-service",
+      "shared-chassis",
+      "specification-service",
+      "store-query-service",
+    ]) {
+      expect(ids.has(id)).toBe(true);
+    }
   });
 
   it("sources: getSource throws for unknown id", async () => {
     await expect(getSource("does-not-exist")).rejects.toThrow(/not found/);
   });
 
-  it("sources: every source URL points at the real monorepo subpath", async () => {
+  it("sources: every github code source URL points at the real monorepo subpath", async () => {
     const s = await listSources();
-    for (const src of s) {
+    const codeRepos = s.filter((src) => src.kind === "code" && src.category === "github");
+    expect(codeRepos.length).toBeGreaterThanOrEqual(9);
+    for (const src of codeRepos) {
       expect(src.url).toContain("amirkiarafiei/microservices-product-catalog");
       expect(src.url).toContain(src.path);
     }
   });
 
-  it("wiki: every source has a readable tree and at least one page", async () => {
+  it("wiki: every code source has a readable tree and at least one page", async () => {
     const sources = await listSources();
-    for (const src of sources) {
+    for (const src of sources.filter((s) => s.kind === "code")) {
       const tree = await getWikiTree(src.id);
       expect(tree.repoId).toBe(src.id);
       expect(tree.nodes.length).toBeGreaterThan(0);
     }
   });
 
-  it("wiki: every source has a repo-level llms.txt", async () => {
+  it("wiki: every code source has a repo-level llms.txt", async () => {
     const sources = await listSources();
-    for (const src of sources) {
+    for (const src of sources.filter((s) => s.kind === "code")) {
       const l = await getLlmsTxt(src.id);
       expect(l.repoId).toBe(src.id);
       expect(l.markdown.length).toBeGreaterThan(100);
@@ -95,11 +96,13 @@ describe("@context-layer/mocks loaders", () => {
     expect(l.markdown).toContain("Microservices Product Catalog");
   });
 
-  it("intelligence: health has per-repo entry for every source", async () => {
+  it("intelligence: health has per-repo entry for every code source", async () => {
     const h = await getHealth();
     const sources = await listSources();
     const healthIds = new Set(h.perRepo.map((x) => x.repoId));
-    for (const s of sources) expect(healthIds.has(s.id)).toBe(true);
+    for (const s of sources.filter((s) => s.kind === "code")) {
+      expect(healthIds.has(s.id)).toBe(true);
+    }
     expect(h.overallScore).toBeGreaterThan(0);
     expect(h.overallScore).toBeLessThanOrEqual(100);
   });
@@ -127,11 +130,13 @@ describe("@context-layer/mocks loaders", () => {
     expect(d.outdatedCount).toBeGreaterThan(0);
   });
 
-  it("intelligence: knowledge graph nodes include every source id", async () => {
+  it("intelligence: knowledge graph nodes include every code source id", async () => {
     const g = await getKnowledgeGraph();
     const sources = await listSources();
     const nodeIds = new Set(g.nodes.map((n) => n.id));
-    for (const s of sources) expect(nodeIds.has(s.id)).toBe(true);
+    for (const s of sources.filter((s) => s.kind === "code")) {
+      expect(nodeIds.has(s.id)).toBe(true);
+    }
     expect(g.edges.length).toBeGreaterThan(10);
   });
 

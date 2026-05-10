@@ -4,8 +4,8 @@
   "slug": "microservices-product-catalog",
   "createdAt": "2026-02-14T09:12:00.000Z",
   "lastActivity": "2026-04-22T14:08:41.000Z",
-  "sourceCount": 9,
+  "sourceCount": 14,
   "syncStatus": "live",
   "syncStrategy": "per-pr-merge",
-  "description": "TMForum-compatible distributed product catalog: 7 Python/FastAPI microservices, a Next.js storefront, and a shared chassis library — treated as 9 logical repos in a single workspace."
+  "description": "TMForum-compatible distributed product catalog: 7 Python/FastAPI microservices, a Next.js storefront, and a shared chassis library (9 logical repos) — plus supporting Notion, Google Drive, Linear, GitLab, and PDF sources."
 }

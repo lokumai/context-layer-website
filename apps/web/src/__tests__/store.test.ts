@@ -19,7 +19,7 @@ describe("Zustand store hydration", () => {
     expect(s.personaId).toBe("full");
     expect(s.isHydrated).toBe(true);
     expect(s.workspaces).toHaveLength(1);
-    expect(s.sources).toHaveLength(9);
+    expect(s.sources).toHaveLength(14);
     expect(s.narrative).not.toBeNull();
     expect(s.health).not.toBeNull();
     expect(s.artifacts.length).toBeGreaterThan(0);
@@ -43,7 +43,7 @@ describe("Zustand store hydration", () => {
     useStore.getState().hydrate(payload, "partial");
     const s = useStore.getState();
     expect(s.personaId).toBe("partial");
-    expect(s.sources).toHaveLength(9);
+    expect(s.sources).toHaveLength(14);
     expect(s.narrative).toBeNull();
     expect(s.health).toBeNull();
     expect(s.cannedQA).toHaveLength(0);
