@@ -1,7 +1,6 @@
 "use client";
 
-import { AnimatePresence, motion } from "motion/react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 // Per IMPROVE.md: "Generating states across the app show trickling, realistic
 // fake agent logs rather than a simple spinner." Each topic has a deterministic
@@ -52,7 +51,7 @@ const TEMPLATES: Record<TrickleTopic, string[]> = {
   ],
 };
 
-const MAX_LINES = 5;
+const MAX_LINES = 10;
 const TICK_MS = 320;
 
 // Pure picker — exposed for unit tests.
@@ -63,6 +62,7 @@ export function pickLine(topic: TrickleTopic, tick: number): string {
 
 export function TrickleLogs({ topic, paused = false }: { topic: TrickleTopic; paused?: boolean }) {
   const [lines, setLines] = useState<Array<{ id: number; text: string }>>([]);
+  const scrollRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (paused) return;
@@ -80,27 +80,25 @@ export function TrickleLogs({ topic, paused = false }: { topic: TrickleTopic; pa
     return () => clearInterval(interval);
   }, [topic, paused]);
 
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [lines]);
+
   return (
     <div
-      className="font-mono text-caption text-[#4e4e4e] bg-[#f9f9f9] rounded-card px-4 py-3 min-h-[8.5rem] overflow-hidden border border-[rgba(0,0,0,0.04)]"
+      ref={scrollRef}
+      className="font-mono text-caption text-[#4e4e4e] bg-[#f9f9f9] rounded-card px-4 py-3 h-[8.5rem] overflow-y-auto border border-[rgba(0,0,0,0.04)] scroll-smooth"
       data-testid="trickle-logs"
     >
       <ul className="space-y-1">
-        <AnimatePresence initial={false}>
-          {lines.map((l) => (
-            <motion.li
-              key={l.id}
-              initial={{ opacity: 0, y: 4 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.18 }}
-              className="leading-relaxed"
-            >
-              <span className="text-[#9ca3af] mr-2">›</span>
-              {l.text}
-            </motion.li>
-          ))}
-        </AnimatePresence>
+        {lines.map((l) => (
+          <li key={l.id} className="leading-relaxed animate-in fade-in slide-in-from-bottom-1 duration-200">
+            <span className="text-[#9ca3af] mr-2">›</span>
+            {l.text}
+          </li>
+        ))}
       </ul>
     </div>
   );

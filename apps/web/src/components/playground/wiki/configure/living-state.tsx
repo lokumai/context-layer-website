@@ -25,7 +25,7 @@ export function LivingState({
     if (syncing) return;
     setSyncing(true);
     const iter = simulateJob(["Pulling latest", "Diffing", "Committing"], () => undefined, {
-      totalMs: 3000,
+      totalMs: 5500,
     });
     while (true) {
       const next = await iter.next();

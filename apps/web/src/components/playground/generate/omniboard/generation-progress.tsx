@@ -31,8 +31,8 @@ export function OmniBoardGenerationProgress({
     let cancelled = false;
     async function run() {
       const iter = simulateJob([...STEPS], () => undefined, {
-        totalMs: 15000,
-        minStepMs: 1200,
+        totalMs: 5500,
+        minStepMs: 400,
       });
       while (!cancelled) {
         const n = await iter.next();
