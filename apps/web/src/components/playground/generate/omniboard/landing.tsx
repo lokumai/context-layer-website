@@ -1,7 +1,6 @@
 "use client";
 
-import { FileImage, Headphones, Video } from "lucide-react";
-import type { ComponentType } from "react";
+import { IconMark, artifactIconFor } from "../../icons/icon-mark";
 
 export type Modality = "slides" | "audio" | "video";
 
@@ -13,7 +12,6 @@ export interface ModalityPick {
 interface Bundle {
   modality: Modality;
   label: string;
-  icon: ComponentType<{ size?: number; strokeWidth?: number; className?: string }>;
   accent: string;
   options: string[];
   description: string;
@@ -23,7 +21,6 @@ const BUNDLES: Bundle[] = [
   {
     modality: "slides",
     label: "Slides",
-    icon: FileImage,
     accent: "#fef3c7",
     description: "Shareable decks — suitable for emailing, reading standalone, or presenting.",
     options: ["Detailed Slides", "Summary Slides"],
@@ -31,7 +28,6 @@ const BUNDLES: Bundle[] = [
   {
     modality: "audio",
     label: "Audio",
-    icon: Headphones,
     accent: "#ede9fe",
     description: "Walkthroughs and podcast-style explanations of the codebase.",
     options: ["Deep Dive", "Summary", "Podcast"],
@@ -39,7 +35,6 @@ const BUNDLES: Bundle[] = [
   {
     modality: "video",
     label: "Video",
-    icon: Video,
     accent: "#eef6ff",
     description: "Slide-on-voice video presentations for richer onboarding sessions.",
     options: ["Detailed Presentation", "Summary Presentation"],
@@ -65,7 +60,7 @@ export function OmniBoardLanding({ onPick }: { onPick: (pick: ModalityPick) => v
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
         {BUNDLES.map((b) => {
-          const Icon = b.icon;
+          const icon = artifactIconFor("research-docs", b.modality);
           return (
             <div
               key={b.modality}
@@ -76,7 +71,7 @@ export function OmniBoardLanding({ onPick }: { onPick: (pick: ModalityPick) => v
                 className="w-11 h-11 rounded-[12px] flex items-center justify-center mb-4"
                 style={{ backgroundColor: b.accent, color: "#3f3f46" }}
               >
-                <Icon size={22} strokeWidth={1.5} />
+                <IconMark icon={icon} size={24} className="w-6 h-6" />
               </div>
               <h3 className="text-card-heading text-black mb-1">{b.label}</h3>
               <p className="text-body text-[#4e4e4e] mb-5">{b.description}</p>

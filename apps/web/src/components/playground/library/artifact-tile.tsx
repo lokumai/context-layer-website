@@ -3,29 +3,9 @@
 "use client";
 
 import type { Artifact, ArtifactBundle } from "@context-layer/mocks";
-import {
-  BookMarked,
-  Bot,
-  FileImage,
-  FileText,
-  FlaskConical,
-  GitBranch,
-  Headphones,
-  type LucideIcon,
-  Shield,
-  Video,
-} from "lucide-react";
 import { StatusPill } from "@context-layer/ui/components/marketing/status-pill";
 import { ActionsMenu } from "./actions-menu";
-
-export const BUNDLE_ICON_MAP: Record<ArtifactBundle, LucideIcon> = {
-  "structure-architecture": GitBranch,
-  "specification-knowledge": FileText,
-  "health-risk": Shield,
-  agentify: Bot,
-  "institutional-memory": BookMarked,
-  "research-docs": FlaskConical,
-};
+import { IconMark, artifactIconFor } from "../icons/icon-mark";
 
 const BUNDLE_COLOR_MAP: Record<ArtifactBundle, string> = {
   "structure-architecture": "bg-blue-100 text-blue-600",
@@ -69,10 +49,7 @@ export function ArtifactTile({
   onPreview: (a: Artifact) => void;
   onDelete: (a: Artifact) => void;
 }) {
-  let Icon = BUNDLE_ICON_MAP[artifact.bundle] || FileText;
-  if (artifact.format === "slides") Icon = FileImage;
-  else if (artifact.format === "audio") Icon = Headphones;
-  else if (artifact.format === "video") Icon = Video;
+  const icon = artifactIconFor(artifact.bundle, artifact.format);
 
   const colorClass = BUNDLE_COLOR_MAP[artifact.bundle] || "bg-gray-100 text-gray-600";
   const statusTone =
@@ -86,7 +63,7 @@ export function ArtifactTile({
     >
       <div className="flex justify-between items-start">
         <div className={`p-2 rounded-[10px] ${colorClass}`}>
-          <Icon className="w-5 h-5" />
+          <IconMark icon={icon} size={22} className="w-[22px] h-[22px]" />
         </div>
         <ToolBadge tool={artifact.tool} />
       </div>

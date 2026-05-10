@@ -1,20 +1,10 @@
 import type { SourceCategory, SourceKind } from "@context-layer/mocks";
 import {
   Boxes,
-  Cloud,
-  Disc,
   FileText,
   GitBranch,
-  HardDrive,
   Hash,
-  KanbanSquare,
-  Link as LinkIcon,
   type LucideIcon,
-  MessageSquare,
-  MessagesSquare,
-  Notebook,
-  Package,
-  Upload,
 } from "lucide-react";
 
 // Per IMPROVE.md / Phase 14: each bucket exposes 2 primary connectors that
@@ -28,7 +18,6 @@ export interface Connector {
   category: SourceCategory;
   label: "Connect" | "Paste" | "Upload";
   primary: boolean;
-  icon: LucideIcon;
   /** Tailwind classes for the icon-square background + foreground. */
   accent: string;
 }
@@ -45,7 +34,6 @@ export const CONNECTORS_BY_BUCKET: Record<Bucket, Connector[]> = {
       category: "github",
       label: "Connect",
       primary: true,
-      icon: GitBranch,
       accent: ACCENT_CODE,
     },
     {
@@ -54,7 +42,6 @@ export const CONNECTORS_BY_BUCKET: Record<Bucket, Connector[]> = {
       category: "gitlab",
       label: "Connect",
       primary: true,
-      icon: GitBranch,
       accent: ACCENT_CODE,
     },
     {
@@ -63,7 +50,6 @@ export const CONNECTORS_BY_BUCKET: Record<Bucket, Connector[]> = {
       category: "bitbucket",
       label: "Connect",
       primary: false,
-      icon: GitBranch,
       accent: ACCENT_CODE,
     },
     {
@@ -72,7 +58,6 @@ export const CONNECTORS_BY_BUCKET: Record<Bucket, Connector[]> = {
       category: "gitea",
       label: "Connect",
       primary: false,
-      icon: GitBranch,
       accent: ACCENT_CODE,
     },
     {
@@ -81,7 +66,6 @@ export const CONNECTORS_BY_BUCKET: Record<Bucket, Connector[]> = {
       category: "url",
       label: "Paste",
       primary: false,
-      icon: LinkIcon,
       accent: ACCENT_CODE,
     },
     {
@@ -90,7 +74,6 @@ export const CONNECTORS_BY_BUCKET: Record<Bucket, Connector[]> = {
       category: "upload",
       label: "Upload",
       primary: false,
-      icon: Upload,
       accent: ACCENT_CODE,
     },
   ],
@@ -101,7 +84,6 @@ export const CONNECTORS_BY_BUCKET: Record<Bucket, Connector[]> = {
       category: "notion",
       label: "Connect",
       primary: true,
-      icon: Notebook,
       accent: ACCENT_DOCS,
     },
     {
@@ -110,7 +92,6 @@ export const CONNECTORS_BY_BUCKET: Record<Bucket, Connector[]> = {
       category: "confluence",
       label: "Connect",
       primary: true,
-      icon: FileText,
       accent: ACCENT_DOCS,
     },
     {
@@ -119,7 +100,6 @@ export const CONNECTORS_BY_BUCKET: Record<Bucket, Connector[]> = {
       category: "drive",
       label: "Connect",
       primary: false,
-      icon: HardDrive,
       accent: ACCENT_DOCS,
     },
     {
@@ -128,7 +108,6 @@ export const CONNECTORS_BY_BUCKET: Record<Bucket, Connector[]> = {
       category: "sharepoint",
       label: "Connect",
       primary: false,
-      icon: Cloud,
       accent: ACCENT_DOCS,
     },
     {
@@ -137,7 +116,6 @@ export const CONNECTORS_BY_BUCKET: Record<Bucket, Connector[]> = {
       category: "upload",
       label: "Upload",
       primary: false,
-      icon: Upload,
       accent: ACCENT_DOCS,
     },
   ],
@@ -148,7 +126,6 @@ export const CONNECTORS_BY_BUCKET: Record<Bucket, Connector[]> = {
       category: "slack",
       label: "Connect",
       primary: true,
-      icon: MessageSquare,
       accent: ACCENT_DISC,
     },
     {
@@ -157,7 +134,6 @@ export const CONNECTORS_BY_BUCKET: Record<Bucket, Connector[]> = {
       category: "discord",
       label: "Connect",
       primary: true,
-      icon: Disc,
       accent: ACCENT_DISC,
     },
     {
@@ -166,7 +142,6 @@ export const CONNECTORS_BY_BUCKET: Record<Bucket, Connector[]> = {
       category: "linear",
       label: "Connect",
       primary: false,
-      icon: KanbanSquare,
       accent: ACCENT_DISC,
     },
     {
@@ -175,7 +150,6 @@ export const CONNECTORS_BY_BUCKET: Record<Bucket, Connector[]> = {
       category: "jira",
       label: "Connect",
       primary: false,
-      icon: Package,
       accent: ACCENT_DISC,
     },
     {
@@ -184,7 +158,6 @@ export const CONNECTORS_BY_BUCKET: Record<Bucket, Connector[]> = {
       category: "github",
       label: "Connect",
       primary: false,
-      icon: MessagesSquare,
       accent: ACCENT_DISC,
     },
   ],

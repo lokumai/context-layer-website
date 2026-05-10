@@ -8,6 +8,7 @@ import { CONTEXT_SPRING } from "@/lib/motion/spring";
 import { simulateJob } from "@/lib/simulate-latency";
 import { useStore } from "@/stores";
 import { BUCKETS, type Bucket, CONNECTORS_BY_BUCKET, type Connector } from "./connector-catalog";
+import { IconMark, sourceIconForCategory } from "../icons/icon-mark";
 
 const STEPS = [
   "Contacting provider",
@@ -209,7 +210,6 @@ function ConnectorStrip({
 }) {
   const isThisBusy = busyConnector === connector.name;
   const otherBusy = busyConnector !== null && !isThisBusy;
-  const Icon = connector.icon;
 
   return (
     <button
@@ -224,7 +224,7 @@ function ConnectorStrip({
       <div
         className={`w-8 h-8 rounded-[6px] flex items-center justify-center shrink-0 ${connector.accent}`}
       >
-        <Icon size={16} strokeWidth={1.75} />
+        <IconMark icon={sourceIconForCategory(connector.category)} size={18} />
       </div>
       <span className="text-body-medium text-black flex-1 truncate">{connector.name}</span>
       {isThisBusy ? (

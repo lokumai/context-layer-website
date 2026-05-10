@@ -1,16 +1,7 @@
 "use client";
 
 import type { Artifact, ArtifactBundle } from "@context-layer/mocks";
-import type { LucideIcon } from "lucide-react";
-import {
-  BookMarked,
-  Bot,
-  FileText,
-  FlaskConical,
-  GitBranch,
-  RefreshCw,
-  Shield,
-} from "lucide-react";
+import { RefreshCw } from "lucide-react";
 import { useState } from "react";
 import { StatusPill } from "@context-layer/ui/components/marketing/status-pill";
 import { TriangleLoader } from "@/components/playground/loaders/triangle-loader";
@@ -20,15 +11,7 @@ import { useStore } from "@/stores";
 import type { DocsGenCard, DocsGenOutputFormat } from "./catalog";
 import { GenerateModal } from "./generate-modal";
 import { PreviewModal } from "./preview-modal";
-
-const ICON_MAP: Record<ArtifactBundle, LucideIcon> = {
-  "structure-architecture": GitBranch,
-  "specification-knowledge": FileText,
-  "health-risk": Shield,
-  agentify: Bot,
-  "institutional-memory": BookMarked,
-  "research-docs": FlaskConical,
-};
+import { artifactIconFor, IconMark } from "../../icons/icon-mark";
 
 export function ArtifactCard({
   bundle,
@@ -49,7 +32,7 @@ export function ArtifactCard({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
-  const Icon = ICON_MAP[bundle] || FileText;
+  const icon = artifactIconFor(bundle, "markdown");
 
   const handleGenerate = async (data: {
     sources: string[];
@@ -108,7 +91,7 @@ export function ArtifactCard({
     >
       <div className="flex items-start justify-between mb-4">
         <div className="p-2.5 rounded-lg bg-[#f9f9f9] text-black">
-          <Icon size={20} />
+          <IconMark icon={icon} size={22} className="w-[22px] h-[22px]" />
         </div>
         {artifact && !isRunning && <StatusPill tone="indexed">Generated</StatusPill>}
       </div>

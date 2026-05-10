@@ -2,11 +2,11 @@
 "use client";
 
 import type { Artifact } from "@context-layer/mocks";
-import { FileImage, FileText, Headphones, Video } from "lucide-react";
 import { StatusPill } from "@context-layer/ui/components/marketing/status-pill";
 import { DOCSGEN_CATALOG } from "@/components/playground/generate/docsgen/catalog";
 import { ActionsMenu } from "./actions-menu";
-import { BUNDLE_ICON_MAP, relativeTime } from "./artifact-tile";
+import { artifactIconFor, IconMark } from "../icons/icon-mark";
+import { relativeTime } from "./artifact-tile";
 
 const BUNDLE_COLOR_HEX: Record<string, string> = {
   "structure-architecture": "#2563eb",
@@ -28,10 +28,7 @@ export function ArtifactRow({
   onPreview: (a: Artifact) => void;
   onDelete: (a: Artifact) => void;
 }) {
-  let Icon = BUNDLE_ICON_MAP[artifact.bundle] || FileText;
-  if (artifact.format === "slides") Icon = FileImage;
-  else if (artifact.format === "audio") Icon = Headphones;
-  else if (artifact.format === "video") Icon = Video;
+  const icon = artifactIconFor(artifact.bundle, artifact.format);
 
   const statusTone =
     artifact.status === "current" ? "indexed" : artifact.status === "superseded" ? "warn" : "error";
@@ -51,7 +48,7 @@ export function ArtifactRow({
       </td>
       <td className="py-4 px-2">
         <div className="flex items-center gap-3">
-          <Icon className="w-4 h-4 text-[#777169]" />
+          <IconMark icon={icon} size={18} className="w-[18px] h-[18px]" />
           <span className="text-body-medium text-black line-clamp-1">{artifact.title}</span>
         </div>
       </td>
