@@ -8,7 +8,6 @@ import { WorkspacePill } from "./workspace-pill";
 
 export function PlaygroundNavbar() {
   const workspaces = useStore((s) => s.workspaces);
-  const isHydrated = useStore((s) => s.isHydrated);
   const activeId = useStore((s) => s.activeWorkspaceId);
   const activeWorkspace = workspaces.find((w) => w.id === activeId) ?? null;
   const pathname = usePathname() ?? "";
@@ -41,9 +40,9 @@ export function PlaygroundNavbar() {
             <img
               src="/logo-landscape.svg"
               alt="Context Layer"
-              className="h-9 w-auto"
-              width={180}
-              height={36}
+              className="h-24 w-auto"
+              width={360}
+              height={72}
             />
           </a>
           {inWorkspace && workspace ? (

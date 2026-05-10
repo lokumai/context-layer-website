@@ -48,7 +48,7 @@ function LoginInner() {
 
   return (
     <main className="min-h-screen bg-white flex items-center justify-center px-4">
-      <div className="w-full max-w-[440px] space-y-10">
+      <div className="w-full max-w-[440px] space-y-2">
         <div className="flex justify-center">
           <Link href="/" aria-label="Back to home">
             {/* biome-ignore lint/performance/noImgElement: logo should render immediately on first paint */}
@@ -57,7 +57,7 @@ function LoginInner() {
               alt="Context Layer"
               width={320}
               height={72}
-              className="h-auto w-[320px]"
+              className="h-64 w-auto"
             />
           </Link>
         </div>
@@ -132,8 +132,6 @@ function LoginInner() {
           <span className="mx-1 rounded-subtle bg-[var(--color-stone)] px-1.5 py-0.5 font-mono">
             full
           </span>
-          <span className="mx-2 text-[#cfcfcf]">·</span>
-          Passwords come from environment variables.
         </p>
       </div>
     </main>
