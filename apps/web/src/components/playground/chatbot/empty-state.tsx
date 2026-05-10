@@ -1,6 +1,7 @@
 "use client";
 
 import { Sparkles } from "lucide-react";
+import { motion } from "motion/react";
 import { useStore } from "@/stores";
 
 interface Props {
@@ -15,7 +16,12 @@ export function ChatbotEmptyState({ onPromptClick }: Props) {
       className="flex-1 flex items-center justify-center px-6 py-10"
       data-testid="chatbot-empty-state"
     >
-      <div className="max-w-2xl w-full text-center">
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
+        className="max-w-2xl w-full text-center"
+      >
         <div className="mx-auto w-14 h-14 rounded-[16px] bg-[#fdf6ec] text-[#b45309] flex items-center justify-center mb-5">
           <Sparkles size={26} strokeWidth={1.5} />
         </div>
@@ -27,10 +33,13 @@ export function ChatbotEmptyState({ onPromptClick }: Props) {
 
         {suggestedPrompts.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-            {suggestedPrompts.slice(0, 6).map((p) => (
-              <button
+            {suggestedPrompts.slice(0, 6).map((p, i) => (
+              <motion.button
                 key={p.id}
                 type="button"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.2, delay: i * 0.05 }}
                 onClick={() => onPromptClick(p.text)}
                 className="text-left rounded-card bg-white shadow-[var(--shadow-inset-border)] hover:shadow-[var(--shadow-outline-ring)] px-4 py-3 transition-shadow"
                 data-testid="chatbot-suggested-prompt"
@@ -41,11 +50,11 @@ export function ChatbotEmptyState({ onPromptClick }: Props) {
                     {p.groundedIn}
                   </p>
                 ) : null}
-              </button>
+              </motion.button>
             ))}
           </div>
         ) : null}
-      </div>
+      </motion.div>
     </div>
   );
 }

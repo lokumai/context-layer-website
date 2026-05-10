@@ -4,6 +4,7 @@
 import type { ChatMessage } from "@context-layer/mocks";
 import { Bot, User } from "lucide-react";
 import { useEffect, useRef } from "react";
+import { AnimatePresence, motion } from "motion/react";
 import { CitationChip } from "./citation";
 
 interface Props {
@@ -27,20 +28,38 @@ export function MessageList({ messages, workspaceId, thinking, compact = false }
   return (
     <div className={`flex-1 overflow-y-auto ${pad}`} data-testid="chatbot-messages">
       <div className={compact ? "space-y-4" : "max-w-3xl mx-auto space-y-6"}>
-        {messages.map((m, i) => (
-          <MessageBubble
-            key={`${i}-${m.role}`}
-            message={m}
-            workspaceId={workspaceId}
-            isStreaming={
-              i === messages.length - 1 &&
-              m.role === "assistant" &&
-              thinking === false &&
-              m.content.length === 0
-            }
-          />
-        ))}
-        {thinking ? <ThinkingBubble /> : null}
+        <AnimatePresence initial={false}>
+          {messages.map((m, i) => (
+            <motion.div
+              key={`${i}-${m.role}`}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              <MessageBubble
+                message={m}
+                workspaceId={workspaceId}
+                isStreaming={
+                  i === messages.length - 1 &&
+                  m.role === "assistant" &&
+                  thinking === false &&
+                  m.content.length === 0
+                }
+              />
+            </motion.div>
+          ))}
+          {thinking ? (
+            <motion.div
+              key="thinking-bubble"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10, transition: { duration: 0.15 } }}
+              transition={{ duration: 0.2 }}
+            >
+              <ThinkingBubble />
+            </motion.div>
+          ) : null}
+        </AnimatePresence>
         <div ref={endRef} />
       </div>
     </div>
