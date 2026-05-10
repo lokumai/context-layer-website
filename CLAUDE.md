@@ -18,6 +18,7 @@ The project follows **Goal-Driven Development** — the docs below describe *wha
 | [docs/PHASES.md](docs/PHASES.md) | High-level milestones (NOT a micro-task list) — read the lessons-learned block at the top |
 | [docs/IMPROVE.md](docs/IMPROVE.md) | Active polish backlog — UX deltas requested by the founder |
 | [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) | Docker → GHCR → DigitalOcean App Platform pipeline |
+| [docs/DEMO_STORIES.md](docs/DEMO_STORIES.md) | Step-by-step "without vs. with" demo scripts for the playground |
 | `docs/sample_pages/` and `docs/screenshots/` | Visual references — inspiration, not copy-paste templates |
 
 **If your context has been compacted and you are uncertain about SEED / UI_UX / DESIGN content, re-read those three before continuing.**
@@ -51,8 +52,7 @@ packages/
   mcp/           Streamable-HTTP MCP server (port 8765)
   config/        Shared tsconfig, biome, eslint stubs
 deploy/docker/   Dockerfiles for web + mcp images
-.do/             DigitalOcean App Platform spec
-.github/workflows/  CI + deploy pipelines
+.github/workflows/  CI + deploy pipelines (build-push.yaml, deploy-pages.yaml)
 ```
 
 `packages/mocks` is the **stable service abstraction** every UI surface consumes (`getWorkspace`, `listSources`, `getWikiTree`, `listArtifacts`, …). When real agents arrive later, only the loader implementation changes — UI never moves.
@@ -144,8 +144,8 @@ State is persisted per-persona via Zustand. Switching personas should reset the 
 
 ## 9. Testing Instructions
 
-- Unit tests: Vitest. Co-locate `*.test.ts(x)` next to the file under test.
-- E2E: Playwright lives in `apps/web/tests/`.
+- Unit tests: Vitest. Web app tests live in `apps/web/src/__tests__/`. Co-locating `*.test.ts(x)` next to the file under test is also acceptable for new packages.
+- E2E: Playwright configs live in both `apps/web/playwright.config.ts` and `apps/marketing/playwright.config.ts`.
 - Run `bun run test` from the repo root before opening a PR.
 - For UI/UX changes: type-checks pass ≠ feature works. Always start `bun dev` and exercise the actual page in a browser. If you cannot open a browser, say so explicitly — do not claim success.
 - At the end of every phase (per [docs/PHASES.md](docs/PHASES.md)), run the full suite (unit + e2e + visual) before marking it complete.
@@ -158,7 +158,7 @@ State is persisted per-persona via Zustand. Switching personas should reset the 
 - Conventional-commit-ish prefixes are fine (`feat:`, `fix:`, `chore:`) — match recent history (see `git log`).
 - Include screenshots or short clips for any visible UI change.
 - Never push directly to `main`. PR + review.
-- `git push` to `main` triggers the production deploy via GitHub Actions (`.github/workflows/deploy.yaml`) — only push when you intend to ship.
+- `git push` to `main` triggers production deploys via GitHub Actions: `deploy-pages.yaml` (marketing → GitHub Pages) and `build-push.yaml` (web + mcp images → GHCR, picked up by DigitalOcean). Only push when you intend to ship.
 
 ---
 
@@ -192,9 +192,9 @@ After the subagent returns, **review and verify the actual changes**. The summar
 
 ## 13. Deployment
 
-- **Marketing**: Pushed to `main` → GitHub Actions → GitHub Pages.
-- **Playground**: Pushed to `main` → GHCR build → `doctl apps update` → DigitalOcean.
-- See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for full dual-target setup, secrets, and local Docker testing.
+- **Marketing**: Push to `main` → `deploy-pages.yaml` builds the static export and publishes to GitHub Pages.
+- **Playground + MCP**: Push to `main` → `build-push.yaml` builds Docker images and pushes them to GHCR (`context-layer-web`, `context-layer-mcp`); DigitalOcean App Platform pulls the new tags and rolls out.
+- See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for full dual-target setup, secrets, the `.do/app.yaml` spec, and local Docker testing.
 
 ---
 
