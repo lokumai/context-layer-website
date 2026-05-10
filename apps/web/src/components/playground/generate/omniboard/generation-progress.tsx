@@ -76,7 +76,7 @@ export function OmniBoardGenerationProgress({
         </p>
 
         <div className="text-left">
-          <TrickleLogs topic="omniboard" />
+          <TrickleLogs topic="omniboard" complete={completedRef.current} />
         </div>
       </div>
     </div>

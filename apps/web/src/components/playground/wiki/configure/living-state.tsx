@@ -53,9 +53,12 @@ export function LivingState({
             <StatusPill tone="info">Persistent · Versioned</StatusPill>
           </div>
           <h2 className="text-card-heading text-black">Your Wiki is live.</h2>
-          <p className="text-caption text-[#4e4e4e]">
-            WikiSync maintains it automatically on the schedule below.
-          </p>
+      <div className="space-y-4">
+        <p className="text-caption text-[#4e4e4e]">
+          WikiSync maintains it automatically on the schedule below.
+        </p>
+        {syncing && <TrickleLogs topic="wiki" />}
+      </div>
         </div>
       </header>
 

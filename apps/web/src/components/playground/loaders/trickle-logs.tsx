@@ -60,12 +60,20 @@ export function pickLine(topic: TrickleTopic, tick: number): string {
   return list[tick % list.length];
 }
 
-export function TrickleLogs({ topic, paused = false }: { topic: TrickleTopic; paused?: boolean }) {
+export function TrickleLogs({
+  topic,
+  paused = false,
+  complete = false,
+}: {
+  topic: TrickleTopic;
+  paused?: boolean;
+  complete?: boolean;
+}) {
   const [lines, setLines] = useState<Array<{ id: number; text: string }>>([]);
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    if (paused) return;
+    if (paused || complete) return;
     let tick = 0;
     let nextId = 0;
     const interval = setInterval(() => {
@@ -78,7 +86,7 @@ export function TrickleLogs({ topic, paused = false }: { topic: TrickleTopic; pa
       });
     }, TICK_MS);
     return () => clearInterval(interval);
-  }, [topic, paused]);
+  }, [topic, paused, complete]);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -94,11 +102,20 @@ export function TrickleLogs({ topic, paused = false }: { topic: TrickleTopic; pa
     >
       <ul className="space-y-1">
         {lines.map((l) => (
-          <li key={l.id} className="leading-relaxed animate-in fade-in slide-in-from-bottom-1 duration-200">
+          <li
+            key={l.id}
+            className="leading-relaxed animate-in fade-in slide-in-from-bottom-1 duration-200"
+          >
             <span className="text-[#9ca3af] mr-2">›</span>
             {l.text}
           </li>
         ))}
+        {complete && lines.length > 0 && (
+          <li className="leading-relaxed text-[#047857] font-bold animate-in fade-in duration-300">
+            <span className="mr-2">✓</span>
+            Process complete.
+          </li>
+        )}
       </ul>
     </div>
   );

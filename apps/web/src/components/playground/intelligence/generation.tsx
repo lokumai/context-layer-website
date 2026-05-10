@@ -200,7 +200,7 @@ function GenerationInProgress({
         </button>
       </header>
 
-      <TrickleLogs topic="intelligence" />
+      <TrickleLogs topic="intelligence" complete={currentStep >= STEPS.length} />
 
       <div className="h-1.5 w-full bg-[#f5f5f5] rounded-pill overflow-hidden">
         <div

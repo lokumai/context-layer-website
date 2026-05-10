@@ -106,7 +106,7 @@ export function GenerationInProgress({
         </button>
       </header>
 
-      <TrickleLogs topic="wiki" />
+      <TrickleLogs topic="wiki" complete={currentStep >= STEPS.length} />
 
       <div className="h-1.5 w-full bg-[#f5f5f5] rounded-pill overflow-hidden">
         <div
