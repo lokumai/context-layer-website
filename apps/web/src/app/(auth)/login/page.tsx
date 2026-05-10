@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
@@ -52,12 +51,12 @@ function LoginInner() {
       <div className="w-full max-w-[440px] space-y-10">
         <div className="flex justify-center">
           <Link href="/" aria-label="Back to home">
-            <Image
+            {/* biome-ignore lint/performance/noImgElement: logo should render immediately on first paint */}
+            <img
               src="/logo-landscape.svg"
               alt="Context Layer"
               width={320}
               height={72}
-              priority
               className="h-auto w-[320px]"
             />
           </Link>
