@@ -44,17 +44,17 @@ export function GenerationInProgress({
 }: Props) {
   const [expanded, setExpanded] = useState<Record<number, boolean>>({ 0: true });
   const cancelled = useRef(false);
-  const started = useRef(false);
+
+  const onStepAdvanceRef = useRef(onStepAdvance);
+  const onCompleteRef = useRef(onComplete);
 
   useEffect(() => {
-    if (currentStep === 0) {
-      started.current = false;
-    }
-  }, [currentStep]);
+    onStepAdvanceRef.current = onStepAdvance;
+    onCompleteRef.current = onComplete;
+  }, [onStepAdvance, onComplete]);
 
   useEffect(() => {
-    if (started.current) return;
-    started.current = true;
+    let active = true;
     (async () => {
       const iter = simulateJob([...STEPS], () => undefined, {
         totalMs: 5500,
@@ -63,21 +63,21 @@ export function GenerationInProgress({
       let stepIdx = 0;
       while (true) {
         const next = await iter.next();
-        if (cancelled.current) return;
+        if (!active || cancelled.current) return;
         if (next.done) break;
         const fragment = LOG_FRAGMENTS[stepIdx % LOG_FRAGMENTS.length];
-        onStepAdvance(
+        onStepAdvanceRef.current(
           stepIdx,
           `[${new Date().toISOString().slice(11, 19)}] ${fragment} ${next.value.step}`,
         );
         stepIdx += 1;
       }
-      if (!cancelled.current) onComplete();
+      if (active && !cancelled.current) onCompleteRef.current();
     })();
     return () => {
-      cancelled.current = true;
+      active = false;
     };
-  }, [onStepAdvance, onComplete]);
+  }, []);
 
   function handleCancel() {
     if (window.confirm("Cancel Wiki generation?")) {
