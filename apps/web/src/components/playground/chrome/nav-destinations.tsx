@@ -1,7 +1,7 @@
 "use client";
 
-import { BookOpen, ChevronDown, Inbox, Library, Lock, MessageSquare, Sparkles } from "lucide-react";
-import { LayoutGroup, motion } from "motion/react";
+import { BookOpen, ChevronDown, Inbox, Library, Lock, MessageSquare, Sparkles, FileText, BrainCircuit, LayoutDashboard, Terminal } from "lucide-react";
+import { LayoutGroup, motion, AnimatePresence } from "motion/react";
 import { usePathname } from "next/navigation";
 import { type ReactNode, useEffect, useRef, useState } from "react";
 import { LAYOUT_SPRING } from "@/lib/motion/spring";
@@ -28,7 +28,7 @@ export function NavDestinations({ workspaceId, hasWiki, sourceCount }: Props) {
     label: string;
     href?: string;
     icon: ReactNode;
-    dropdown?: Array<{ label: string; href: string }>;
+    dropdown?: Array<{ label: string; href: string; icon: ReactNode }>;
     locked: boolean;
   }> = [
     {
@@ -41,8 +41,8 @@ export function NavDestinations({ workspaceId, hasWiki, sourceCount }: Props) {
       label: "Knowledge",
       icon: <BookOpen size={14} strokeWidth={1.5} />,
       dropdown: [
-        { label: "Wiki", href: `${base}/wiki/status` },
-        { label: "Intelligence", href: `${base}/intelligence` },
+        { label: "Wiki", href: `${base}/wiki/status`, icon: <FileText size={14} strokeWidth={1.5} /> },
+        { label: "Intelligence", href: `${base}/intelligence`, icon: <BrainCircuit size={14} strokeWidth={1.5} /> },
       ],
       locked: knowledgeLocked,
     },
@@ -56,9 +56,9 @@ export function NavDestinations({ workspaceId, hasWiki, sourceCount }: Props) {
       label: "Generate",
       icon: <Sparkles size={14} strokeWidth={1.5} />,
       dropdown: [
-        { label: "DocsGen", href: `${base}/generate/docsgen` },
-        { label: "OmniBoard", href: `${base}/generate/omniboard` },
-        { label: "MCPGen", href: `${base}/generate/mcpgen` },
+        { label: "DocsGen", href: `${base}/generate/docsgen`, icon: <FileText size={14} strokeWidth={1.5} /> },
+        { label: "OmniBoard", href: `${base}/generate/omniboard`, icon: <LayoutDashboard size={14} strokeWidth={1.5} /> },
+        { label: "MCPGen", href: `${base}/generate/mcpgen`, icon: <Terminal size={14} strokeWidth={1.5} /> },
       ],
       locked: downstreamLocked,
     },
@@ -76,7 +76,9 @@ export function NavDestinations({ workspaceId, hasWiki, sourceCount }: Props) {
     <LayoutGroup id="playground-nav">
       <div className="flex items-center gap-1" data-testid="nav-destinations">
         {items.map((item) => {
-          const isActive = item.href ? pathname.startsWith(item.href) : false;
+          const isActive = item.href
+            ? pathname.startsWith(item.href)
+            : (item.dropdown?.some((d) => pathname.startsWith(d.href)) ?? false);
           return (
             <NavItem
               key={item.label}
@@ -105,7 +107,7 @@ function NavItem({
   label: string;
   href?: string;
   icon: ReactNode;
-  dropdown?: Array<{ label: string; href: string }>;
+  dropdown?: Array<{ label: string; href: string; icon: ReactNode }>;
   locked: boolean;
   active: boolean;
 }) {
@@ -170,7 +172,7 @@ function NavItem({
 
   if (dropdown) {
     return (
-      <div ref={ref} className="relative">
+      <div ref={ref} className="relative z-50">
         <button
           type="button"
           className={`${baseShell} ${tone} group`}
@@ -186,20 +188,29 @@ function NavItem({
             <ChevronDown size={12} strokeWidth={1.5} />
           </span>
         </button>
-        {open ? (
-          <div className="absolute top-full left-0 mt-1 min-w-[180px] bg-white rounded-card shadow-[var(--shadow-card)] border border-[rgba(0,0,0,0.05)] overflow-hidden">
-            {dropdown.map((d) => (
-              <a
-                key={d.label}
-                href={d.href}
-                className="block px-3 py-2 text-nav text-black hover:bg-[#f9f9f9]"
-                onClick={() => setOpen(false)}
-              >
-                {d.label}
-              </a>
-            ))}
-          </div>
-        ) : null}
+        <AnimatePresence>
+          {open ? (
+            <motion.div
+              initial={{ opacity: 0, y: -5 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -5 }}
+              transition={{ duration: 0.15 }}
+              className="absolute top-full left-0 mt-1 min-w-[180px] bg-white rounded-card shadow-[var(--shadow-card)] border border-[rgba(0,0,0,0.05)] overflow-hidden"
+            >
+              {dropdown.map((d) => (
+                <a
+                  key={d.label}
+                  href={d.href}
+                  className="flex items-center gap-2 px-3 py-2 text-nav text-black hover:bg-[#f9f9f9]"
+                  onClick={() => setOpen(false)}
+                >
+                  {d.icon}
+                  <span>{d.label}</span>
+                </a>
+              ))}
+            </motion.div>
+          ) : null}
+        </AnimatePresence>
       </div>
     );
   }

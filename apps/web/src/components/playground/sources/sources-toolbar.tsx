@@ -2,6 +2,8 @@
 
 import type { SourceKind } from "@context-layer/mocks";
 import { LayoutGrid, List, Plus, Search } from "lucide-react";
+import { LayoutGroup, motion } from "motion/react";
+import { LAYOUT_SPRING } from "@/lib/motion/spring";
 import { useStore } from "@/stores";
 
 export type SourceFilter = "all" | SourceKind;
@@ -48,19 +50,29 @@ export function SourcesToolbar({
             className="w-full pl-11 pr-4 py-2.5 rounded-pill shadow-[var(--shadow-card)] bg-white text-body-standard focus:outline-none focus:shadow-[var(--shadow-outline-ring)] transition-shadow"
           />
         </div>
-        <div className="flex p-1 bg-white rounded-pill shadow-[var(--shadow-card)]">
-          {FILTERS.map((f) => (
-            <button
-              key={f.id}
-              type="button"
-              onClick={() => setFilter(f.id)}
-              className={`px-4 py-1.5 rounded-pill text-caption font-medium transition-colors ${filter === f.id ? "bg-[#f5f2ef] text-black" : "text-[#777169] hover:text-black hover:bg-[#f9f9f9]"}`}
-              data-testid={`filter-${f.id}`}
-            >
-              {f.label}
-            </button>
-          ))}
-        </div>
+        <LayoutGroup id="source-filters">
+          <div className="flex p-1 bg-white rounded-pill shadow-[var(--shadow-card)]">
+            {FILTERS.map((f) => (
+              <button
+                key={f.id}
+                type="button"
+                onClick={() => setFilter(f.id)}
+                className={`relative px-4 py-1.5 rounded-pill text-caption font-medium transition-colors ${filter === f.id ? "text-black" : "text-[#777169] hover:text-black hover:bg-[#f9f9f9]"}`}
+                data-testid={`filter-${f.id}`}
+              >
+                {filter === f.id && (
+                  <motion.span
+                    layoutId="filter-active-bg"
+                    transition={LAYOUT_SPRING}
+                    className="absolute inset-0 rounded-pill bg-[#f5f2ef]"
+                    aria-hidden
+                  />
+                )}
+                <span className="relative z-[1]">{f.label}</span>
+              </button>
+            ))}
+          </div>
+        </LayoutGroup>
         <div className="flex p-1 bg-white rounded-pill shadow-[var(--shadow-card)]">
           <button
             type="button"

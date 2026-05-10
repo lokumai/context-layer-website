@@ -2,9 +2,11 @@
 "use client";
 
 import type { Citation } from "@context-layer/mocks";
-import { BookOpen, Code2, ExternalLink, File as FileIcon, X } from "lucide-react";
+import { BookOpen, Code2, ExternalLink, File as FileIcon, Maximize2, Minimize2, X } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
 import Link from "next/link";
 import { createContext, type ReactNode, useCallback, useContext, useState } from "react";
+import { CONTEXT_SPRING } from "@/lib/motion/spring";
 
 // Citations are a first-class primitive (UI_UX §9.7): clicking any chip —
 // whether rendered inside the full Chatbot page or the side-panel — opens
@@ -27,13 +29,16 @@ export function CitationProvider({ children }: { children: ReactNode }) {
   return (
     <Ctx.Provider value={{ open }}>
       {children}
-      {active ? (
-        <CitationDrawer
-          citation={active.citation}
-          workspaceId={active.workspaceId}
-          onClose={() => setActive(null)}
-        />
-      ) : null}
+      <AnimatePresence>
+        {active ? (
+          <CitationDrawer
+            key="drawer"
+            citation={active.citation}
+            workspaceId={active.workspaceId}
+            onClose={() => setActive(null)}
+          />
+        ) : null}
+      </AnimatePresence>
     </Ctx.Provider>
   );
 }
@@ -90,34 +95,59 @@ function CitationDrawer({
         ? "Code Reference"
         : "File Reference";
   const wikiHref = citation.kind === "wiki" ? wikiAnchorToPath(citation.anchor, workspaceId) : null;
+  const [expanded, setExpanded] = useState(false);
+  const width = expanded ? 900 : 520;
 
   return (
     <>
-      <div className="fixed inset-0 bg-black/10 z-[60]" onClick={onClose} aria-hidden="true" />
-      <aside
-        className="fixed right-0 top-0 h-screen w-full max-w-[520px] bg-white shadow-[var(--shadow-card)] z-[70] flex flex-col animate-in slide-in-from-right duration-200"
+      <motion.div
+        className="fixed inset-0 bg-black/10 z-[60]"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.15 }}
+        onClick={onClose}
+        aria-hidden="true"
+      />
+      <motion.aside
+        className="fixed right-0 top-0 h-screen w-full max-w-[100vw] bg-white shadow-[var(--shadow-card)] z-[70] flex flex-col"
+        initial={{ x: "100%" }}
+        animate={{ x: 0, width }}
+        exit={{ x: "100%" }}
+        transition={CONTEXT_SPRING}
+        style={{ width }}
         role="dialog"
         aria-label="Citation details"
         data-testid="citation-drawer"
       >
-        <header className="px-6 py-4 border-b border-[rgba(0,0,0,0.06)] flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-[10px] bg-[#f5f2ef] text-[#4e4e4e] flex items-center justify-center">
+        <header className="px-6 py-4 border-b border-[rgba(0,0,0,0.06)] flex items-center justify-between shrink-0">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="w-9 h-9 shrink-0 rounded-[10px] bg-[#f5f2ef] text-[#4e4e4e] flex items-center justify-center">
               <Icon size={18} strokeWidth={1.5} />
             </div>
-            <div>
+            <div className="min-w-0">
               <p className="text-caption text-[#777169] uppercase tracking-[0.08em]">{kindLabel}</p>
-              <h3 className="text-card-heading text-black">{citation.label}</h3>
+              <h3 className="text-card-heading text-black truncate">{citation.label}</h3>
             </div>
           </div>
-          <button
-            type="button"
-            onClick={onClose}
-            className="p-1.5 rounded-full hover:bg-[#f5f2ef] transition-colors"
-            aria-label="Close"
-          >
-            <X size={18} strokeWidth={1.5} />
-          </button>
+          <div className="flex items-center gap-1 shrink-0 ml-4">
+            <button
+              type="button"
+              onClick={() => setExpanded((v) => !v)}
+              className="p-1.5 rounded-full hover:bg-[#f5f2ef] transition-colors"
+              aria-label={expanded ? "Collapse panel" : "Expand panel"}
+            >
+              {expanded ? <Minimize2 size={16} strokeWidth={1.5} /> : <Maximize2 size={16} strokeWidth={1.5} />}
+            </button>
+            <button
+              type="button"
+              onClick={onClose}
+              className="p-1.5 rounded-full hover:bg-[#f5f2ef] transition-colors"
+              aria-label="Close"
+            >
+              <X size={18} strokeWidth={1.5} />
+            </button>
+          </div>
         </header>
 
         <div className="flex-1 overflow-y-auto px-6 py-5 space-y-4">
@@ -169,7 +199,7 @@ function CitationDrawer({
             </div>
           ) : null}
         </div>
-      </aside>
+      </motion.aside>
     </>
   );
 }
