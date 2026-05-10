@@ -141,6 +141,12 @@ function GenerationInProgress({
   const started = useRef(false);
 
   useEffect(() => {
+    if (currentStep === 0) {
+      started.current = false;
+    }
+  }, [currentStep]);
+
+  useEffect(() => {
     if (started.current) return;
     started.current = true;
     (async () => {
