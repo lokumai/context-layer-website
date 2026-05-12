@@ -290,8 +290,22 @@ Production build: all 4 marketing routes statically prerendered; middleware 92 k
 
 ## Phase 21: Website & Playground Architectural Separation
 * **Status:** `[x] Complete`
-...
-  * **Verification** — `bun run build` successful for both workspaces; `bun run lint` (Biome) passing repo-wide; E2E tests stabilized with hydration-aware sign-in logic.
+* **Goal:** Decouple the marketing site from the playground to enable static-site delivery for marketing (GitHub Pages) and an independent deploy cadence for the dynamic playground (DigitalOcean).
+* **Decision:** Option 1 — separate deployable apps. A pre-implementation analysis (`docs/REFACTOR.md`, now merged here) identified 10 risks and a 3-phase execution track. All go/no-go criteria were satisfied before merging.
+* **Delivered:**
+  * **`apps/marketing`** — new Next.js app configured for `output: "export"` (GitHub Pages). Replicated global styles (`globals.css`), Tailwind setup, Raleway + Inter font loading, and a minimal root layout with no auth/session providers.
+  * **Shared UI extraction** — `components/marketing` and `components/motion` moved from `apps/web` into the new `@context-layer/ui` package (`packages/ui`). Both apps consume them from there.
+  * **Marketing routes migrated** — all `/(marketing)` routes (homepage, product pages, about) moved from `apps/web` to `apps/marketing/src/app/` with flattened routing (no `(marketing)` group).
+  * **Cross-domain CTAs** — introduced `NEXT_PUBLIC_PLAYGROUND_URL` env var. All "Open Playground" and "Login" links in the marketing app use it instead of relative paths so dev/staging/prod can each target a different playground host.
+  * **CI split** — `deploy-pages.yaml` builds and publishes `apps/marketing` static export to GitHub Pages; `build-push.yaml` builds and pushes Docker images for `apps/web` + `packages/mcp` to GHCR.
+  * **Biome-only linting** — purged all legacy ESLint configs repo-wide; `biome.json` at root is the single lint/format authority.
+  * **E2E split** — marketing playwright specs moved to `apps/marketing/e2e/`; assertions updated to check external `href` values rather than same-origin routing.
+  * **Key risks mitigated:**
+    * Cross-domain CTA breakage → `NEXT_PUBLIC_PLAYGROUND_URL`.
+    * GitHub Pages base-path pitfalls → custom domain configured; no `basePath` offset needed.
+    * Provider leakage → marketing root layout has no NextAuth / Zustand / hydration imports.
+    * CI ownership confusion → two independent workflow files with clear triggers.
+* **Verification** — `bun run build` successful for both workspaces; `bun run lint` (Biome) passing repo-wide; E2E tests stabilized with hydration-aware sign-in logic.
 
 ## Phase 22: Next.js 16 & React 19.2 Platform Upgrade
 * **Status:** `[x] Complete`
