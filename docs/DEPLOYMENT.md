@@ -122,16 +122,54 @@ If both containers serve their health checks, the production deploy will too —
 
 ---
 
-## Connecting Claude Desktop to the remote MCP
+## Connecting an AI agent to the MCP server
 
-After the DO deploy is live, update Claude Desktop's config (macOS path: `~/Library/Application Support/Claude/claude_desktop_config.json`):
+### Local development
 
+With `bun dev` running, the server is live at `http://localhost:8765/mcp` with no auth.
+
+**Claude Code** — one command, no token:
+```sh
+claude mcp add --transport http context-layer http://localhost:8765/mcp
+```
+
+Verify: `claude mcp list` → `context-layer … ✓ Connected`
+
+To remove: `claude mcp remove context-layer`
+
+**Claude Desktop** (`~/Library/Application Support/Claude/claude_desktop_config.json`):
 ```json
 {
   "mcpServers": {
     "context-layer": {
+      "type": "http",
+      "url": "http://localhost:8765/mcp"
+    }
+  }
+}
+```
+Restart Claude Desktop after editing the file.
+
+---
+
+### Production (DigitalOcean)
+
+After the DO deploy is live, the MCP endpoint is at `/mcp-api/mcp` and requires the bearer token you set as an encrypted env var.
+
+**Claude Code**:
+```sh
+claude mcp add --transport http context-layer \
+  https://<your-do-app>.ondigitalocean.app/mcp-api/mcp \
+  -H "Authorization: Bearer <CONTEXT_LAYER_TOKEN>"
+```
+
+**Claude Desktop** (`~/Library/Application Support/Claude/claude_desktop_config.json`):
+```json
+{
+  "mcpServers": {
+    "context-layer": {
+      "type": "http",
       "url": "https://<your-do-app>.ondigitalocean.app/mcp-api/mcp",
-      "transport": "streamable-http",
       "headers": {
         "Authorization": "Bearer <CONTEXT_LAYER_TOKEN>"
       }
@@ -140,13 +178,10 @@ After the DO deploy is live, update Claude Desktop's config (macOS path: `~/Libr
 }
 ```
 
-Restart Claude Desktop. The three tools (`get_wiki_content`, `get_code_intelligence`, `ask_context_layer`) should appear in the tool picker. If they don't:
-
-1. Hit `/mcp-api/healthz` directly — confirm 200 + `{ ok: true }`.
-2. Send a test POST to `/mcp-api/mcp` with a fresh bearer (see the `curl` example above) — confirm the server doesn't 401.
+If the tools don't appear after connecting:
+1. Hit `https://<your-do-app>.ondigitalocean.app/mcp-api/healthz` — confirm `{ ok: true }`.
+2. Check the token: `curl -H "Authorization: Bearer <token>" https://<your-do-app>.ondigitalocean.app/mcp-api/mcp` — should not 401.
 3. Tail DO logs: `doctl apps logs <APP_ID> --component mcp --follow`.
-
-Cursor uses the same JSON shape under its MCP settings.
 
 ---
 

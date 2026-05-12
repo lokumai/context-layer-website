@@ -41,24 +41,59 @@ Restart Claude Desktop; the three tools appear in the tool picker.
 
 Same JSON under the editor's MCP settings. Any client that speaks stdio-based MCP will work.
 
-### Running over HTTP (Phase 18)
+### Running over HTTP
 
-For remote demos / containerised deployments the package also ships a Streamable-HTTP entrypoint:
+`bun dev` from the monorepo root starts the server automatically on port 8765 with no auth required (local dev mode). To run it standalone:
 
 ```bash
-PORT=8765 CONTEXT_LAYER_TOKEN=demo bun --cwd packages/mcp run start:http
-# → http://localhost:8765/mcp  (auth: bearer required)
+bun --cwd packages/mcp run start:http
+# → http://localhost:8765/mcp  (auth: open)
 # → http://localhost:8765/healthz
 ```
 
-Once published, an MCP client config that targets the remote endpoint looks like:
+#### Connect Claude Code (local dev)
+
+Run once — no token needed:
+
+```sh
+claude mcp add --transport http context-layer http://localhost:8765/mcp
+```
+
+That's it. Verify with `claude mcp list` — you should see `✓ Connected`.
+
+#### Connect Claude Desktop (local dev)
+
+Add to `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) and restart the app:
 
 ```json
 {
   "mcpServers": {
-    "context-layer-remote": {
-      "url": "https://your-deployment.example.com/mcp",
-      "transport": "streamable-http",
+    "context-layer": {
+      "type": "http",
+      "url": "http://localhost:8765/mcp"
+    }
+  }
+}
+```
+
+#### Connect to the production deployment
+
+When `CONTEXT_LAYER_TOKEN` is set on the server (DigitalOcean encrypted env var), every request must include the bearer. Add it to the config:
+
+```sh
+claude mcp add --transport http context-layer \
+  https://<your-do-app>.ondigitalocean.app/mcp-api/mcp \
+  -H "Authorization: Bearer <CONTEXT_LAYER_TOKEN>"
+```
+
+Or in `~/.claude.json`:
+
+```json
+{
+  "mcpServers": {
+    "context-layer": {
+      "type": "http",
+      "url": "https://<your-do-app>.ondigitalocean.app/mcp-api/mcp",
       "headers": {
         "Authorization": "Bearer <CONTEXT_LAYER_TOKEN>"
       }
