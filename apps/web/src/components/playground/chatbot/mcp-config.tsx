@@ -13,13 +13,9 @@ export function McpConfigModal({ workspaceId, onClose }: Props) {
 
   const snippet = `{
   "mcpServers": {
-    "context-layer-${workspaceId}": {
-      "command": "npx",
-      "args": ["-y", "@context-layer/mcp"],
-      "env": {
-        "CONTEXT_LAYER_WORKSPACE": "${workspaceId}",
-        "CONTEXT_LAYER_TOKEN": "<your-token>"
-      }
+    "context-layer": {
+      "type": "http",
+      "url": "http://localhost:8765/mcp"
     }
   }
 }`;
@@ -67,12 +63,8 @@ export function McpConfigModal({ workspaceId, onClose }: Props) {
 
         <div className="px-6 py-5 space-y-4">
           <p className="text-body text-[#4e4e4e]">
-            Paste this into{" "}
-            <code className="font-mono text-body-medium text-black bg-[#f5f2ef] rounded px-1">
-              claude_desktop_config.json
-            </code>{" "}
-            or your editor's MCP settings to expose this workspace's Wiki, Intelligence, and chatbot
-            to external AI agents.
+            Add to your MCP client config — Claude Code, Claude Desktop, Cursor, or any HTTP MCP
+            client — to expose this workspace's Wiki, Intelligence, and Q&A to external AI agents.
           </p>
 
           <div className="relative rounded-card bg-[#0f0f0f] text-[#e4e4e4] font-mono text-caption px-4 py-3 overflow-x-auto">
@@ -94,7 +86,7 @@ export function McpConfigModal({ workspaceId, onClose }: Props) {
           <p className="text-caption text-[#777169]">
             Tools exposed: <code className="font-mono">get_wiki_content</code>,{" "}
             <code className="font-mono">get_code_intelligence</code>,{" "}
-            <code className="font-mono">ask_context_layer</code>. Full MCP server ships in Phase 12.
+            <code className="font-mono">ask_context_layer</code>. Requires <code className="font-mono">bun dev</code> running locally.
           </p>
         </div>
       </div>
