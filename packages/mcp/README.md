@@ -14,56 +14,21 @@ This package is the mock-backed MVP — it reads from the `@context-layer/mocks`
 
 ---
 
-## Install & connect
+## Connect
 
-### Claude Desktop
+Start the server first — `bun dev` from the monorepo root starts it on port 8765 automatically.
 
-Add to `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) or the equivalent on Windows / Linux:
-
-```json
-{
-  "mcpServers": {
-    "context-layer": {
-      "command": "npx",
-      "args": ["-y", "@context-layer/mcp"],
-      "env": {
-        "CONTEXT_LAYER_WORKSPACE": "microservices-product-catalog",
-        "CONTEXT_LAYER_TOKEN": "<your-token>"
-      }
-    }
-  }
-}
-```
-
-Restart Claude Desktop; the three tools appear in the tool picker.
-
-### Cursor / Windsurf
-
-Same JSON under the editor's MCP settings. Any client that speaks stdio-based MCP will work.
-
-### Running over HTTP
-
-`bun dev` from the monorepo root starts the server automatically on port 8765 with no auth required (local dev mode). To run it standalone:
-
-```bash
-bun --cwd packages/mcp run start:http
-# → http://localhost:8765/mcp  (auth: open)
-# → http://localhost:8765/healthz
-```
-
-#### Connect Claude Code (local dev)
-
-Run once — no token needed:
+### Claude Code
 
 ```sh
 claude mcp add --transport http context-layer http://localhost:8765/mcp
 ```
 
-That's it. Verify with `claude mcp list` — you should see `✓ Connected`.
+Verify: `claude mcp list` → `context-layer … ✓ Connected`
 
-#### Connect Claude Desktop (local dev)
+### Claude Desktop
 
-Add to `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) and restart the app:
+Add to `~/Library/Application Support/Claude/claude_desktop_config.json` and restart the app:
 
 ```json
 {
@@ -76,17 +41,19 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS)
 }
 ```
 
-#### Connect to the production deployment
+### Cursor / Windsurf / any HTTP MCP client
 
-When `CONTEXT_LAYER_TOKEN` is set on the server (DigitalOcean encrypted env var), every request must include the bearer. Add it to the config:
+Point at `http://localhost:8765/mcp`, transport type `http`. No token needed for local dev.
+
+### Production (DigitalOcean)
+
+The deployed endpoint is at `/mcp-api/mcp` and requires the bearer token set as an encrypted env var on the server:
 
 ```sh
 claude mcp add --transport http context-layer \
   https://<your-do-app>.ondigitalocean.app/mcp-api/mcp \
   -H "Authorization: Bearer <CONTEXT_LAYER_TOKEN>"
 ```
-
-Or in `~/.claude.json`:
 
 ```json
 {
