@@ -68,7 +68,7 @@ Use these commands to work on specific parts of the ecosystem without starting e
 Sign in via `/login` using the following passwords (set in `.env.local`):
 - `empty`: Zero-state onboarding
 - `partial`: Active sources, no Wiki generated
-- `full`: Complete 9-repo workspace with Wiki, Intelligence, and Chatbot history
+- `full`: Complete workspace (9 code repos + 5 supplementary sources) with Wiki, Intelligence, and Chatbot history
 
 ---
 

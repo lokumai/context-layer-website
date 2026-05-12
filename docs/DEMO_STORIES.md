@@ -4,6 +4,38 @@ This document provides step-by-step copy-paste scripts to demonstrate the value 
 
 ---
 
+## Setup
+
+### 1. Start the Context Layer server
+
+From the `context-layer-website` repo:
+
+```sh
+bun dev
+# MCP server starts automatically on http://localhost:8765/mcp
+```
+
+### 2. Register the MCP server with Claude Code
+
+```sh
+claude mcp add --transport http context-layer http://localhost:8765/mcp
+```
+
+Verify: `claude mcp list` → `context-layer … ✓ Connected`
+
+### 3. Open the demo target repo
+
+```sh
+cd /path/to/microservices-product-catalog
+claude  # opens Claude Code in that repo
+```
+
+### 4. Brief the agent with the Siloed Persona
+
+Paste the `--- BEGIN SILOED-AGENT-PERSONA ---` block from [`AGENTS.md`](../AGENTS.md) into the Claude Code prompt. This puts the agent in "Without" mode.
+
+---
+
 ## 🎭 The "Siloed Agent" Setup
 
 Before running these stories, ensure the AI agent (Claude Code, Cursor, etc.) is briefed with the **Siloed Agent Persona** defined in [`AGENTS.md`](../AGENTS.md). 

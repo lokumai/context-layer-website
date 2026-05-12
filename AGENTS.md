@@ -82,7 +82,7 @@ packages/
       scripts/
       __tests__/
   config/                             Shared tsconfig, biome, eslint stubs
-deploy/docker/                        Dockerfiles for web + mcp images
+deploy/docker/                        Docker Compose files (docker-compose.dev.yml, docker-compose.prod.yml)
 .github/workflows/                    CI + deploy pipelines (build-push.yaml, deploy-pages.yaml)
 ```
 
@@ -167,7 +167,7 @@ The playground is mock-first. Sign in via `/login` with passwords set in `.env.l
 |---|---|
 | `empty` | Zero-state — only the "create workspace" wizard is reachable |
 | `partial` | Sources added, no Wiki generated yet — partial gating |
-| `full` | Complete 9-repo workspace with Wiki, Intelligence, and Chatbot history |
+| `full` | Complete workspace (9 code repos + 5 supplementary sources) with Wiki, Intelligence, and Chatbot history |
 
 State is persisted per-persona via Zustand. Switching personas should reset the visible state cleanly.
 

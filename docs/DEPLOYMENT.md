@@ -29,13 +29,16 @@ You only do this once.
 
 ### 1. Create the DigitalOcean App
 
-```sh
-doctl apps create --spec .do/app.yaml
-```
+Create the app in the DO console (Apps → Create App → select "Container Registry" → GHCR) or via the CLI with a spec file. A `.do/app.yaml` spec is not checked into this repo — configure the two services manually:
 
-The command prints an app id (a UUID). Save it — you'll need it as a GitHub repo secret.
+| Service | Image | Port | Health path |
+|---------|-------|------|-------------|
+| `web` | `ghcr.io/<owner>/context-layer-web:latest` | 3000 | `/` |
+| `mcp` | `ghcr.io/<owner>/context-layer-mcp:latest` | 8765 | `/healthz` |
 
-> If `doctl apps create` rejects the spec because the GHCR images don't exist yet, push to `main` first to populate GHCR, then re-run.
+Set the HTTP route for `mcp` to `/mcp-api` with `preserve_path_prefix: false`.
+
+> Push to `main` first to populate GHCR images before creating the DO app, otherwise the image pull will fail.
 
 ### 2. Configure GitHub repo secrets
 
@@ -75,13 +78,16 @@ In DO → Apps → context-layer → Settings → Components, set the **encrypte
 git push origin main
 ```
 
-GitHub Actions (`.github/workflows/deploy.yaml`) will:
+GitHub Actions (`.github/workflows/build-push.yaml`) will:
 
 1. Build `context-layer-web` and `context-layer-mcp` images in parallel.
 2. Push both to `ghcr.io/<owner>/...:latest` and `:<sha>`.
-3. Run `doctl apps update $DIGITALOCEAN_APP_ID --spec .do/app.yaml --wait`, which triggers a DO rollout.
 
-Total wall time: ~6–8 minutes from `git push` to live.
+**Note:** The CI workflow only builds and pushes images. It does **not** trigger a DigitalOcean rollout automatically. To deploy after the images are pushed, either:
+- Enable "Auto-deploy" in the DO console for both services (DO polls GHCR for new `latest` tags), or
+- Trigger manually: `doctl apps create-deployment <APP_ID>`
+
+Total image build time: ~4–6 minutes. DO rollout adds ~2 minutes on top.
 
 ---
 
