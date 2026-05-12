@@ -16,7 +16,7 @@ interface Started {
 }
 
 async function start(opts: { token?: string } = {}): Promise<Started> {
-  const server = await createHttpServer({ token: opts.token });
+  const server = createHttpServer({ token: opts.token });
   await new Promise<void>((resolve) => {
     server.listen(0, resolve);
   });

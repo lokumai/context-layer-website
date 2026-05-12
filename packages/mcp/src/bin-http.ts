@@ -16,7 +16,7 @@ const token = process.env.CONTEXT_LAYER_TOKEN;
 const workspace = process.env.CONTEXT_LAYER_WORKSPACE;
 
 async function main() {
-  const server = await createHttpServer({ workspace, token });
+  const server = createHttpServer({ workspace, token });
 
   server.listen(port, () => {
     const address = server.address();

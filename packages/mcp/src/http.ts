@@ -3,16 +3,6 @@ import { createServer, type IncomingMessage, type Server, type ServerResponse } 
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import { createMcpServer, type McpServerConfig } from "./server";
 
-// Phase 18 — HTTP transport entrypoint.
-//
-// Boots the existing createMcpServer() factory onto an MCP Streamable HTTP
-// transport (POST /mcp + GET /mcp for SSE notifications) plus a lightweight
-// /healthz route for monitoring + DigitalOcean health checks.
-//
-// Stateful mode: the transport mints a session id on initialize so the SDK
-// client's mandatory `notifications/initialized` POST is processed correctly.
-// Single-replica deployment target — no horizontal scaling concerns yet.
-
 export interface HttpServerConfig extends McpServerConfig {
   /** Bearer token required on every /mcp request. When undefined, auth is skipped (local dev). */
   token?: string;
@@ -25,38 +15,28 @@ export interface HttpServerConfig extends McpServerConfig {
 /**
  * Build a Node `http.Server` ready for `listen(port)`.
  *
- * The server speaks MCP at `/mcp` (both POST and GET) and replies with a
- * small JSON status object at `/healthz`. CORS is permissive so a
- * browser-based MCP client can connect during local demos.
+ * Each MCP session (identified by a fresh `initialize` POST without an
+ * `Mcp-Session-Id` header) gets its own McpServer + transport pair so that
+ * the protocol state machine resets cleanly between clients. Subsequent
+ * requests in the same session carry the `Mcp-Session-Id` header and are
+ * routed to the appropriate transport by the SDK.
  *
- * Returns a Promise<Server> because the underlying mcp.connect(transport)
- * handshake is async — awaiting it before we start accepting requests
- * eliminates a race window on the first POST.
+ * CORS is permissive for browser-based demo clients.
+ * Returns a Promise<Server> because the structure needs to be async-ready.
  */
-export async function createHttpServer(config: HttpServerConfig = {}): Promise<Server> {
-  const mcp = createMcpServer({ workspace: config.workspace, token: config.token });
-  // Stateful mode: the transport mints a session id on initialize and the
-  // SDK client honours it on subsequent requests. Stateless mode (sessionIdGenerator: undefined)
-  // doesn't accommodate the client's mandatory `notifications/initialized` POST.
-  const transport = new StreamableHTTPServerTransport({
-    sessionIdGenerator: () => randomUUID(),
-  });
-
-  // Connect the server → transport once. The transport handles session
-  // tracking internally; subsequent requests carry an `Mcp-Session-Id`
-  // header that the transport uses to route to the right state.
-  await mcp.connect(transport);
-
+export function createHttpServer(config: HttpServerConfig = {}): Server {
   const requireAuth = typeof config.token === "string" && config.token.length > 0;
   const expected = config.token ?? "";
   const version = config.version ?? "1.0.0";
   const name = config.name ?? "context-layer";
 
+  // Session registry: sessionId → live transport.
+  const sessions = new Map<string, StreamableHTTPServerTransport>();
+
   return createServer((req, res) => {
-    // CORS — permissive for the demo; `Mcp-Session-Id` exposed per the
-    // Streamable HTTP spec so browser-based clients can read it.
+    // CORS — permissive for demo; Mcp-Session-Id exposed per Streamable HTTP spec.
     res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS");
     res.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type, Mcp-Session-Id");
     res.setHeader("Access-Control-Expose-Headers", "Mcp-Session-Id");
     if (req.method === "OPTIONS") {
@@ -75,21 +55,57 @@ export async function createHttpServer(config: HttpServerConfig = {}): Promise<S
     if (url.pathname === "/mcp") {
       if (requireAuth && !hasValidBearer(req, expected)) {
         res.writeHead(401, { "Content-Type": "application/json" });
-        res.end(
-          JSON.stringify({
-            error: "unauthorized",
-            detail: "Missing or invalid Authorization: Bearer <token>",
-          }),
-        );
+        res.end(JSON.stringify({ error: "unauthorized", detail: "Missing or invalid Authorization: Bearer <token>" }));
         return;
       }
-      transport.handleRequest(req, res).catch((err: unknown) => {
-        console.error("[mcp-http] transport error:", err);
-        if (!res.headersSent) {
-          res.writeHead(500, { "Content-Type": "application/json" });
-          res.end(JSON.stringify({ error: "internal" }));
-        }
+
+      const sessionId = req.headers["mcp-session-id"] as string | undefined;
+
+      // Route to an existing session.
+      if (sessionId && sessions.has(sessionId)) {
+        const transport = sessions.get(sessionId)!;
+        transport.handleRequest(req, res).catch((err: unknown) => {
+          console.error("[mcp-http] transport error:", err);
+          if (!res.headersSent) {
+            res.writeHead(500, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ error: "internal" }));
+          }
+        });
+        return;
+      }
+
+      // New initialize request — mint a fresh server + transport pair.
+      const transport = new StreamableHTTPServerTransport({
+        sessionIdGenerator: () => {
+          const id = randomUUID();
+          // Register the session so subsequent requests can find it.
+          sessions.set(id, transport);
+          return id;
+        },
+        onsessionclosed: (id: string) => {
+          sessions.delete(id);
+          console.error(`[mcp-http] session ${id} closed (${sessions.size} active)`);
+        },
       });
+
+      const mcp = createMcpServer({ workspace: config.workspace, token: config.token });
+      mcp.connect(transport)
+        .then(() =>
+          transport.handleRequest(req, res).catch((err: unknown) => {
+            console.error("[mcp-http] transport error:", err);
+            if (!res.headersSent) {
+              res.writeHead(500, { "Content-Type": "application/json" });
+              res.end(JSON.stringify({ error: "internal" }));
+            }
+          }),
+        )
+        .catch((err: unknown) => {
+          console.error("[mcp-http] connect error:", err);
+          if (!res.headersSent) {
+            res.writeHead(500, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ error: "internal" }));
+          }
+        });
       return;
     }
 
@@ -105,5 +121,5 @@ function hasValidBearer(req: IncomingMessage, expected: string): boolean {
   return match[1].trim() === expected;
 }
 
-// Re-export for tests + package consumers that want to pass a custom Response signature.
+// Re-export for tests + package consumers.
 export type { IncomingMessage, ServerResponse };
