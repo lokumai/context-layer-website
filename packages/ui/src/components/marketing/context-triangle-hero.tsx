@@ -9,7 +9,7 @@ import { Bot, User } from "lucide-react";
 
 const VIEW_W = 600;
 const VIEW_H = 640;
-const BASE_PATH = "/context-layer-website";
+import { BASE_PATH } from "../../lib/site";
 
 interface Source {
   id: string;

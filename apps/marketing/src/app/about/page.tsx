@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { FadeUp } from "@context-layer/ui/components/motion/fade-up";
 
-const BASE_PATH = "/context-layer-website";
+import { BASE_PATH } from "@context-layer/ui/lib/site";
 
 export const metadata: Metadata = {
   title: "About | Context Layer",

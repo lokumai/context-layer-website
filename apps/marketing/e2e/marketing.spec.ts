@@ -22,6 +22,6 @@ test.describe("marketing pages", () => {
     const btn = page.getByTestId("playground-button").first();
     const href = await btn.getAttribute("href");
     // Fallback or explicit URL check
-    expect(href).toMatch(/\/workspaces|app\.context-layer\.dev/);
+    expect(href).toMatch(/\/workspaces|app\.context-layer\.dev|assets\/screenshots/);
   });
 });

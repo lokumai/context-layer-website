@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-const BASE_PATH = "/context-layer-website";
+import { BASE_PATH } from "../../../lib/site";
 
 const COLUMNS = [
   {
@@ -14,7 +14,6 @@ const COLUMNS = [
   {
     heading: "Resources",
     items: [
-      { href: "/design-system", label: "Design System" },
       {
         href: "https://github.com/amirkiarafiei/microservices-product-catalog",
         label: "Demo workspace",

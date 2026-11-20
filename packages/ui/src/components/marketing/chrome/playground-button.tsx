@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { PLAYGROUND_URL } from "../../../lib/site";
 
 type Variant = "default" | "hero" | "compact";
 
@@ -22,7 +23,7 @@ export function PlaygroundButton({
   children = "Playground",
   variant = "default",
   className = "",
-  href = process.env.NEXT_PUBLIC_PLAYGROUND_URL || "/workspaces",
+  href = PLAYGROUND_URL,
 }: PlaygroundButtonProps) {
   const classes = `${variantClass[variant]} ${className}`.trim();
 
