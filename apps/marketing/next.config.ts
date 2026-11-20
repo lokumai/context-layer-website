@@ -4,7 +4,7 @@ const nextConfig: NextConfig = {
   output: "export",
   transpilePackages: ["@context-layer/ui"],
   reactCompiler: true,
-  basePath: "/context-layer-website",
+  basePath: process.env.NEXT_PUBLIC_BASE_PATH ?? "",
   trailingSlash: true,
 };
 

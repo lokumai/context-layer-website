@@ -7,7 +7,7 @@ import { useState, type ReactNode } from "react";
 import { GlowPulse } from "../../motion/glow-pulse";
 import { PlaygroundButton } from "./playground-button";
 
-const BASE_PATH = "/context-layer-website";
+import { BASE_PATH } from "../../../lib/site";
 const PRODUCTS = [
   {
     href: "/product/context-layer",

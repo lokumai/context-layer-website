@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import type { ReactNode } from "react";
+import { PLAYGROUND_URL } from "../../lib/site";
 import { ScrollSection, StickyScrollGroup, useStickyActive } from "../motion/scroll-section";
 
 export interface Capability {
@@ -35,12 +35,12 @@ export function CapabilityScroller({ items }: { items: Capability[] }) {
                 </div>
                 <h3 className="text-section-heading text-black">{c.title}</h3>
                 <p className="text-body text-[#4e4e4e] max-w-[500px]">{c.body}</p>
-                <Link
-                  href="/login"
+                <a
+                  href={PLAYGROUND_URL}
                   className="text-button text-black inline-flex items-center gap-1 pt-2 hover:gap-2 transition-[gap]"
                 >
                   Explore in playground <span aria-hidden>→</span>
-                </Link>
+                </a>
               </ScrollSection>
             ))}
           </div>

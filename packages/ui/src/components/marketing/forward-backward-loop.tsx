@@ -3,7 +3,7 @@
 import { motion, useReducedMotion } from "motion/react";
 import { Bot, Database, User } from "lucide-react";
 
-const BASE_PATH = "/context-layer-website";
+import { BASE_PATH } from "../../lib/site";
 
 // Forward / Backward engineering loop.
 // Clockwise cycle of 4 nodes:
